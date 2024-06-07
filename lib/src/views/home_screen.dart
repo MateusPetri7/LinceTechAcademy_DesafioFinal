@@ -25,6 +25,23 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 250,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/registerClient');
+                },
+                icon: Icon(Icons.person),
+                label: Text('Cadastrar Clientes'),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
