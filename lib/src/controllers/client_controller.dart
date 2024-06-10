@@ -7,7 +7,7 @@ class ClientController extends ChangeNotifier {
   ClientController() {
     load();
   }
-  final controller = database.ClientController();
+  final _controllerDataBase = database.ClientController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _telephoneController = TextEditingController();
@@ -39,7 +39,7 @@ class ClientController extends ChangeNotifier {
       tin: tinController.text,
     );
 
-    await controller.insert(client);
+    await _controllerDataBase.insert(client);
 
     nameController.clear();
     telephoneController.clear();
@@ -50,8 +50,15 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> delete(ClientModel client) async {
+    await _controllerDataBase.delete(client);
+    await load();
+
+    notifyListeners();
+  }
+
   Future<void> load() async {
-    final list = await controller.select();
+    final list = await _controllerDataBase.select();
 
     listClient.clear();
     listClient.addAll(list);

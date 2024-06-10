@@ -58,6 +58,16 @@ class ClientController {
     return;
   }
 
+  Future<void> delete(ClientModel client) async {
+    final database = await getDatabase();
+
+    database.delete(
+      ClientTable.tableName,
+      where: '${ClientTable.id} = ?',
+      whereArgs: [client.id],
+    );
+  }
+
   Future<List<ClientModel>> select() async {
     final database = await getDatabase();
 
