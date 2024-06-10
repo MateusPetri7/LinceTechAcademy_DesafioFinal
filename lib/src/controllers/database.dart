@@ -33,6 +33,7 @@ class ClientTable {
   static const String city = 'city';
   static const String state = 'state';
   static const String tin = 'tin';
+
   static Map<String, dynamic> toMap(ClientModel client) {
     final map = <String, dynamic>{};
 
@@ -55,5 +56,29 @@ class ClientController {
     await database.insert(ClientTable.tableName, map);
 
     return;
+  }
+
+  Future<List<ClientModel>> select() async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      ClientTable.tableName,
+    );
+
+    var list = <ClientModel>[];
+    for (final item in result) {
+      list.add(
+        ClientModel(
+          id: item[ClientTable.id].toString(),
+          name: item[ClientTable.name],
+          telephone: item[ClientTable.telephone],
+          city: item[ClientTable.city],
+          state: item[ClientTable.state],
+          tin: item[ClientTable.tin],
+        ),
+      );
+    }
+
+    return list;
   }
 }

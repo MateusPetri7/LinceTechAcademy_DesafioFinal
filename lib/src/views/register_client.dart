@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lincetechacademy_ss_automoveis_app/src/controllers/client_controller.dart';
+import 'package:lincetechacademy_ss_automoveis_app/src/models/client_model.dart';
 import 'package:provider/provider.dart';
 
 class RegisterClient extends StatelessWidget {
@@ -95,7 +96,10 @@ class RegisterClient extends StatelessWidget {
                   SizedBox(height: 20.0),
                   ElevatedButton.icon(
                     onPressed: () async {
-                      await state.insert();
+                      if (state.formKey.currentState!.validate()) {
+                        await state.insert();
+                        print(state.listClient.length);
+                      }
                     },
                     icon: Icon(Icons.add),
                     label: Text('Cadastrar'),

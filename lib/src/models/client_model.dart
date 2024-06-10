@@ -7,7 +7,8 @@ class ClientModel {
   String tin;
 
   ClientModel(
-      {required this.name,
+      {this.id,
+      required this.name,
       required this.telephone,
       required this.city,
       required this.state,

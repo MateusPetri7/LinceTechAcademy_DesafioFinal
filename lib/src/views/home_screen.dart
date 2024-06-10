@@ -18,8 +18,8 @@ class HomeScreen extends StatelessWidget {
                 themeModel.themeMode == ThemeMode.light
                     ? Icons.dark_mode
                     : themeModel.themeMode == ThemeMode.dark
-                    ? Icons.light_mode
-                    : Icons.settings_brightness,
+                        ? Icons.light_mode
+                        : Icons.settings_brightness,
               );
             },
           ),
@@ -37,6 +37,16 @@ class HomeScreen extends StatelessWidget {
                 },
                 icon: Icon(Icons.person),
                 label: Text('Cadastrar Clientes'),
+              ),
+            ),
+            SizedBox(
+              width: 250,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/registeredClient');
+                },
+                icon: Icon(Icons.person_3),
+                label: Text('Listar Clientes'),
               ),
             ),
           ],
