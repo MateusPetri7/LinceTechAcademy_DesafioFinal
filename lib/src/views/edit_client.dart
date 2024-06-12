@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/client_controller.dart';
+import '../models/client_model.dart';
 
-class RegisterClient extends StatelessWidget {
-  const RegisterClient({super.key});
+class EditClient extends StatelessWidget {
+  final ClientModel client;
+
+  const EditClient({super.key, required this.client});
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +15,7 @@ class RegisterClient extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Consumer<ClientController>(
           builder: (context, state, _) {
+            state.populateClientInformation(client);
             return Form(
               key: state.formKey,
               child: Column(
@@ -96,11 +100,12 @@ class RegisterClient extends StatelessWidget {
                   ElevatedButton.icon(
                     onPressed: () async {
                       if (state.formKey.currentState!.validate()) {
-                        await state.insert();
+                        await state.update();
+                        Navigator.pop(context);
                       }
                     },
-                    icon: const Icon(Icons.add),
-                    label: const Text('Cadastrar'),
+                    icon: const Icon(Icons.edit),
+                    label: const Text('Alterar dados'),
                     style: ElevatedButton.styleFrom(),
                   ),
                 ],

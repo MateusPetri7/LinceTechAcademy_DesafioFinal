@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lincetechacademy_ss_automoveis_app/src/controllers/theme_controller.dart';
-import 'package:lincetechacademy_ss_automoveis_app/src/models/theme_model.dart';
 import 'package:provider/provider.dart';
+import '../controllers/theme_controller.dart';
+import '../models/theme_model.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -35,8 +35,8 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(context, '/registerClient');
                 },
-                icon: Icon(Icons.person),
-                label: Text('Cadastrar Clientes'),
+                icon: const Icon(Icons.person),
+                label: const Text('Cadastrar Clientes'),
               ),
             ),
             SizedBox(
@@ -45,8 +45,8 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(context, '/registeredClient');
                 },
-                icon: Icon(Icons.person_3),
-                label: Text('Listar Clientes'),
+                icon: const Icon(Icons.person_3),
+                label: const Text('Listar Clientes'),
               ),
             ),
           ],

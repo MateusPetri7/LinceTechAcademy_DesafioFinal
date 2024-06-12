@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lincetechacademy_ss_automoveis_app/src/controllers/client_controller.dart';
 import 'package:provider/provider.dart';
+import '../controllers/client_controller.dart';
+import 'edit_client.dart';
 
 class RegisteredClients extends StatelessWidget {
   const RegisteredClients({super.key});
@@ -16,7 +17,6 @@ class RegisteredClients extends StatelessWidget {
                 itemCount: state.listClient.length,
                 itemBuilder: (context, index) {
                   final client = state.listClient[index];
-                  print(client.name);
                   return ListTile(
                     title: Text('Nome: ${client.name}'),
                     subtitle: Column(
@@ -29,11 +29,19 @@ class RegisteredClients extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {},
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    EditClient(client: client),
+                              ),
+                            );
+                          },
                         ),
                         IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: const Icon(Icons.delete),
                           onPressed: () {
                             state.delete(client);
                           },

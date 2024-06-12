@@ -1,6 +1,6 @@
-import 'package:lincetechacademy_ss_automoveis_app/src/models/client_model.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import '../models/client_model.dart';
 
 Future<Database> getDatabase() async {
   final path = join(await getDatabasesPath(), 'ss_automoveis.db');
@@ -61,7 +61,7 @@ class ClientController {
   Future<void> delete(ClientModel client) async {
     final database = await getDatabase();
 
-    database.delete(
+    await database.delete(
       ClientTable.tableName,
       where: '${ClientTable.id} = ?',
       whereArgs: [client.id],
@@ -90,5 +90,18 @@ class ClientController {
     }
 
     return list;
+  }
+
+  Future<void> update(ClientModel client) async {
+    final database = await getDatabase();
+
+    var map = ClientTable.toMap(client);
+
+    await database.update(
+      ClientTable.tableName,
+      map,
+      where: '${ClientTable.id} = ?',
+      whereArgs: [client.id]
+    );
   }
 }

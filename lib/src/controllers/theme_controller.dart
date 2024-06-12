@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lincetechacademy_ss_automoveis_app/src/models/theme_model.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
+import '../models/theme_model.dart';
 
 class ThemeController {
   static void toggleTheme(BuildContext context) {
