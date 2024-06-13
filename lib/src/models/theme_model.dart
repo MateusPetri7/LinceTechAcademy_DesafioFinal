@@ -5,11 +5,8 @@ const appThemeModeKey = 'appThemeModeKey';
 
 class ThemeModel extends ChangeNotifier {
   late SharedPreferences _sharedPreferences;
-
   ThemeMode _themeMode = ThemeMode.system;
-
   ThemeMode get themeMode => _themeMode;
-
   ThemeModel() {
     _loadPreferences();
   }

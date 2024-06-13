@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/client_controller.dart';
-import 'edit_client.dart';
+import 'client_edit.dart';
 
 class RegisteredClients extends StatelessWidget {
   const RegisteredClients({super.key});

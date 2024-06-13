@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/client_controller.dart';
+import '../models/client_model.dart';
 
 class RegisterClient extends StatelessWidget {
   const RegisterClient({super.key});
@@ -18,9 +19,22 @@ class RegisterClient extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextFormField(
+                    controller: state.tinController,
+                    decoration: InputDecoration(labelText: 'CNPJ'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (state.tinController.text.isNotEmpty) {
+                        state.getClientData(state.tinController.text);
+                        state.populateClientInformation(state.clientCurrent);
+                      }
+                    },
+                    child: Text('Buscar dados'),
+                  ),
+                  TextFormField(
                     controller: state.nameController,
                     keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Nome',
                     ),
                     validator: (value) {
@@ -75,19 +89,6 @@ class RegisterClient extends StatelessWidget {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Estado é obrigatório.';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: state.tinController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      labelText: 'CNPJ',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'CNPJ é obrigatório.';
                       }
                       return null;
                     },

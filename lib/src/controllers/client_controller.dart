@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import '../controllers/database.dart' as database;
 import '../models/client_model.dart';
+import '../repositories/client_repository.dart';
+import '../services/exceptions.dart';
+import 'databases/database.dart' as database;
 
 class ClientController extends ChangeNotifier {
-  ClientController() {
+  final IClientRepository clientRepository;
+  ClientController({required this.clientRepository}) {
     load();
   }
 
@@ -14,24 +17,29 @@ class ClientController extends ChangeNotifier {
   final _cityController = TextEditingController();
   final _stateController = TextEditingController();
   final _tinController = TextEditingController();
-  ClientModel _clientCurrent = ClientModel();
   final _listClient = <ClientModel>[];
+  ClientModel _clientCurrent = ClientModel();
 
   GlobalKey<FormState> get formKey => _formKey;
-
   TextEditingController get nameController => _nameController;
-
   TextEditingController get telephoneController => _telephoneController;
-
   TextEditingController get cityController => _cityController;
-
   TextEditingController get stateController => _stateController;
-
   TextEditingController get tinController => _tinController;
-
   List<ClientModel> get listClient => _listClient;
+  ClientModel get clientCurrent => _clientCurrent;
 
-  ClientModel? get clientCurrent => _clientCurrent;
+  Future<void> getClientData(String tin) async {
+    try {
+      final clientData = await clientRepository.getClientData(tin);
+      _clientCurrent = clientData;
+      notifyListeners();
+    } on NotFoundException catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future<void> insert() async {
     final client = ClientModel(
@@ -63,8 +71,8 @@ class ClientController extends ChangeNotifier {
   Future<void> load() async {
     final list = await _controllerDataBase.select();
 
-    listClient.clear();
-    listClient.addAll(list);
+    _listClient.clear();
+    _listClient.addAll(list);
 
     notifyListeners();
   }
@@ -101,7 +109,6 @@ class ClientController extends ChangeNotifier {
     tinController.clear();
 
     await load();
-
     notifyListeners();
   }
 }
