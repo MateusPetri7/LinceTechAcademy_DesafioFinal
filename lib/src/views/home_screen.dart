@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../routes.dart';
 import '../controllers/theme_controller.dart';
 import '../models/theme_model.dart';
 
@@ -33,7 +34,10 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/registerClient');
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.registerClient
+                  );
                 },
                 icon: const Icon(Icons.person),
                 label: const Text('Cadastrar Clientes'),
@@ -43,10 +47,39 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/registeredClient');
+                  Navigator.pushNamed(
+                      context,
+                      AppRoutes.registeredClients
+                  );
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Listar Clientes'),
+              ),
+            ),
+            SizedBox(
+              width: 250,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context,
+                      AppRoutes.registerManager
+                  );
+                },
+                icon: const Icon(Icons.person_3),
+                label: const Text('Cadastrar Gerentes'),
+              ),
+            ),
+            SizedBox(
+              width: 250,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context,
+                      AppRoutes.registeredManagers
+                  );
+                },
+                icon: const Icon(Icons.person_3),
+                label: const Text('Listar Gerentes'),
               ),
             ),
           ],

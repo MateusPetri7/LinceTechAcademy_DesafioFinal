@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../controllers/client_controller.dart';
-import '../models/client_model.dart';
+import '../controllers/manager_controller.dart';
+import '../models/manager_model.dart';
 
-class EditClient extends StatelessWidget {
-  final ClientModel client;
+class EditManager extends StatelessWidget {
+  final ManagerModel manager;
 
-  const EditClient({super.key, required this.client});
+  const EditManager({super.key, required this.manager});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<ClientController>(
+        child: Consumer<ManagerController>(
           builder: (context, state, _) {
-            state.populateClientInformation(client);
+            state.populateManagerInformation(manager);
             return Form(
               key: state.formKey,
               child: Column(
@@ -24,7 +24,7 @@ class EditClient extends StatelessWidget {
                   TextFormField(
                     controller: state.nameController,
                     keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Nome',
                     ),
                     validator: (value) {
@@ -58,14 +58,14 @@ class EditClient extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    controller: state.cityController,
+                    controller: state.individualTaxpayerRegistryController,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
-                      labelText: 'Cidade',
+                      labelText: 'CPF',
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Cidade é obrigatório.';
+                        return 'CPF é obrigatório.';
                       }
                       return null;
                     },
@@ -84,14 +84,14 @@ class EditClient extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    controller: state.tinController,
-                    keyboardType: TextInputType.text,
+                    controller: state.commissionPercentageController,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
-                      labelText: 'CNPJ',
+                      labelText: "Porcetagem de Comissão",
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'CNPJ é obrigatório.';
+                      if (value?.isEmpty ?? true) {
+                        return "Porcetagem de Comissão obrigatória.";
                       }
                       return null;
                     },

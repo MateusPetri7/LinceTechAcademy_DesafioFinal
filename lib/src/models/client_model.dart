@@ -4,6 +4,7 @@ class ClientModel {
   String? telephone;
   String? city;
   String? state;
+  ///Mudar para companyRegistrationNumber
   String? tin;
 
   ClientModel(

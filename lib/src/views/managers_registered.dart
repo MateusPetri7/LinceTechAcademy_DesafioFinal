@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
-import '../controllers/client_controller.dart';
-import 'client_edit.dart';
+import '../controllers/manager_controller.dart';
+import 'manager_edit.dart';
 
-class RegisteredClients extends StatelessWidget {
-  const RegisteredClients({super.key});
+class RegisteredManagers extends StatelessWidget {
+  const RegisteredManagers({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +13,17 @@ class RegisteredClients extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Consumer<ClientController>(builder: (context, state, _) {
+            child: Consumer<ManagerController>(builder: (context, state, _) {
               return ListView.builder(
-                itemCount: state.listClient.length,
+                itemCount: state.listManager.length,
                 itemBuilder: (context, index) {
-                  final client = state.listClient[index];
+                  final manager = state.listManager[index];
                   return ListTile(
-                    title: Text('Nome: ${client.name}'),
+                    title: Text('Nome: ${manager.name}'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('CNPJ: ${client.tin}'),
+                        Text('CPF: ${manager.individualTaxpayerRegistry}'),
                       ],
                     ),
                     trailing: Row(
@@ -34,15 +34,15 @@ class RegisteredClients extends StatelessWidget {
                           onPressed: () {
                             Navigator.pushNamed(
                               context,
-                              AppRoutes.editClient,
-                              arguments: client,
+                              AppRoutes.editManager,
+                              arguments: manager,
                             );
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
                           onPressed: () {
-                            state.delete(client);
+                            state.delete(manager);
                           },
                         ),
                       ],

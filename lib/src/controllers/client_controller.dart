@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/client_model.dart';
 import '../repositories/client_repository.dart';
 import '../services/exceptions.dart';
-import 'databases/database.dart' as database;
+import 'databases/client_controller.dart' as database;
 
 class ClientController extends ChangeNotifier {
   final IClientRepository clientRepository;
@@ -35,7 +35,7 @@ class ClientController extends ChangeNotifier {
       _clientCurrent = clientData;
       notifyListeners();
     } on NotFoundException catch (e) {
-      print(e);
+      print(e.message);
     } catch (e) {
       print(e);
     }

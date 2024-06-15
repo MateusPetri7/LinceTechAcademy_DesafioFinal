@@ -61,7 +61,7 @@ class RegisterClient extends StatelessWidget {
                       if (value == null || value.isEmpty) {
                         return 'Telefone é obrigatório.';
                       }
-                      if (value.length < 11) {
+                      if (value.length < 10) {
                         return 'Número inválido.';
                       }
                       return null;
