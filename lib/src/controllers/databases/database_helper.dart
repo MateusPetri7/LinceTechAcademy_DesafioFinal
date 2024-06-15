@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'client_table.dart';
 import 'manager_table.dart';
+import 'vehicle_table.dart';
 
 Future<Database> getDatabase() async {
   final path = join(await getDatabasesPath(), 'ss_automoveis.db');

@@ -1,3 +1,4 @@
+//ignore_for_file:avoid_classes_with_only_static_members
 import 'package:flutter/material.dart';
 import 'src/models/client_model.dart';
 import 'src/models/manager_model.dart';
@@ -8,6 +9,7 @@ import 'src/views/home_screen.dart';
 import 'src/views/manager_edit.dart';
 import 'src/views/manager_register.dart';
 import 'src/views/managers_registered.dart';
+import 'src/views/vehicle_register.dart';
 
 class AppRoutes {
   static const String home = '/';
@@ -17,6 +19,7 @@ class AppRoutes {
   static const String registerManager = '/registerManager';
   static const String registeredManagers = '/registeredManagers';
   static const String editManager = '/editManager';
+  static const String registerVehicle = '/registerVehicle';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -36,6 +39,8 @@ class AppRoutes {
       case editManager:
         final args = settings.arguments as ManagerModel;
         return MaterialPageRoute(builder: (_) => EditManager(manager: args));
+      case registerVehicle:
+        return MaterialPageRoute(builder: (_) => const RegisterVehicle());
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
     }

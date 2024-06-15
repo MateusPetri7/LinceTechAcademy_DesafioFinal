@@ -1,3 +1,4 @@
+//ignore_for_file:avoid_classes_with_only_static_members
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/theme_model.dart';
