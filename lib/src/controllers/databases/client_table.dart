@@ -1,4 +1,4 @@
-//ignore_for_file:avoid_classes_with_only_static_members
+// ignore_for_file: avoid_classes_with_only_static_members
 import '../../models/client_model.dart';
 
 class ClientTable {

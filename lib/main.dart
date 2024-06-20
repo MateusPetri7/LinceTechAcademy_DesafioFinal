@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'src/controllers/client_controller.dart';
+import 'src/controllers/image_controller.dart';
 import 'src/controllers/manager_controller.dart';
 import 'src/controllers/vehicle_controller.dart';
 import 'src/models/theme_model.dart';
@@ -24,6 +25,7 @@ void main() {
         ChangeNotifierProvider(
             create: (context) =>
                 VehicleController(vehicleRepository: vehicleRepository)),
+        ChangeNotifierProvider(create: (context) => ImageController()),
       ],
       child: const MyApp(),
     ),

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import '../controllers/image_controller.dart';
 import '../controllers/vehicle_controller.dart';
+import '../models/vehicle_brand_model.dart';
+import '../models/vehicle_model_model.dart';
 
 class RegisterVehicle extends StatelessWidget {
   const RegisterVehicle({super.key});
@@ -10,53 +14,79 @@ class RegisterVehicle extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<VehicleController>(
-          builder: (context, state, _) {
+        child: Consumer2<VehicleController, ImageController>(
+          builder: (context, vehicleState, imageState, _) {
             return Form(
-              key: state.formKey,
+              key: vehicleState.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  TextFormField(
-                    controller: state.brandController,
-                    decoration: InputDecoration(labelText: 'Marca'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      //if (state.tinContro.text.isNotEmpty) {
-                        state.getVehiclesBrands();
-                        state.getVehicheModels();
-                      //   state.populateClientInformation(state.clientCurrent);
-                      // }
+                  DropdownButton<String>(
+                    value: vehicleState.selectedType,
+                    hint: Text('Selecione o tipo'),
+                    items: vehicleState.types
+                        .map<DropdownMenuItem<String>>((String type) {
+                      return DropdownMenuItem<String>(
+                        value: type,
+                        child: Text(type),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      vehicleState.selectedType = value;
+                      if(value != null) {
+                        vehicleState.getVehicleBrands(value);
+                      }
                     },
-                    child: Text('Buscar dados'),
+                  ),
+                  DropdownButton<VehicleBrandModel>(
+                    value: vehicleState.selectedBrand,
+                    hint: const Text('Selecione a marca'),
+                    items: vehicleState.vehicleBrands
+                        .map<DropdownMenuItem<VehicleBrandModel>>(
+                            (VehicleBrandModel brand) {
+                          return DropdownMenuItem<VehicleBrandModel>(
+                            value: brand,
+                            child: Text(brand.name),
+                          );
+                        }).toList(),
+                    onChanged: (VehicleBrandModel? value) {
+                      vehicleState.selectedBrand = value;
+                      if (value != null) {
+                        vehicleState.getVehicleModels(value.code);
+                      }
+                    },
+                  ),
+                  DropdownButton<VehicleModelModel>(
+                    value: vehicleState.selectedModel,
+                    hint: const Text('Selecione o modelo'),
+                    items: vehicleState.vehicleModels
+                        .map<DropdownMenuItem<VehicleModelModel>>(
+                            (VehicleModelModel model) {
+                          return DropdownMenuItem<VehicleModelModel>(
+                            value: model,
+                            child: Text(model.name),
+                          );
+                        }).toList(),
+                    onChanged: (VehicleModelModel? value) {
+                      vehicleState.selectedModel = value;
+                    },
                   ),
                   TextFormField(
-                    controller: state.modelController,
+                    controller: vehicleState.plateController,
                     keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      labelText: 'Modelo',
+                    decoration: const InputDecoration(
+                      labelText: 'Placa',
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Modelo é obrigatório.';
+                        return 'Placa é obrigatória.';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
-                    controller: state.plateController,
-                    keyboardType: TextInputType.text,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Placa é obrigatório.';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: state.yearManufactureController,
-                    keyboardType: TextInputType.text,
+                    controller: vehicleState.yearManufactureController,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       labelText: 'Ano de fabricação',
                     ),
@@ -68,8 +98,8 @@ class RegisterVehicle extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    controller: state.dailyRentalCostController,
-                    keyboardType: TextInputType.text,
+                    controller: vehicleState.dailyRentalCostController,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       labelText: 'Custo da diária de aluguel',
                     ),
@@ -80,15 +110,35 @@ class RegisterVehicle extends StatelessWidget {
                       return null;
                     },
                   ),
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () =>
+                            imageState.pickImage(ImageSource.gallery),
+                        child: const Text('Selecionar imagem da galeria'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () =>
+                            imageState.pickImage(ImageSource.camera),
+                        child: const Text('Tirar foto'),
+                      ),
+                      if (imageState.selectedImage != null)
+                        Image.file(
+                          imageState.selectedImage!,
+                          height: 200,
+                          width: 200,
+                        ),
+                    ],
+                  ),
                   TextFormField(
-                    controller: state.photosTheVehicleController,
+                    controller: vehicleState.photosTheVehicleController,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
-                      labelText: 'fotos do veículo',
+                      labelText: 'Fotos do veículo',
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'fotos do veículo.';
+                        return 'Fotos do veículo são obrigatórias.';
                       }
                       return null;
                     },
@@ -96,8 +146,8 @@ class RegisterVehicle extends StatelessWidget {
                   const SizedBox(height: 20.0),
                   ElevatedButton.icon(
                     onPressed: () async {
-                      if (state.formKey.currentState!.validate()) {
-                        await state.insert();
+                      if (vehicleState.formKey.currentState!.validate()) {
+                        await vehicleState.insert();
                       }
                     },
                     icon: const Icon(Icons.add),

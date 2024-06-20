@@ -1,12 +1,12 @@
 import 'dart:convert';
-import '../models/vehicle_model.dart';
+import '../models/vehicle_brand_model.dart';
+import '../models/vehicle_model_model.dart';
 import '../services/exceptions.dart';
 import '../services/http_client.dart';
 
 abstract class IVehicleRepository {
-  Future<VehicleModel> getVehicleBrands();
-
-  Future<VehicleModel> getVehicleModels();
+  Future<List<VehicleBrandModel>> getVehicleBrands(String type);
+  Future<List<VehicleModelModel>> getVehicleModels(String brandCode);
 }
 
 class VehicleRepository implements IVehicleRepository {
@@ -15,14 +15,15 @@ class VehicleRepository implements IVehicleRepository {
   VehicleRepository({required this.client});
 
   @override
-  Future<VehicleModel> getVehicleBrands() async {
+  Future<List<VehicleBrandModel>> getVehicleBrands(String type) async {
     final response = await client.get(
-        url: 'https://fipe.parallelum.com.br/api/v2/cars/brands');
+      url: 'https://fipe.parallelum.com.br/api/v2/$type/brands',
+    );
 
+    print('opa' + response.body);
     if (response.statusCode == 200) {
-      final body = jsonDecode(response.body);
-      print(response.body);
-      return VehicleModel.fromJson(body);
+      final List<dynamic> body = jsonDecode(response.body);
+      return body.map((item) => VehicleBrandModel.fromJson(item)).toList();
     } else if (response.statusCode == 404) {
       throw NotFoundException('Página não encontrada.');
     } else if (response.statusCode == 500) {
@@ -33,13 +34,15 @@ class VehicleRepository implements IVehicleRepository {
   }
 
   @override
-  Future<VehicleModel> getVehicleModels() async {
+  Future<List<VehicleModelModel>> getVehicleModels(String brandCode) async {
     final response = await client.get(
-        url: 'https://fipe.parallelum.com.br/api/v2/cars/brands/23/models');
+      url: 'https://fipe.parallelum.com.br/api/v2/cars/brands/$brandCode/models',
+    );
 
+    print('Model' + response.body);
     if (response.statusCode == 200) {
-      final body = jsonDecode(response.body);
-      return VehicleModel.fromJson(body);
+      final List<dynamic> body = jsonDecode(response.body);
+      return body.map((item) => VehicleModelModel.fromJson(item)).toList();
     } else if (response.statusCode == 404) {
       throw NotFoundException('Página não encontrada.');
     } else if (response.statusCode == 500) {

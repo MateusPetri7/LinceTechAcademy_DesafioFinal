@@ -1,4 +1,4 @@
-//ignore_for_file:avoid_classes_with_only_static_members
+// ignore_for_file: avoid_classes_with_only_static_members
 import '../../models/vehicle_model.dart';
 
 class VehicleTable {
@@ -9,7 +9,7 @@ class VehicleTable {
   $model TEXT NOT NULL,
   $plate TEXT NOT NULL,
   $yearManufacture INTEGER NOT NULL,
-  $dailyRentalCost REAL NOT NULL
+  $dailyRentalCost REAL NOT NULL,
   $photosTheVehicle TEXT NOT NULL
   ); 
   ''';

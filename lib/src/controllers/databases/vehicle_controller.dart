@@ -3,13 +3,11 @@ import 'database_helper.dart';
 import 'vehicle_table.dart';
 
 class VehicleController {
-  Future<void> insert(VehicleModel client) async {
+  Future<void> insert(VehicleModel vehicle) async {
     final database = await getDatabase();
-    final map = VehicleTable.toMap(client);
+    final map = VehicleTable.toMap(vehicle);
 
     await database.insert(VehicleTable.tableName, map);
-
-    return;
   }
 
   Future<void> delete(VehicleModel vehicle) async {

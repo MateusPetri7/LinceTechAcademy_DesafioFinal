@@ -8,8 +8,6 @@ class ManagerController {
     final map = ManagerTable.toMap(manager);
 
     await database.insert(ManagerTable.tableName, map);
-
-    return;
   }
 
   Future<void> delete(ManagerModel manager) async {

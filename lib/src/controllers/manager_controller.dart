@@ -18,21 +18,14 @@ class ManagerController extends ChangeNotifier {
   ManagerModel _managerCurrent = ManagerModel();
 
   GlobalKey<FormState> get formKey => _formKey;
-
   TextEditingController get nameController => _nameController;
-
   TextEditingController get individualTaxpayerRegistryController =>
       _individualTaxpayerRegistryController;
-
   TextEditingController get stateController => _stateController;
-
   TextEditingController get telephoneController => _telephoneController;
-
   TextEditingController get commissionPercentageController =>
       _commissionPercentageController;
-
   List<ManagerModel> get listManager => _listManager;
-
   ManagerModel get managerCurrent => _managerCurrent;
 
   Future<void> insert() async {
@@ -45,12 +38,9 @@ class ManagerController extends ChangeNotifier {
 
     await _controllerDataBase.insert(manager);
 
-    nameController.clear();
-    individualTaxpayerRegistryController.clear();
-    stateController.clear();
-    telephoneController.clear();
-    commissionPercentageController.clear();
+    _clearControllers();
 
+    await load();
     notifyListeners();
   }
 
@@ -94,13 +84,17 @@ class ManagerController extends ChangeNotifier {
     await _controllerDataBase.update(editedManager);
 
     _managerCurrent = ManagerModel();
+    _clearControllers();
+
+    await load();
+    notifyListeners();
+  }
+
+  void _clearControllers() {
     nameController.clear();
     individualTaxpayerRegistryController.clear();
     stateController.clear();
     telephoneController.clear();
     commissionPercentageController.clear();
-
-    await load();
-    notifyListeners();
   }
 }

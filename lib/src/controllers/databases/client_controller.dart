@@ -8,8 +8,6 @@ class ClientController {
     final map = ClientTable.toMap(client);
 
     await database.insert(ClientTable.tableName, map);
-
-    return;
   }
 
   Future<void> delete(ClientModel client) async {

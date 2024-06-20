@@ -52,12 +52,9 @@ class ClientController extends ChangeNotifier {
 
     await _controllerDataBase.insert(client);
 
-    nameController.clear();
-    telephoneController.clear();
-    cityController.clear();
-    stateController.clear();
-    tinController.clear();
+    _clearControllers();
 
+    await load();
     notifyListeners();
   }
 
@@ -102,13 +99,18 @@ class ClientController extends ChangeNotifier {
     await _controllerDataBase.update(editedClient);
 
     _clientCurrent = ClientModel();
+
+    _clearControllers();
+
+    await load();
+    notifyListeners();
+  }
+
+  void _clearControllers() {
     nameController.clear();
     telephoneController.clear();
     cityController.clear();
     stateController.clear();
     tinController.clear();
-
-    await load();
-    notifyListeners();
   }
 }
