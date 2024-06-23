@@ -70,17 +70,18 @@ class EditManager extends StatelessWidget {
                       return null;
                     },
                   ),
-                  TextFormField(
-                    controller: state.stateController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      labelText: 'Estado',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Estado é obrigatório.';
-                      }
-                      return null;
+                  DropdownButton<String>(
+                    value: state.selectedState,
+                    hint: const Text('Selecione o estado'),
+                    items: state.states
+                        .map<DropdownMenuItem<String>>((String state) {
+                      return DropdownMenuItem<String>(
+                        value: state,
+                        child: Text(state),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      state.selectedState = value;
                     },
                   ),
                   TextFormField(

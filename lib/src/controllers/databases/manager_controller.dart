@@ -53,4 +53,29 @@ class ManagerController {
     await database.update(ManagerTable.tableName, map,
         where: '${ManagerTable.id} = ?', whereArgs: [manager.id]);
   }
+
+  Future<ManagerModel?> getManagerFromState(String state) async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      ManagerTable.tableName,
+      where: '${ManagerTable.state} = ?',
+      whereArgs: [state],
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      final item = result.first;
+      return ManagerModel(
+        id: item[ManagerTable.id].toString(),
+        name: item[ManagerTable.name],
+        individualTaxpayerRegistry: item[ManagerTable.individualTaxpayerRegistry],
+        state: item[ManagerTable.state],
+        telephone: item[ManagerTable.telephone],
+        commissionPercentage: item[ManagerTable.commissionPercentage],
+      );
+    }
+
+    return null;
+  }
 }

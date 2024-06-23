@@ -23,7 +23,7 @@ class RegisteredClients extends StatelessWidget {
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('CNPJ: ${client.tin}'),
+                        Text('CNPJ: ${client.companyRegistrationNumber}'),
                       ],
                     ),
                     trailing: Row(

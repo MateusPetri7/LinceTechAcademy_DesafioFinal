@@ -84,7 +84,7 @@ class EditClient extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    controller: state.tinController,
+                    controller: state.companyRegistrationNumberController,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                       labelText: 'CNPJ',

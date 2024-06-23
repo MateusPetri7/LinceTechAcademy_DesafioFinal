@@ -1,7 +1,7 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/client_controller.dart';
-import '../models/client_model.dart';
 
 class RegisterClient extends StatelessWidget {
   const RegisterClient({super.key});
@@ -19,14 +19,17 @@ class RegisterClient extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextFormField(
-                    controller: state.tinController,
+                    controller: state.companyRegistrationNumberController,
                     decoration: InputDecoration(labelText: 'CNPJ'),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (state.tinController.text.isNotEmpty) {
-                        state.getClientData(state.tinController.text);
+                      if (state.companyRegistrationNumberController.text
+                          .isNotEmpty) {
+                        state.getClientData(
+                            state.companyRegistrationNumberController.text);
                         state.populateClientInformation(state.clientCurrent);
+                        state.getManagerFromState(state.clientCurrent.state!);
                       }
                     },
                     child: Text('Buscar dados'),
@@ -89,6 +92,23 @@ class RegisterClient extends StatelessWidget {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Estado é obrigatório.';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      state.getManagerFromState(value);
+                    },
+                  ),
+                  TextFormField(
+                    controller: state.managerController,
+                    keyboardType: TextInputType.text,
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Gerente',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Gerente é obrigatório.';
                       }
                       return null;
                     },

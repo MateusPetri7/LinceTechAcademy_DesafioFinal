@@ -42,6 +42,7 @@ dependencies:
   http: ^1.2.1
   path: ^1.9.0
   image_picker: ^1.1.2
+  brasil_fields: ^1.14.3
 
 dev_dependencies:
   flutter_test:

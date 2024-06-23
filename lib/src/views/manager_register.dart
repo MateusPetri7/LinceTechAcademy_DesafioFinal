@@ -1,4 +1,6 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../controllers/manager_controller.dart';
 
@@ -43,6 +45,10 @@ class RegisterManager extends StatelessWidget {
                       labelText: 'Telefone',
                       hintText: '(XX) XXXXX-XXXX',
                     ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      TelefoneInputFormatter(),
+                    ],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Telefone é obrigatório.';
@@ -59,24 +65,33 @@ class RegisterManager extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: 'CPF',
                     ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CpfInputFormatter(),
+                    ],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'CPF é obrigatório.';
                       }
+                      if (!CPFValidator.isValid(value)) {
+                        return 'CPF inválido.';
+                      }
                       return null;
                     },
                   ),
-                  TextFormField(
-                    controller: state.stateController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      labelText: 'Estado',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Estado é obrigatório.';
-                      }
-                      return null;
+                  DropdownButton<String>(
+                    value: state.selectedState,
+                    hint: const Text('Selecione o estado'),
+                    items: state.states
+                        .map<DropdownMenuItem<String>>((String state) {
+                      return DropdownMenuItem<String>(
+                        value: state,
+                        child: Text(state),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      print(value);
+                      state.selectedState = value;
                     },
                   ),
                   TextFormField(

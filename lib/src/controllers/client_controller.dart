@@ -3,20 +3,24 @@ import '../models/client_model.dart';
 import '../repositories/client_repository.dart';
 import '../services/exceptions.dart';
 import 'databases/client_controller.dart' as database;
+import 'databases/manager_controller.dart';
 
 class ClientController extends ChangeNotifier {
   final IClientRepository clientRepository;
+
   ClientController({required this.clientRepository}) {
     load();
   }
 
   final _controllerDataBase = database.ClientController();
+  final _managerControllerDatabase = ManagerController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _telephoneController = TextEditingController();
   final _cityController = TextEditingController();
   final _stateController = TextEditingController();
-  final _tinController = TextEditingController();
+  final _companyRegistrationNumberController = TextEditingController();
+  final _managerController = TextEditingController();
   final _listClient = <ClientModel>[];
   ClientModel _clientCurrent = ClientModel();
 
@@ -25,7 +29,9 @@ class ClientController extends ChangeNotifier {
   TextEditingController get telephoneController => _telephoneController;
   TextEditingController get cityController => _cityController;
   TextEditingController get stateController => _stateController;
-  TextEditingController get tinController => _tinController;
+  TextEditingController get companyRegistrationNumberController =>
+      _companyRegistrationNumberController;
+  TextEditingController get managerController => _managerController;
   List<ClientModel> get listClient => _listClient;
   ClientModel get clientCurrent => _clientCurrent;
 
@@ -41,13 +47,28 @@ class ClientController extends ChangeNotifier {
     }
   }
 
+  Future<void> getManagerFromState(String state) async {
+    final manager = await _managerControllerDatabase.getManagerFromState(state);
+
+    if (manager != null) {
+      managerController.text = manager.name!;
+    } else {
+      managerController.text = 'Nenhum gerente encontrado';
+    }
+
+    notifyListeners();
+  }
+
   Future<void> insert() async {
+    final manager = await _managerControllerDatabase
+        .getManagerFromState(stateController.text);
     final client = ClientModel(
       name: nameController.text,
       telephone: telephoneController.text,
       city: cityController.text,
       state: stateController.text,
-      tin: tinController.text,
+      companyRegistrationNumber: companyRegistrationNumberController.text,
+      managerId: manager!.id.toString(),
     );
 
     await _controllerDataBase.insert(client);
@@ -79,10 +100,13 @@ class ClientController extends ChangeNotifier {
     _telephoneController.text = client.telephone ?? '';
     _cityController.text = client.city ?? '';
     _stateController.text = client.state ?? '';
-    _tinController.text = client.tin ?? '';
+    _companyRegistrationNumberController.text =
+        client.companyRegistrationNumber ?? '';
+    managerController.text =
+        client.managerId != null ? client.managerId.toString() : '';
 
     _clientCurrent = ClientModel(
-        id: client.id,
+      id: client.id,
     );
   }
 
@@ -93,8 +117,8 @@ class ClientController extends ChangeNotifier {
         telephone: telephoneController.text,
         city: cityController.text,
         state: stateController.text,
-        tin: tinController.text
-    );
+        companyRegistrationNumber: companyRegistrationNumberController.text,
+        managerId: managerController.text);
 
     await _controllerDataBase.update(editedClient);
 
@@ -111,6 +135,7 @@ class ClientController extends ChangeNotifier {
     telephoneController.clear();
     cityController.clear();
     stateController.clear();
-    tinController.clear();
+    companyRegistrationNumberController.clear();
+    managerController.clear();
   }
 }

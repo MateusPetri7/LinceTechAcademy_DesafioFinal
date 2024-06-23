@@ -36,7 +36,9 @@ class ClientController {
           telephone: item[ClientTable.telephone],
           city: item[ClientTable.city],
           state: item[ClientTable.state],
-          tin: item[ClientTable.tin],
+          companyRegistrationNumber:
+              item[ClientTable.companyRegistrationNumber],
+          managerId: item[ClientTable.manager_id],
         ),
       );
     }
@@ -49,11 +51,7 @@ class ClientController {
 
     var map = ClientTable.toMap(client);
 
-    await database.update(
-        ClientTable.tableName,
-        map,
-        where: '${ClientTable.id} = ?',
-        whereArgs: [client.id]
-    );
+    await database.update(ClientTable.tableName, map,
+        where: '${ClientTable.id} = ?', whereArgs: [client.id]);
   }
 }

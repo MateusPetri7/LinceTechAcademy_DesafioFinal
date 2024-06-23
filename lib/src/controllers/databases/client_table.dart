@@ -9,7 +9,9 @@ class ClientTable {
   $telephone TEXT NOT NULL,
   $city TEXT NOT NULL,
   $state TEXT NOT NULL,
-  $tin TEXT NOT NULL
+  $companyRegistrationNumber TEXT NOT NULL,
+  $manager_id INTEGER,
+  FOREIGN KEY (manager_id) REFERENCES Manager(id)
   ); 
   ''';
 
@@ -19,7 +21,8 @@ class ClientTable {
   static const String telephone = 'telephone';
   static const String city = 'city';
   static const String state = 'state';
-  static const String tin = 'tin';
+  static const String companyRegistrationNumber = 'companyRegistrationNumber';
+  static const String manager_id = 'manager_id';
 
   static Map<String, dynamic> toMap(ClientModel client) {
     final map = <String, dynamic>{};
@@ -29,7 +32,9 @@ class ClientTable {
     map[ClientTable.telephone] = client.telephone;
     map[ClientTable.city] = client.city;
     map[ClientTable.state] = client.state;
-    map[ClientTable.tin] = client.tin;
+    map[ClientTable.companyRegistrationNumber] =
+        client.companyRegistrationNumber;
+    map[ClientTable.manager_id] = client.managerId;
 
     return map;
   }
