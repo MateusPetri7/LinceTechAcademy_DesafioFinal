@@ -38,7 +38,7 @@ class ClientController {
           state: item[ClientTable.state],
           companyRegistrationNumber:
               item[ClientTable.companyRegistrationNumber],
-          managerId: item[ClientTable.manager_id],
+          managerId: item[ClientTable.manager_id].toString(),
         ),
       );
     }

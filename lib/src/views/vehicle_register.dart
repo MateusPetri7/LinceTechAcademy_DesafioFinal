@@ -1,4 +1,6 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../controllers/image_controller.dart';
@@ -21,7 +23,7 @@ class RegisterVehicle extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  DropdownButton<String>(
+                  DropdownButtonFormField<String>(
                     value: vehicleState.selectedType,
                     hint: Text('Selecione o tipo'),
                     items: vehicleState.types
@@ -37,8 +39,14 @@ class RegisterVehicle extends StatelessWidget {
                         vehicleState.getVehicleBrands(value);
                       }
                     },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Tipo do veículo é obrigatório.';
+                      }
+                      return null;
+                    },
                   ),
-                  DropdownButton<VehicleBrandModel>(
+                  DropdownButtonFormField<VehicleBrandModel>(
                     value: vehicleState.selectedBrand,
                     hint: const Text('Selecione a marca'),
                     items: vehicleState.vehicleBrands
@@ -55,8 +63,14 @@ class RegisterVehicle extends StatelessWidget {
                         vehicleState.getVehicleModels(value.code);
                       }
                     },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Marca do veículo é obrigatória.';
+                      }
+                      return null;
+                    },
                   ),
-                  DropdownButton<VehicleModelModel>(
+                  DropdownButtonFormField<VehicleModelModel>(
                     value: vehicleState.selectedModel,
                     hint: const Text('Selecione o modelo'),
                     items: vehicleState.vehicleModels
@@ -69,6 +83,12 @@ class RegisterVehicle extends StatelessWidget {
                         }).toList(),
                     onChanged: (VehicleModelModel? value) {
                       vehicleState.selectedModel = value;
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Madelo do veículo é obrigatório.';
+                      }
+                      return null;
                     },
                   ),
                   TextFormField(
@@ -90,9 +110,15 @@ class RegisterVehicle extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: 'Ano de fabricação',
                     ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Ano de fabricação é obrigatório.';
+                      }
+                      if (value.length != 4 ) {
+                        return 'Ano de fabricação inválido.';
                       }
                       return null;
                     },

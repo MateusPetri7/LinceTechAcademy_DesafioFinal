@@ -1,5 +1,6 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../controllers/client_controller.dart';
 
@@ -20,24 +21,41 @@ class RegisterClient extends StatelessWidget {
                 children: [
                   TextFormField(
                     controller: state.companyRegistrationNumberController,
-                    decoration: InputDecoration(labelText: 'CNPJ'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (state.companyRegistrationNumberController.text
-                          .isNotEmpty) {
-                        state.getClientData(
-                            state.companyRegistrationNumberController.text);
-                        state.populateClientInformation(state.clientCurrent);
-                        state.getManagerFromState(state.clientCurrent.state!);
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'CNPJ',
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () async {
+                          String? cnpj = state
+                              .companyRegistrationNumberController.text
+                              .replaceAll(RegExp(r'\D'), '');
+                          if (cnpj.isNotEmpty) {
+                            await state.getClientData(cnpj);
+                            state.populateClientInformationAtRegistration(
+                                state.clientCurrent);
+                          }
+                        },
+                      ),
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CnpjInputFormatter(),
+                    ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'CNPJ é obrigatório.';
                       }
+                      if (!CNPJValidator.isValid(value)) {
+                        return 'CNPJ inválido.';
+                      }
+                      return null;
                     },
-                    child: Text('Buscar dados'),
                   ),
                   TextFormField(
                     controller: state.nameController,
                     keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Nome',
                     ),
                     validator: (value) {
@@ -55,11 +73,14 @@ class RegisterClient extends StatelessWidget {
                   ),
                   TextFormField(
                     controller: state.telephoneController,
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(
                       labelText: 'Telefone',
-                      hintText: '(XX) XXXXX-XXXX',
                     ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      TelefoneInputFormatter(),
+                    ],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Telefone é obrigatório.';
@@ -83,20 +104,25 @@ class RegisterClient extends StatelessWidget {
                       return null;
                     },
                   ),
-                  TextFormField(
-                    controller: state.stateController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      labelText: 'Estado',
-                    ),
+                  DropdownButtonFormField<String>(
+                    value: state.selectedState,
+                    hint: const Text('Selecione o estado'),
+                    items: state.states
+                        .map<DropdownMenuItem<String>>((String state) {
+                      return DropdownMenuItem<String>(
+                        value: state,
+                        child: Text(state),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      state.selectedState = value;
+                      state.getManagerFromState(state.selectedState!);
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Estado é obrigatório.';
                       }
                       return null;
-                    },
-                    onChanged: (value) {
-                      state.getManagerFromState(value);
                     },
                   ),
                   TextFormField(
@@ -122,7 +148,6 @@ class RegisterClient extends StatelessWidget {
                     },
                     icon: const Icon(Icons.add),
                     label: const Text('Cadastrar'),
-                    style: ElevatedButton.styleFrom(),
                   ),
                 ],
               ),

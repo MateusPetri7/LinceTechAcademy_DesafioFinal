@@ -43,7 +43,6 @@ class RegisterManager extends StatelessWidget {
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                       labelText: 'Telefone',
-                      hintText: '(XX) XXXXX-XXXX',
                     ),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -79,7 +78,7 @@ class RegisterManager extends StatelessWidget {
                       return null;
                     },
                   ),
-                  DropdownButton<String>(
+                  DropdownButtonFormField<String>(
                     value: state.selectedState,
                     hint: const Text('Selecione o estado'),
                     items: state.states
@@ -90,8 +89,13 @@ class RegisterManager extends StatelessWidget {
                       );
                     }).toList(),
                     onChanged: (String? value) {
-                      print(value);
                       state.selectedState = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Estado é obrigatório.';
+                      }
+                      return null;
                     },
                   ),
                   TextFormField(
@@ -100,6 +104,9 @@ class RegisterManager extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: "Porcetagem de Comissão",
                     ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return "Porcetagem de Comissão obrigatória.";

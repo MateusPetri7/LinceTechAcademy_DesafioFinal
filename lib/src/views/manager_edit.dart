@@ -1,4 +1,6 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../controllers/manager_controller.dart';
 import '../models/manager_model.dart';
@@ -24,7 +26,7 @@ class EditManager extends StatelessWidget {
                   TextFormField(
                     controller: state.nameController,
                     keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Nome',
                     ),
                     validator: (value) {
@@ -45,8 +47,11 @@ class EditManager extends StatelessWidget {
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                       labelText: 'Telefone',
-                      hintText: '(XX) XXXXX-XXXX',
                     ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      TelefoneInputFormatter(),
+                    ],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Telefone é obrigatório.';
@@ -60,17 +65,12 @@ class EditManager extends StatelessWidget {
                   TextFormField(
                     controller: state.individualTaxpayerRegistryController,
                     keyboardType: TextInputType.text,
+                    readOnly: true,
                     decoration: const InputDecoration(
                       labelText: 'CPF',
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'CPF é obrigatório.';
-                      }
-                      return null;
-                    },
                   ),
-                  DropdownButton<String>(
+                  DropdownButtonFormField<String>(
                     value: state.selectedState,
                     hint: const Text('Selecione o estado'),
                     items: state.states
@@ -83,6 +83,12 @@ class EditManager extends StatelessWidget {
                     onChanged: (String? value) {
                       state.selectedState = value;
                     },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Estado é obrigatório.';
+                      }
+                      return null;
+                    },
                   ),
                   TextFormField(
                     controller: state.commissionPercentageController,
@@ -90,6 +96,9 @@ class EditManager extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: "Porcetagem de Comissão",
                     ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return "Porcetagem de Comissão obrigatória.";

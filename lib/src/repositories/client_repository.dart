@@ -11,16 +11,16 @@ class ClientRepository implements IClientRepository {
   final IHttpClient client;
 
   ClientRepository({required this.client});
+
   @override
-  Future<ClientModel> getClientData(String tin) async {
-    final response = await client.get(
-      url: 'https://brasilapi.com.br/api/cnpj/v1/$tin'
-    );
+  Future<ClientModel> getClientData(String companyRegistrationNumber) async {
+    final response =
+        await client.get(url: 'https://brasilapi.com.br/api/cnpj/v1/$companyRegistrationNumber');
 
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
       return ClientModel.fromJson(body);
-    } else if (response.statusCode == 404){
+    } else if (response.statusCode == 404) {
       throw NotFoundException('CNPJ não encontrado na API Minha Receita');
     } else {
       throw Exception('Não foi possível encontrar o CNPJ');

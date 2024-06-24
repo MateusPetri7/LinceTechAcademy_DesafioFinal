@@ -6,6 +6,7 @@ import '../services/http_client.dart';
 
 abstract class IVehicleRepository {
   Future<List<VehicleBrandModel>> getVehicleBrands(String type);
+
   Future<List<VehicleModelModel>> getVehicleModels(String brandCode);
 }
 
@@ -20,7 +21,6 @@ class VehicleRepository implements IVehicleRepository {
       url: 'https://fipe.parallelum.com.br/api/v2/$type/brands',
     );
 
-    print('opa' + response.body);
     if (response.statusCode == 200) {
       final List<dynamic> body = jsonDecode(response.body);
       return body.map((item) => VehicleBrandModel.fromJson(item)).toList();
@@ -36,10 +36,10 @@ class VehicleRepository implements IVehicleRepository {
   @override
   Future<List<VehicleModelModel>> getVehicleModels(String brandCode) async {
     final response = await client.get(
-      url: 'https://fipe.parallelum.com.br/api/v2/cars/brands/$brandCode/models',
+      url:
+          'https://fipe.parallelum.com.br/api/v2/cars/brands/$brandCode/models',
     );
 
-    print('Model' + response.body);
     if (response.statusCode == 200) {
       final List<dynamic> body = jsonDecode(response.body);
       return body.map((item) => VehicleModelModel.fromJson(item)).toList();

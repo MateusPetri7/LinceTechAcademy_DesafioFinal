@@ -102,8 +102,8 @@ class ManagerController extends ChangeNotifier {
   void _clearControllers() {
     nameController.clear();
     individualTaxpayerRegistryController.clear();
-    states.clear();
     telephoneController.clear();
     commissionPercentageController.clear();
+    selectedState = null;
   }
 }

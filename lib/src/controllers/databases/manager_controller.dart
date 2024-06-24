@@ -69,7 +69,34 @@ class ManagerController {
       return ManagerModel(
         id: item[ManagerTable.id].toString(),
         name: item[ManagerTable.name],
-        individualTaxpayerRegistry: item[ManagerTable.individualTaxpayerRegistry],
+        individualTaxpayerRegistry:
+            item[ManagerTable.individualTaxpayerRegistry],
+        state: item[ManagerTable.state],
+        telephone: item[ManagerTable.telephone],
+        commissionPercentage: item[ManagerTable.commissionPercentage],
+      );
+    }
+
+    return null;
+  }
+
+  Future<ManagerModel?> getManagerFromId(String id) async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      ManagerTable.tableName,
+      where: '${ManagerTable.id} = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      final item = result.first;
+      return ManagerModel(
+        id: item[ManagerTable.id].toString(),
+        name: item[ManagerTable.name],
+        individualTaxpayerRegistry:
+            item[ManagerTable.individualTaxpayerRegistry],
         state: item[ManagerTable.state],
         telephone: item[ManagerTable.telephone],
         commissionPercentage: item[ManagerTable.commissionPercentage],
