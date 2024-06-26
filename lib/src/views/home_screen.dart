@@ -95,6 +95,19 @@ class HomeScreen extends StatelessWidget {
                 label: const Text('Cadastrar Veículos'),
               ),
             ),
+            SizedBox(
+              width: 250,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context,
+                      AppRoutes.registeredVehicles
+                  );
+                },
+                icon: const Icon(Icons.person_3),
+                label: const Text('Listar Veículos'),
+              ),
+            ),
           ],
         ),
       ),

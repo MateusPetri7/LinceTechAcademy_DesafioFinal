@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import '../models/vehicle_brand_model.dart';
 import '../models/vehicle_model.dart';
 import '../models/vehicle_model_model.dart';
@@ -15,10 +18,13 @@ class VehicleController extends ChangeNotifier {
 
   final _controllerDataBase = database.VehicleController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _typeController = TextEditingController();
+  final _brandController = TextEditingController();
+  final _modelController = TextEditingController();
   final _plateController = TextEditingController();
   final _yearManufactureController = TextEditingController();
   final _dailyRentalCostController = TextEditingController();
-  final _photosTheVehicleController = TextEditingController();
+  final List<String> _photosTheVehicle = [];
   final _listVehicle = <VehicleModel>[];
   VehicleModel _vehicleCurrent = VehicleModel();
   final List<String> _types = ['cars', 'motorcycles', 'trucks'];
@@ -29,20 +35,37 @@ class VehicleController extends ChangeNotifier {
   VehicleModelModel? _selectedModel;
 
   GlobalKey<FormState> get formKey => _formKey;
+
+  TextEditingController get typeController => _typeController;
+
+  TextEditingController get brandController => _brandController;
+
+  TextEditingController get modelController => _modelController;
+
   TextEditingController get plateController => _plateController;
+
   TextEditingController get yearManufactureController =>
       _yearManufactureController;
+
   TextEditingController get dailyRentalCostController =>
       _dailyRentalCostController;
-  TextEditingController get photosTheVehicleController =>
-      _photosTheVehicleController;
+
+  List<String> get photosTheVehicle => _photosTheVehicle;
+
   List<VehicleModel> get listVehicle => _listVehicle;
+
   VehicleModel get vehicleCurrent => _vehicleCurrent;
+
   List<String> get types => _types;
+
   List<VehicleBrandModel> get vehicleBrands => _vehicleBrands;
+
   List<VehicleModelModel> get vehicleModels => _vehicleModels;
+
   VehicleBrandModel? get selectedBrand => _selectedBrand;
+
   VehicleModelModel? get selectedModel => _selectedModel;
+
   String? get selectedType => _selectedType;
 
   set selectedType(String? value) {
@@ -96,12 +119,14 @@ class VehicleController extends ChangeNotifier {
 
   Future<void> insert() async {
     final vehicle = VehicleModel(
+      type: _selectedType,
       brand: _selectedBrand?.name,
       model: _selectedModel?.name,
       plate: plateController.text,
       yearManufacture: int.tryParse(yearManufactureController.text) ?? 0,
-      dailyRentalCost: double.tryParse(dailyRentalCostController.text) ?? 0.0,
-      photosTheVehicle: photosTheVehicleController.text,
+      dailyRentalCost:
+          _removeCurrencyFormatting(dailyRentalCostController.text),
+      photosTheVehicle: _photosTheVehicle,
     );
 
     await _controllerDataBase.insert(vehicle);
@@ -128,17 +153,18 @@ class VehicleController extends ChangeNotifier {
   }
 
   void populateVehicleInformation(VehicleModel vehicle) {
-    _selectedBrand = _vehicleBrands
-        .firstWhere((brand) => brand.name == vehicle.brand);
-    _selectedModel = _vehicleModels
-        .firstWhere((model) => model.name == vehicle.model);
+    _typeController.text = vehicle.type ?? '';
+    _brandController.text = vehicle.brand ?? '';
+    _modelController.text = vehicle.model ?? '';
     _plateController.text = vehicle.plate ?? '';
     _yearManufactureController.text = vehicle.yearManufacture?.toString() ?? '';
-    _dailyRentalCostController.text = vehicle.dailyRentalCost?.toString() ?? '';
-    _photosTheVehicleController.text = vehicle.photosTheVehicle ?? '';
+    _dailyRentalCostController.text =
+        _formatCurrency(vehicle.dailyRentalCost ?? 0.0);
+    _photosTheVehicle.addAll(vehicle.photosTheVehicle ?? []);
 
     _vehicleCurrent = VehicleModel(
       id: vehicle.id,
+      type: vehicle.type,
       brand: vehicle.brand,
       model: vehicle.model,
       plate: vehicle.plate,
@@ -151,12 +177,13 @@ class VehicleController extends ChangeNotifier {
   Future<void> update() async {
     final editedVehicle = VehicleModel(
       id: _vehicleCurrent.id,
+      type: _selectedType,
       brand: _selectedBrand?.name,
       model: _selectedModel?.name,
       plate: plateController.text,
       yearManufacture: int.tryParse(yearManufactureController.text) ?? 0,
       dailyRentalCost: double.tryParse(dailyRentalCostController.text) ?? 0.0,
-      photosTheVehicle: photosTheVehicleController.text,
+      photosTheVehicle: _photosTheVehicle,
     );
 
     await _controllerDataBase.update(editedVehicle);
@@ -169,12 +196,34 @@ class VehicleController extends ChangeNotifier {
   }
 
   void _clearControllers() {
+    _selectedType = null;
     _selectedBrand = null;
     _selectedModel = null;
     _plateController.clear();
     _yearManufactureController.clear();
     _dailyRentalCostController.clear();
-    _photosTheVehicleController.clear();
+    _photosTheVehicle.clear();
     notifyListeners();
+  }
+
+  void addPhoto(String imagePath) {
+    _photosTheVehicle.add(imagePath);
+    notifyListeners();
+  }
+
+  void removePhoto(String imagePath) {
+    _photosTheVehicle.remove(imagePath);
+    notifyListeners();
+  }
+
+  double _removeCurrencyFormatting(String value) {
+    final cleanValue = value.replaceAll('R\$', '').trim();
+    final numericValue = cleanValue.replaceAll('.', '').replaceAll(',', '.');
+    return double.tryParse(numericValue) ?? 0.0;
+  }
+
+  String _formatCurrency(double value) {
+    final formatCurrency = NumberFormat.simpleCurrency(locale: 'pt_BR');
+    return formatCurrency.format(value);
   }
 }

@@ -72,26 +72,6 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
-  String formatcompanyRegistrationNumber(String companyRegistrationNumber) {
-    final cnpjMaskFormatter = MaskTextInputFormatter(
-      mask: '##.###.###/####-##',
-      filter: {'#': RegExp(r'[0-9]')},
-    );
-    return cnpjMaskFormatter.maskText(companyRegistrationNumber);
-  }
-
-  String formatTelephone(String? telephone) {
-    if (telephone != null) {
-      final phoneMaskFormatter = MaskTextInputFormatter(
-        mask: '(##) #####-####',
-        filter: {'#': RegExp(r'[0-9]')},
-      );
-      return phoneMaskFormatter.maskText(telephone);
-    } else {
-      return '';
-    }
-  }
-
   Future<void> insert() async {
     final manager =
         await _managerControllerDatabase.getManagerFromState(selectedState!);
@@ -136,7 +116,7 @@ class ClientController extends ChangeNotifier {
     _cityController.text = client.city ?? '';
     selectedState = client.state;
     _companyRegistrationNumberController.text =
-        formatcompanyRegistrationNumber(client.companyRegistrationNumber!);
+        client.companyRegistrationNumber ?? '';
     managerController.text = manager?.name ?? '';
 
     _clientCurrent = ClientModel(
@@ -153,8 +133,6 @@ class ClientController extends ChangeNotifier {
     _telephoneController.text = formatTelephone(client.telephone);
     _cityController.text = client.city ?? '';
     selectedState = client.state;
-    _companyRegistrationNumberController.text =
-        formatcompanyRegistrationNumber(client.companyRegistrationNumber!);
     managerController.text = manager?.name ?? '';
 
     _clientCurrent = ClientModel(
@@ -188,5 +166,25 @@ class ClientController extends ChangeNotifier {
     cityController.clear();
     companyRegistrationNumberController.clear();
     managerController.clear();
+  }
+
+  String formatcompanyRegistrationNumber(String companyRegistrationNumber) {
+    final cnpjMaskFormatter = MaskTextInputFormatter(
+      mask: '##.###.###/####-##',
+      filter: {'#': RegExp(r'[0-9]')},
+    );
+    return cnpjMaskFormatter.maskText(companyRegistrationNumber);
+  }
+
+  String formatTelephone(String? telephone) {
+    if (telephone != null) {
+      final phoneMaskFormatter = MaskTextInputFormatter(
+        mask: '(##) #####-####',
+        filter: {'#': RegExp(r'[0-9]')},
+      );
+      return phoneMaskFormatter.maskText(telephone);
+    } else {
+      return '';
+    }
   }
 }

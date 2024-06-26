@@ -33,4 +33,15 @@ class ManagerTable {
 
     return map;
   }
+
+  static ManagerModel fromMap(Map<String, dynamic> map) {
+    return ManagerModel(
+      id: map[ManagerTable.id].toString(),
+      name: map[ManagerTable.name],
+      individualTaxpayerRegistry: map[ManagerTable.individualTaxpayerRegistry],
+      state: map[ManagerTable.state],
+      telephone: map[ManagerTable.telephone],
+      commissionPercentage: map[ManagerTable.commissionPercentage],
+    );
+  }
 }

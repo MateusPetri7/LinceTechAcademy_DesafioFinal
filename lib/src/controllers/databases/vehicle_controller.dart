@@ -29,17 +29,7 @@ class VehicleController {
 
     var list = <VehicleModel>[];
     for (final item in result) {
-      list.add(
-        VehicleModel(
-          id: item[VehicleTable.id].toString(),
-          brand: item[VehicleTable.brand],
-          model: item[VehicleTable.model],
-          plate: item[VehicleTable.plate],
-          yearManufacture: item[VehicleTable.yearManufacture],
-          dailyRentalCost: item[VehicleTable.dailyRentalCost],
-          photosTheVehicle: item[VehicleTable.photosTheVehicle],
-        ),
-      );
+      list.add(VehicleTable.fromMap(item));
     }
 
     return list;

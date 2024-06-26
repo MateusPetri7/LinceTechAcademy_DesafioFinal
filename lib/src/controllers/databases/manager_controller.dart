@@ -29,17 +29,7 @@ class ManagerController {
 
     var list = <ManagerModel>[];
     for (final item in result) {
-      list.add(
-        ManagerModel(
-          id: item[ManagerTable.id].toString(),
-          name: item[ManagerTable.name],
-          individualTaxpayerRegistry:
-              item[ManagerTable.individualTaxpayerRegistry],
-          state: item[ManagerTable.state],
-          telephone: item[ManagerTable.telephone],
-          commissionPercentage: item[ManagerTable.commissionPercentage],
-        ),
-      );
+      list.add(ManagerTable.fromMap(item));
     }
 
     return list;
@@ -66,15 +56,7 @@ class ManagerController {
 
     if (result.isNotEmpty) {
       final item = result.first;
-      return ManagerModel(
-        id: item[ManagerTable.id].toString(),
-        name: item[ManagerTable.name],
-        individualTaxpayerRegistry:
-            item[ManagerTable.individualTaxpayerRegistry],
-        state: item[ManagerTable.state],
-        telephone: item[ManagerTable.telephone],
-        commissionPercentage: item[ManagerTable.commissionPercentage],
-      );
+      return ManagerTable.fromMap(item);
     }
 
     return null;
@@ -92,15 +74,7 @@ class ManagerController {
 
     if (result.isNotEmpty) {
       final item = result.first;
-      return ManagerModel(
-        id: item[ManagerTable.id].toString(),
-        name: item[ManagerTable.name],
-        individualTaxpayerRegistry:
-            item[ManagerTable.individualTaxpayerRegistry],
-        state: item[ManagerTable.state],
-        telephone: item[ManagerTable.telephone],
-        commissionPercentage: item[ManagerTable.commissionPercentage],
-      );
+      return ManagerTable.fromMap(item);
     }
 
     return null;

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'src/models/client_model.dart';
 import 'src/models/manager_model.dart';
+import 'src/models/vehicle_model.dart';
 import 'src/views/client_edit.dart';
 import 'src/views/client_register.dart';
 import 'src/views/clients_registered.dart';
@@ -9,7 +10,9 @@ import 'src/views/home_screen.dart';
 import 'src/views/manager_edit.dart';
 import 'src/views/manager_register.dart';
 import 'src/views/managers_registered.dart';
+import 'src/views/vehicle_edit.dart';
 import 'src/views/vehicle_register.dart';
+import 'src/views/vehicles_registered.dart';
 
 class AppRoutes {
   static const String home = '/';
@@ -20,6 +23,8 @@ class AppRoutes {
   static const String registeredManagers = '/registeredManagers';
   static const String editManager = '/editManager';
   static const String registerVehicle = '/registerVehicle';
+  static const String registeredVehicles = '/registeredVehicles';
+  static const String editVehicle = '/editVehicle';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -41,6 +46,12 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => EditManager(manager: args));
       case registerVehicle:
         return MaterialPageRoute(builder: (_) => const RegisterVehicle());
+      case registeredVehicles:
+        return MaterialPageRoute(builder: (_) => const RegisteredVehicles());
+      case editVehicle:
+        final args = settings.arguments as VehicleModel;
+        return MaterialPageRoute(
+            builder: (_) => EditVehicle(vehicle: args));
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
     }

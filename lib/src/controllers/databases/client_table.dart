@@ -38,4 +38,16 @@ class ClientTable {
 
     return map;
   }
+
+  static ClientModel fromMap(Map<String, dynamic> map) {
+    return ClientModel(
+      id: map[ClientTable.id].toString(),
+      name: map[ClientTable.name],
+      telephone: map[ClientTable.telephone],
+      city: map[ClientTable.city],
+      state: map[ClientTable.state],
+      companyRegistrationNumber: map[ClientTable.companyRegistrationNumber],
+      managerId: map[ClientTable.manager_id].toString(),
+    );
+  }
 }

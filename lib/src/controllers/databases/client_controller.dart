@@ -29,17 +29,7 @@ class ClientController {
 
     var list = <ClientModel>[];
     for (final item in result) {
-      list.add(
-        ClientModel(
-          id: item[ClientTable.id].toString(),
-          name: item[ClientTable.name],
-          telephone: item[ClientTable.telephone],
-          city: item[ClientTable.city],
-          state: item[ClientTable.state],
-          companyRegistrationNumber:
-              item[ClientTable.companyRegistrationNumber],
-          managerId: item[ClientTable.manager_id].toString(),
-        ),
+      list.add(ClientTable.fromMap(item)
       );
     }
 

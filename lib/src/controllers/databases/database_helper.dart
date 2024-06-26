@@ -9,10 +9,11 @@ Future<Database> getDatabase() async {
 
   return openDatabase(
     path,
-    version: 3,
+    version: 5,
     onCreate: (db, version) async {
       await db.execute(ClientTable.createTable);
       await db.execute(ManagerTable.createTable);
+      await db.execute(VehicleTable.createTable);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
@@ -23,6 +24,13 @@ Future<Database> getDatabase() async {
             'ALTER TABLE ${ClientTable.tableName} RENAME COLUMN tin TO companyRegistrationNumber');
         await db.execute(
             'ALTER TABLE ${ClientTable.tableName} ADD COLUMN ${ClientTable.manager_id} INTEGER');
+      }
+      if (oldVersion < 4) {
+        await db.execute(VehicleTable.createTable);
+      }
+      if (oldVersion < 5) {
+        await db.execute(
+            'ALTER TABLE ${VehicleTable.tableName} ADD COLUMN ${VehicleTable.type} TEXT');
       }
     },
   );
