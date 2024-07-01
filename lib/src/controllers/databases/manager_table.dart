@@ -13,13 +13,13 @@ class ManagerTable {
   ); 
   ''';
 
-  static const String tableName = 'Manager';
+  static const String tableName = 'manager';
   static const String id = 'id';
   static const String name = 'name';
-  static const String individualTaxpayerRegistry = 'individualTaxpayerRegistry';
+  static const String individualTaxpayerRegistry = 'individual_taxpayer_registry';
   static const String state = 'state';
   static const String telephone = 'telephone';
-  static const String commissionPercentage = 'commissionPercentage';
+  static const String commissionPercentage = 'commission_percentage';
 
   static Map<String, dynamic> toMap(ManagerModel manager) {
     final map = <String, dynamic>{};

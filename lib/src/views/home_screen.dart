@@ -108,6 +108,32 @@ class HomeScreen extends StatelessWidget {
                 label: const Text('Listar Veículos'),
               ),
             ),
+            SizedBox(
+              width: 250,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context,
+                      AppRoutes.registerRentals
+                  );
+                },
+                icon: const Icon(Icons.person_3),
+                label: const Text('Cadastrar alugueis'),
+              ),
+            ),
+            SizedBox(
+              width: 250,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context,
+                      AppRoutes.registeredRentalsHeld
+                  );
+                },
+                icon: const Icon(Icons.person_3),
+                label: const Text('Aluguéis cadastrados'),
+              ),
+            ),
           ],
         ),
       ),

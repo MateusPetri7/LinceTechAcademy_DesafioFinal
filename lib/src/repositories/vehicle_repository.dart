@@ -21,6 +21,7 @@ class VehicleRepository implements IVehicleRepository {
       url: 'https://fipe.parallelum.com.br/api/v2/$type/brands',
     );
 
+    print(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> body = jsonDecode(response.body);
       return body.map((item) => VehicleBrandModel.fromJson(item)).toList();
@@ -40,6 +41,7 @@ class VehicleRepository implements IVehicleRepository {
           'https://fipe.parallelum.com.br/api/v2/cars/brands/$brandCode/models',
     );
 
+    print(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> body = jsonDecode(response.body);
       return body.map((item) => VehicleModelModel.fromJson(item)).toList();

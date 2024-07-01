@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_classes_with_only_static_members
-import '../../models/vehicle_model.dart';
 import 'dart:convert';
+import '../../models/vehicle_model.dart';
 
 class VehicleTable {
   static const String createTable = '''
@@ -16,15 +16,15 @@ class VehicleTable {
   ); 
   ''';
 
-  static const String tableName = 'Vehicle';
+  static const String tableName = 'vehicle';
   static const String id = 'id';
   static const String type = 'type';
   static const String brand = 'brand';
   static const String model = 'model';
   static const String plate = 'plate';
-  static const String yearManufacture = 'yearManufacture';
-  static const String dailyRentalCost = 'dailyRentalCost';
-  static const String photosTheVehicle = 'photosTheVehicle';
+  static const String yearManufacture = 'year_manufacture';
+  static const String dailyRentalCost = 'daily_rental_cost';
+  static const String photosTheVehicle = 'photos_the_vehicle';
 
   static Map<String, dynamic> toMap(VehicleModel vehicle) {
     final map = <String, dynamic>{};
@@ -50,7 +50,8 @@ class VehicleTable {
       plate: map[VehicleTable.plate],
       yearManufacture: map[VehicleTable.yearManufacture],
       dailyRentalCost: map[VehicleTable.dailyRentalCost],
-      photosTheVehicle: List<String>.from(jsonDecode(map[VehicleTable.photosTheVehicle])),
+      photosTheVehicle:
+          List<String>.from(jsonDecode(map[VehicleTable.photosTheVehicle])),
     );
   }
 }

@@ -69,9 +69,6 @@ class EditClient extends StatelessWidget {
                       if (value.length < 3) {
                         return 'Nome precisa ter pelo menos 3 letras.';
                       }
-                      if (!RegExp(r'^[A-Z]').hasMatch(value)) {
-                        return 'Nome precisa começar com letra maiúscula.';
-                      }
                       return null;
                     },
                   ),

@@ -29,8 +29,7 @@ class ClientController {
 
     var list = <ClientModel>[];
     for (final item in result) {
-      list.add(ClientTable.fromMap(item)
-      );
+      list.add(ClientTable.fromMap(item));
     }
 
     return list;
@@ -43,5 +42,24 @@ class ClientController {
 
     await database.update(ClientTable.tableName, map,
         where: '${ClientTable.id} = ?', whereArgs: [client.id]);
+  }
+
+  Future<List<ClientModel>> getClientsFromState(String state) async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      ClientTable.tableName,
+      where: '${ClientTable.state} = ?',
+      whereArgs: [state],
+    );
+
+    var list = <ClientModel>[];
+    if (result.isNotEmpty) {
+      for (final item in result) {
+        list.add(ClientTable.fromMap(item));
+      }
+    }
+
+    return list;
   }
 }

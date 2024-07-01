@@ -5,7 +5,7 @@ import '../models/client_model.dart';
 import '../repositories/client_repository.dart';
 import '../services/exceptions.dart';
 import 'databases/client_controller.dart' as database;
-import 'databases/manager_controller.dart';
+import 'databases/manager_controller.dart' as database_manager;
 
 class ClientController extends ChangeNotifier {
   final IClientRepository clientRepository;
@@ -15,7 +15,7 @@ class ClientController extends ChangeNotifier {
   }
 
   final _controllerDataBase = database.ClientController();
-  final _managerControllerDatabase = ManagerController();
+  final _managerControllerDatabase = database_manager.ManagerController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _telephoneController = TextEditingController();

@@ -10,19 +10,19 @@ class ClientTable {
   $city TEXT NOT NULL,
   $state TEXT NOT NULL,
   $companyRegistrationNumber TEXT NOT NULL,
-  $manager_id INTEGER,
-  FOREIGN KEY (manager_id) REFERENCES Manager(id)
+  $managerId INTEGER,
+  FOREIGN KEY ($managerId) REFERENCES manager(id)
   ); 
   ''';
 
-  static const String tableName = 'Client';
+  static const String tableName = 'client';
   static const String id = 'id';
   static const String name = 'name';
   static const String telephone = 'telephone';
   static const String city = 'city';
   static const String state = 'state';
-  static const String companyRegistrationNumber = 'companyRegistrationNumber';
-  static const String manager_id = 'manager_id';
+  static const String companyRegistrationNumber = 'company_registration_number';
+  static const String managerId = 'manager_id';
 
   static Map<String, dynamic> toMap(ClientModel client) {
     final map = <String, dynamic>{};
@@ -34,7 +34,7 @@ class ClientTable {
     map[ClientTable.state] = client.state;
     map[ClientTable.companyRegistrationNumber] =
         client.companyRegistrationNumber;
-    map[ClientTable.manager_id] = client.managerId;
+    map[ClientTable.managerId] = client.managerId;
 
     return map;
   }
@@ -47,7 +47,7 @@ class ClientTable {
       city: map[ClientTable.city],
       state: map[ClientTable.state],
       companyRegistrationNumber: map[ClientTable.companyRegistrationNumber],
-      managerId: map[ClientTable.manager_id].toString(),
+      managerId: map[ClientTable.managerId]?.toString(),
     );
   }
 }
