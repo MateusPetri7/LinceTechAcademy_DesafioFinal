@@ -62,4 +62,22 @@ class ClientController {
 
     return list;
   }
+
+  Future<ClientModel?> getClientFromId(String id) async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      ClientTable.tableName,
+      where: '${ClientTable.id} = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      final item = result.first;
+      return ClientTable.fromMap(item);
+    }
+
+    return null;
+  }
 }

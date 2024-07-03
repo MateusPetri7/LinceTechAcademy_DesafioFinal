@@ -6,17 +6,20 @@ class RentalsHeldTable {
   CREATE TABLE $tableName (
     $id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     $clientId INTEGER NOT NULL,
+    $vehicleId INTEGER NOT NULL,
     $startDate TEXT NOT NULL,
     $endDate TEXT NOT NULL,
     $numberOfDays INTEGER NOT NULL,
     $totalAmountPayable REAL NOT NULL,
-    FOREIGN KEY ($clientId) REFERENCES client(id)
+    FOREIGN KEY ($clientId) REFERENCES client(id),
+    FOREIGN KEY ($vehicleId) REFERENCES vehicle(id)
   );
   ''';
 
   static const String tableName = 'rentals_held';
   static const String id = 'id';
   static const String clientId = 'client_id';
+  static const String vehicleId = 'vehicle_id';
   static const String startDate = 'start_date';
   static const String endDate = 'end_date';
   static const String numberOfDays = 'number_of_days';
@@ -27,6 +30,7 @@ class RentalsHeldTable {
 
     map[RentalsHeldTable.id] = rentalsHeld.id;
     map[RentalsHeldTable.clientId] = rentalsHeld.clientId;
+    map[RentalsHeldTable.vehicleId] = rentalsHeld.vehicleId;
     map[RentalsHeldTable.startDate] = rentalsHeld.startDate?.toIso8601String();
     map[RentalsHeldTable.endDate] = rentalsHeld.endDate?.toIso8601String();
     map[RentalsHeldTable.numberOfDays] = rentalsHeld.numberOfDays;
@@ -39,6 +43,7 @@ class RentalsHeldTable {
     return RentalsHeldModel(
       id: map[RentalsHeldTable.id].toString(),
       clientId: map[RentalsHeldTable.clientId]?.toString(),
+      vehicleId: map[RentalsHeldTable.vehicleId]?.toString(),
       startDate: DateTime.parse(map[RentalsHeldTable.startDate]),
       endDate: DateTime.parse(map[RentalsHeldTable.endDate]),
       numberOfDays: map[RentalsHeldTable.numberOfDays],

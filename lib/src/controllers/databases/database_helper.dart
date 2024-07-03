@@ -10,7 +10,7 @@ Future<Database> getDatabase() async {
 
   return openDatabase(
     path,
-    version: 6,
+    version: 7,
     onCreate: (db, version) async {
       await db.execute(ClientTable.createTable);
       await db.execute(ManagerTable.createTable);
@@ -55,6 +55,10 @@ Future<Database> getDatabase() async {
             'ALTER TABLE vehicle RENAME COLUMN photosTheVehicle TO photos_the_vehicle');
 
         await db.execute(RentalsHeldTable.createTable);
+      }
+      if (oldVersion < 7) {
+        await db.execute(
+            'ALTER TABLE ${RentalsHeldTable.tableName} ADD COLUMN ${RentalsHeldTable.vehicleId} INTEGER');
       }
     },
   );

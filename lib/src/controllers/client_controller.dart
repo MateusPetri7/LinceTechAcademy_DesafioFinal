@@ -108,16 +108,17 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void populateClientInformation(ClientModel client) async {
+  Future<void> populateClientInformation(ClientModel client) async {
     final manager = await _managerControllerDatabase
         .getManagerFromId(client.managerId.toString());
+
     _nameController.text = client.name ?? '';
     _telephoneController.text = client.telephone ?? '';
     _cityController.text = client.city ?? '';
-    selectedState = client.state;
+    _selectedState = client.state;
     _companyRegistrationNumberController.text =
         client.companyRegistrationNumber ?? '';
-    managerController.text = manager?.name ?? '';
+    _managerController.text = manager?.name ?? '';
 
     _clientCurrent = ClientModel(
       id: client.id,
@@ -126,14 +127,21 @@ class ClientController extends ChangeNotifier {
 
   Future<void> populateClientInformationAtRegistration(
       ClientModel client) async {
+
     final manager =
         await _managerControllerDatabase.getManagerFromState(client.state!);
+
+    _selectedState = null;
+    _nameController.clear();
+    _telephoneController.clear();
+    _cityController.clear();
+    _managerController.clear();
 
     _nameController.text = client.name ?? '';
     _telephoneController.text = formatTelephone(client.telephone);
     _cityController.text = client.city ?? '';
     selectedState = client.state;
-    managerController.text = manager?.name ?? '';
+    _managerController.text = manager?.name ?? '';
 
     _clientCurrent = ClientModel(
       id: client.id,
@@ -161,11 +169,12 @@ class ClientController extends ChangeNotifier {
   }
 
   void _clearControllers() {
-    nameController.clear();
-    telephoneController.clear();
-    cityController.clear();
-    companyRegistrationNumberController.clear();
-    managerController.clear();
+    _selectedState = null;
+    _nameController.clear();
+    _telephoneController.clear();
+    _cityController.clear();
+    _companyRegistrationNumberController.clear();
+    _managerController.clear();
   }
 
   String formatcompanyRegistrationNumber(String companyRegistrationNumber) {

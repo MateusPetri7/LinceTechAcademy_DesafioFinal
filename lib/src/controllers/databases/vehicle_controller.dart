@@ -47,4 +47,22 @@ class VehicleController {
         whereArgs: [vehicle.id]
     );
   }
+
+  Future<VehicleModel?> getVehicleFromId(String id) async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      VehicleTable.tableName,
+      where: '${VehicleTable.id} = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      final item = result.first;
+      return VehicleTable.fromMap(item);
+    }
+
+    return null;
+  }
 }

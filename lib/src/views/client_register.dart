@@ -32,7 +32,7 @@ class RegisterClient extends StatelessWidget {
                               .replaceAll(RegExp(r'\D'), '');
                           if (cnpj.isNotEmpty) {
                             await state.getClientData(cnpj);
-                            state.populateClientInformationAtRegistration(
+                            await state.populateClientInformationAtRegistration(
                                 state.clientCurrent);
                           }
                         },

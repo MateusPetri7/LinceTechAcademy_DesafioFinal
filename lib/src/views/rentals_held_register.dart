@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../controllers/rentals_held_controller.dart';
 import '../models/client_model.dart';
+import '../models/vehicle_model.dart';
 
 class RegisterRentalsHeld extends StatelessWidget {
   const RegisterRentalsHeld({super.key});
@@ -63,6 +64,26 @@ class RegisterRentalsHeld extends StatelessWidget {
                       return null;
                     },
                   ),
+                  DropdownButtonFormField<VehicleModel>(
+                    value: state.selectedVehicle,
+                    hint: const Text('Selecione o veículo'),
+                    items: state.listVehicle
+                        .map<DropdownMenuItem<VehicleModel>>((VehicleModel vehicle) {
+                      return DropdownMenuItem<VehicleModel>(
+                        value: vehicle,
+                        child: Text('${vehicle.brand!} - ${vehicle.model!}'),
+                      );
+                    }).toList(),
+                    onChanged: (VehicleModel? value) {
+                      state.selectedVehicle = value;
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Veículo é obrigatório.';
+                      }
+                      return null;
+                    },
+                  ),
                   TextFormField(
                     controller: state.startDateController,
                     readOnly: true,
@@ -107,11 +128,27 @@ class RegisterRentalsHeld extends StatelessWidget {
                       labelText: 'Valor Total a Pagar',
                     ),
                   ),
+                  TextFormField(
+                    controller: state.percentageManagerCommissionController,
+                    keyboardType: TextInputType.number,
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Pencentual de comissão do gerente',
+                    ),
+                  ),
+                  TextFormField(
+                    controller: state.managerCommissionValueController,
+                    keyboardType: TextInputType.number,
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Valor comissão do gerente',
+                    ),
+                  ),
                   const SizedBox(height: 20.0),
                   ElevatedButton.icon(
                     onPressed: () async {
                       if (state.formKey.currentState!.validate()) {
-                        //await state.insert();
+                        await state.insert();
                       }
                     },
                     icon: const Icon(Icons.add),
