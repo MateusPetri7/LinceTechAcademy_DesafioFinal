@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'src/controllers/client_controller.dart';
 import 'src/controllers/image_controller.dart';
 import 'src/controllers/manager_controller.dart';
+import 'src/controllers/pdf_controller.dart';
 import 'src/controllers/rentals_held_controller.dart';
 import 'src/controllers/vehicle_controller.dart';
 import 'src/models/theme_model.dart';
@@ -28,6 +30,7 @@ void main() {
                 VehicleController(vehicleRepository: vehicleRepository)),
         ChangeNotifierProvider(create: (context) => ImageController()),
         ChangeNotifierProvider(create: (context) => RentalsHeldController()),
+        ChangeNotifierProvider(create: (context) => PdfController()),
       ],
       child: const MyApp(),
     ),

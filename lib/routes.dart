@@ -11,6 +11,8 @@ import 'src/views/home_screen.dart';
 import 'src/views/manager_edit.dart';
 import 'src/views/manager_register.dart';
 import 'src/views/managers_registered.dart';
+import 'src/views/pdf_registered.dart';
+import 'src/views/pdf_view.dart';
 import 'src/views/rentals_held_edit.dart';
 import 'src/views/rentals_held_register.dart';
 import 'src/views/rentals_held_registered.dart';
@@ -32,6 +34,8 @@ class AppRoutes {
   static const String registerRentals = '/registerRentals';
   static const String registeredRentalsHeld = '/registeredRentalsHeld';
   static const String editRentals = '/editRentals';
+  static const String pdfView = '/pdfView';
+  static const String registeredPDF = '/registeredPDF';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -66,6 +70,10 @@ class AppRoutes {
         final args = settings.arguments as RentalsHeldModel;
         return MaterialPageRoute(
             builder: (_) => EditRentalsHeld(rentals: args));
+      case pdfView:
+        return MaterialPageRoute(builder: (_) => PdfView());
+      case registeredPDF:
+        return MaterialPageRoute(builder: (_) => RegisteredPDF());
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
     }

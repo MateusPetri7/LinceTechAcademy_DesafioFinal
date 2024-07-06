@@ -4,6 +4,7 @@ import '../models/client_model.dart';
 import '../models/rentals_held_model.dart';
 import '../models/vehicle_model.dart';
 import 'databases/client_controller.dart' as database_client;
+import 'databases/manager_controller.dart' as database_manager;
 import 'databases/rentals_held_controller.dart' as database;
 import 'databases/vehicle_controller.dart' as database_vehicle;
 
@@ -16,6 +17,7 @@ class RentalsHeldController extends ChangeNotifier {
   final _controllerDataBase = database.RentalsHeldController();
   final _clientControllerDataBase = database_client.ClientController();
   final _vehicleControllerDataBase = database_vehicle.VehicleController();
+  final _managerControllerDataBase = database_manager.ManagerController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final List<String> _states = Estados.listaEstadosSigla;
   String? _selectedState;
@@ -76,6 +78,9 @@ class RentalsHeldController extends ChangeNotifier {
 
   set selectedClient(ClientModel? value) {
     _selectedClient = value;
+    if (_selectedClient != null) {
+      setPercentageManagerCommission(_selectedClient!.managerId.toString());
+    }
     notifyListeners();
   }
 
@@ -83,6 +88,19 @@ class RentalsHeldController extends ChangeNotifier {
     _selectedVehicle = value;
     calculateTotalValue();
     notifyListeners();
+  }
+
+  Future<void> setPercentageManagerCommission(String id) async {
+    final manager = await _managerControllerDataBase.getManagerFromId(id);
+    if (manager != null) {
+      _percentageManagerCommissionController.text =
+          manager.commissionPercentage ?? '';
+    }
+  }
+
+  void calculateManagerCommissionValue(
+      double rentalsValue, String percentageManagerCommission) {
+
   }
 
   Future<void> loadClients(String state) async {

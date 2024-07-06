@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'client_table.dart';
 import 'manager_table.dart';
+import 'pdf_table.dart';
 import 'rentals_held_table.dart';
 import 'vehicle_table.dart';
 
@@ -10,12 +11,13 @@ Future<Database> getDatabase() async {
 
   return openDatabase(
     path,
-    version: 7,
+    version: 8,
     onCreate: (db, version) async {
       await db.execute(ClientTable.createTable);
       await db.execute(ManagerTable.createTable);
       await db.execute(VehicleTable.createTable);
       await db.execute(RentalsHeldTable.createTable);
+      await db.execute(PDFTable.createTable);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
@@ -59,6 +61,9 @@ Future<Database> getDatabase() async {
       if (oldVersion < 7) {
         await db.execute(
             'ALTER TABLE ${RentalsHeldTable.tableName} ADD COLUMN ${RentalsHeldTable.vehicleId} INTEGER');
+      }
+      if (oldVersion < 8) {
+        await db.execute(PDFTable.createTable);
       }
     },
   );
