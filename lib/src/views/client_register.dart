@@ -1,6 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../controllers/client_controller.dart';
 
@@ -144,7 +145,7 @@ class RegisterClient extends StatelessWidget {
                       }
                     },
                     icon: const Icon(Icons.add),
-                    label: const Text('Cadastrar'),
+                    label: Text(AppLocalizations.of(context)!.helloWorld),
                   ),
                 ],
               ),

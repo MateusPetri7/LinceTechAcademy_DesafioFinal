@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'src/controllers/client_controller.dart';
 import 'src/controllers/image_controller.dart';
+import 'src/controllers/language_controller.dart';
 import 'src/controllers/manager_controller.dart';
 import 'src/controllers/pdf_controller.dart';
 import 'src/controllers/rentals_held_controller.dart';
@@ -31,6 +32,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => ImageController()),
         ChangeNotifierProvider(create: (context) => RentalsHeldController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
+        ChangeNotifierProvider(create: (context) => LanguageController()),
       ],
       child: const MyApp(),
     ),

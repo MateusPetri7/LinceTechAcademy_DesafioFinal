@@ -30,7 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_localization:
+
+  flutter_localizations:
     sdk: flutter
 
 

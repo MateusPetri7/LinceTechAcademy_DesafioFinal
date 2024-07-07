@@ -73,7 +73,7 @@ class AppRoutes {
       case pdfView:
         return MaterialPageRoute(builder: (_) => PdfView());
       case registeredPDF:
-        return MaterialPageRoute(builder: (_) => RegisteredPDF());
+        return MaterialPageRoute(builder: (_) => const RegisteredPDF());
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
     }

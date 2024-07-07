@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
+import '../controllers/language_controller.dart';
 import '../controllers/theme_controller.dart';
 import '../models/theme_model.dart';
 
@@ -11,20 +13,65 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => ThemeController.toggleTheme(context),
-          icon: Consumer<ThemeModel>(
-            builder: (context, themeModel, _) {
-              return Icon(
-                themeModel.themeMode == ThemeMode.light
-                    ? Icons.dark_mode
-                    : themeModel.themeMode == ThemeMode.dark
-                        ? Icons.light_mode
-                        : Icons.settings_brightness,
-              );
+        actions: [
+          PopupMenuButton<int>(
+            onSelected: (value) {
+              if (value == 0) {
+                ThemeController.toggleTheme(context);
+              }
             },
+            itemBuilder: (context) => [
+              PopupMenuItem<int>(
+                value: 0,
+                child: Consumer<ThemeModel>(
+                  builder: (context, themeModel, _) {
+                    return Row(
+                      children: [
+                        Icon(
+                          themeModel.themeMode == ThemeMode.light
+                              ? Icons.dark_mode
+                              : themeModel.themeMode == ThemeMode.dark
+                              ? Icons.light_mode
+                              : Icons.settings_brightness,
+                        ),
+                        const SizedBox(width: 8),
+                        Text('Change Theme'),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              PopupMenuItem<int>(
+                value: 1,
+                child: Consumer<LanguageController>(
+                  builder: (context, languageController, _) {
+                    return Row(
+                      children: [
+                        Icon(Icons.language),
+                        const SizedBox(width: 8),
+                        DropdownButton<String>(
+                          value: languageController.selectedLanguage,
+                          onChanged: (String? language) {
+                            if (language != null) {
+                              languageController.selectLanguage(language);
+                            }
+                          },
+                          items: <String>['pt', 'en']
+                              .map<DropdownMenuItem<String>>((value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-        ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -34,23 +81,17 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    AppRoutes.registerClient
-                  );
+                  Navigator.pushNamed(context, AppRoutes.registerClient);
                 },
                 icon: const Icon(Icons.person),
-                label: const Text('Cadastrar Clientes'),
+                label: Text(AppLocalizations.of(context)!.language),
               ),
             ),
             SizedBox(
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context,
-                      AppRoutes.registeredClients
-                  );
+                  Navigator.pushNamed(context, AppRoutes.registeredClients);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Listar Clientes'),
@@ -60,10 +101,7 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context,
-                      AppRoutes.registerManager
-                  );
+                  Navigator.pushNamed(context, AppRoutes.registerManager);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Cadastrar Gerentes'),
@@ -73,10 +111,7 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context,
-                      AppRoutes.registeredManagers
-                  );
+                  Navigator.pushNamed(context, AppRoutes.registeredManagers);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Listar Gerentes'),
@@ -86,10 +121,7 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context,
-                      AppRoutes.registerVehicle
-                  );
+                  Navigator.pushNamed(context, AppRoutes.registerVehicle);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Cadastrar Veículos'),
@@ -99,10 +131,7 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context,
-                      AppRoutes.registeredVehicles
-                  );
+                  Navigator.pushNamed(context, AppRoutes.registeredVehicles);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Listar Veículos'),
@@ -112,10 +141,7 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context,
-                      AppRoutes.registerRentals
-                  );
+                  Navigator.pushNamed(context, AppRoutes.registerRentals);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Cadastrar alugueis'),
@@ -125,10 +151,7 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context,
-                      AppRoutes.registeredRentalsHeld
-                  );
+                  Navigator.pushNamed(context, AppRoutes.registeredRentalsHeld);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Aluguéis cadastrados'),
@@ -138,10 +161,7 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context,
-                      AppRoutes.pdfView
-                  );
+                  Navigator.pushNamed(context, AppRoutes.pdfView);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Pdf'),
@@ -151,10 +171,7 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context,
-                      AppRoutes.registeredPDF
-                  );
+                  Navigator.pushNamed(context, AppRoutes.registeredPDF);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Pdf Lista'),
