@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'src/controllers/client_controller.dart';
 import 'src/controllers/image_controller.dart';
-import 'src/controllers/language_controller.dart';
 import 'src/controllers/manager_controller.dart';
 import 'src/controllers/pdf_controller.dart';
 import 'src/controllers/rentals_held_controller.dart';
 import 'src/controllers/vehicle_controller.dart';
+import 'src/models/language_model.dart';
 import 'src/models/theme_model.dart';
 import 'src/repositories/client_repository.dart';
 import 'src/repositories/vehicle_repository.dart';
@@ -32,7 +31,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => ImageController()),
         ChangeNotifierProvider(create: (context) => RentalsHeldController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
-        ChangeNotifierProvider(create: (context) => LanguageController()),
+        ChangeNotifierProvider(create: (context) => LanguageModel()),
       ],
       child: const MyApp(),
     ),

@@ -2,6 +2,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../models/client_model.dart';
+import '../models/manager_model.dart';
 import '../repositories/client_repository.dart';
 import '../services/exceptions.dart';
 import 'databases/client_controller.dart' as database;
@@ -22,10 +23,11 @@ class ClientController extends ChangeNotifier {
   final _cityController = TextEditingController();
   final List<String> _states = Estados.listaEstadosSigla;
   final _companyRegistrationNumberController = TextEditingController();
-  final _managerController = TextEditingController();
+  List<ManagerModel> _listManager = <ManagerModel>[];
   final _listClient = <ClientModel>[];
   ClientModel _clientCurrent = ClientModel();
   String? _selectedState;
+  ManagerModel? _selectedManager;
 
   GlobalKey<FormState> get formKey => _formKey;
 
@@ -40,7 +42,7 @@ class ClientController extends ChangeNotifier {
   TextEditingController get companyRegistrationNumberController =>
       _companyRegistrationNumberController;
 
-  TextEditingController get managerController => _managerController;
+  List<ManagerModel> get listManager => _listManager;
 
   List<ClientModel> get listClient => _listClient;
 
@@ -48,8 +50,15 @@ class ClientController extends ChangeNotifier {
 
   String? get selectedState => _selectedState;
 
+  ManagerModel? get selectedManager => _selectedManager;
+
   set selectedState(String? value) {
     _selectedState = value;
+    notifyListeners();
+  }
+
+  set selectedManager(ManagerModel? value) {
+    _selectedManager = value;
     notifyListeners();
   }
 
@@ -66,22 +75,42 @@ class ClientController extends ChangeNotifier {
     }
   }
 
-  Future<void> getManagerFromState(String state) async {
-    final manager = await _managerControllerDatabase.getManagerFromState(state);
-    managerController.text = manager?.name ?? 'Nenhum gerente encontrado';
+  Future<void> getManagersFromState(String state) async {
+    _listManager = [];
+    final managersList =
+        await _managerControllerDatabase.getManagersFromState(state);
+    _listManager = managersList;
+    if (_listManager.length == 1) {
+      _selectedManager = _listManager.first;
+    }
+    notifyListeners();
+  }
+
+  Future<void> getManagerFromClient(String state, String managerId) async {
+    _listManager = await _managerControllerDatabase.getManagersFromState(state);
+
+    final manager = _listManager.firstWhere(
+          (m) => m.id.toString() == managerId,
+      orElse: () => ManagerModel(id: null, name: 'Gerente não encontrado'),
+    );
+
+    if (manager.id != null) {
+      _selectedManager = manager;
+    } else {
+      _selectedManager = null;
+    }
+
     notifyListeners();
   }
 
   Future<void> insert() async {
-    final manager =
-        await _managerControllerDatabase.getManagerFromState(selectedState!);
     final client = ClientModel(
       name: nameController.text,
       telephone: telephoneController.text,
       city: cityController.text,
       state: selectedState,
       companyRegistrationNumber: companyRegistrationNumberController.text,
-      managerId: manager!.id.toString(),
+      managerId: _selectedManager!.id.toString(),
     );
 
     await _controllerDataBase.insert(client);
@@ -109,43 +138,36 @@ class ClientController extends ChangeNotifier {
   }
 
   Future<void> populateClientInformation(ClientModel client) async {
-    final manager = await _managerControllerDatabase
-        .getManagerFromId(client.managerId.toString());
+    await getManagerFromClient(client.state!, client.managerId.toString());
 
+    _companyRegistrationNumberController.text =
+        client.companyRegistrationNumber ?? '';
     _nameController.text = client.name ?? '';
     _telephoneController.text = client.telephone ?? '';
     _cityController.text = client.city ?? '';
     _selectedState = client.state;
-    _companyRegistrationNumberController.text =
-        client.companyRegistrationNumber ?? '';
-    _managerController.text = manager?.name ?? '';
 
     _clientCurrent = ClientModel(
       id: client.id,
     );
+    notifyListeners();
   }
 
   Future<void> populateClientInformationAtRegistration(
       ClientModel client) async {
+    _clearControllersWhenSwitchingCompanyRegistrationNumber();
 
-    final manager =
-        await _managerControllerDatabase.getManagerFromState(client.state!);
-
-    _selectedState = null;
-    _nameController.clear();
-    _telephoneController.clear();
-    _cityController.clear();
-    _managerController.clear();
+    getManagersFromState(client.state!);
 
     _nameController.text = client.name ?? '';
     _telephoneController.text = formatTelephone(client.telephone);
     _cityController.text = client.city ?? '';
-    selectedState = client.state;
-    _managerController.text = manager?.name ?? '';
+    _selectedState = client.state;
 
     _clientCurrent = ClientModel(
       id: client.id,
     );
+    notifyListeners();
   }
 
   Future<void> update() async {
@@ -156,7 +178,7 @@ class ClientController extends ChangeNotifier {
         city: cityController.text,
         state: selectedState,
         companyRegistrationNumber: companyRegistrationNumberController.text,
-        managerId: managerController.text);
+        managerId: _selectedManager!.id.toString());
 
     await _controllerDataBase.update(editedClient);
 
@@ -169,12 +191,22 @@ class ClientController extends ChangeNotifier {
   }
 
   void _clearControllers() {
-    _selectedState = null;
+    _companyRegistrationNumberController.clear();
     _nameController.clear();
     _telephoneController.clear();
     _cityController.clear();
-    _companyRegistrationNumberController.clear();
-    _managerController.clear();
+    _selectedState = null;
+    _selectedManager = null;
+    _listManager = [];
+  }
+
+  void _clearControllersWhenSwitchingCompanyRegistrationNumber() {
+    _nameController.clear();
+    _telephoneController.clear();
+    _cityController.clear();
+    _selectedState = null;
+    _selectedManager = null;
+    _listManager = [];
   }
 
   String formatcompanyRegistrationNumber(String companyRegistrationNumber) {

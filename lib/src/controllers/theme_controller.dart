@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/theme_model.dart';
 
+/// A controller class for managing theme toggling.
 class ThemeController {
+  /// Static method to toggle between light and dark themes.
   static void toggleTheme(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context, listen: false);
     if (themeModel.themeMode == ThemeMode.light) {
@@ -11,10 +13,10 @@ class ThemeController {
     } else if (themeModel.themeMode == ThemeMode.dark) {
       themeModel.setThemeMode(ThemeMode.light);
     } else {
-      final Brightness platformBrightness =
-          MediaQuery.of(context).platformBrightness;
-      themeModel.setThemeMode(
-          platformBrightness == Brightness.light ? ThemeMode.dark : ThemeMode.light);
+      final platformBrightness = MediaQuery.of(context).platformBrightness;
+      themeModel.setThemeMode(platformBrightness == Brightness.light
+          ? ThemeMode.dark
+          : ThemeMode.light);
     }
   }
 }

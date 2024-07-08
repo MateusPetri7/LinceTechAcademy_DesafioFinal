@@ -47,8 +47,8 @@ class RegisterRentalsHeld extends StatelessWidget {
                   DropdownButtonFormField<ClientModel>(
                     value: state.selectedClient,
                     hint: const Text('Selecione o cliente'),
-                    items: state.listClient
-                        .map<DropdownMenuItem<ClientModel>>((ClientModel client) {
+                    items: state.listClient.map<DropdownMenuItem<ClientModel>>(
+                        (ClientModel client) {
                       return DropdownMenuItem<ClientModel>(
                         value: client,
                         child: Text(client.name!),
@@ -68,7 +68,8 @@ class RegisterRentalsHeld extends StatelessWidget {
                     value: state.selectedVehicle,
                     hint: const Text('Selecione o veículo'),
                     items: state.listVehicle
-                        .map<DropdownMenuItem<VehicleModel>>((VehicleModel vehicle) {
+                        .map<DropdownMenuItem<VehicleModel>>(
+                            (VehicleModel vehicle) {
                       return DropdownMenuItem<VehicleModel>(
                         value: vehicle,
                         child: Text('${vehicle.brand!} - ${vehicle.model!}'),
@@ -90,7 +91,8 @@ class RegisterRentalsHeld extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: 'Data de Início',
                     ),
-                    onTap: () => state.selectDate(context, state.startDateController),
+                    onTap: () =>
+                        state.selectDate(context, state.startDateController),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Data de Início é obrigatória.';
@@ -104,7 +106,8 @@ class RegisterRentalsHeld extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: 'Data de Término',
                     ),
-                    onTap: () => state.selectDate(context, state.endDateController),
+                    onTap: () =>
+                        state.selectDate(context, state.endDateController),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Data de Término é obrigatória.';

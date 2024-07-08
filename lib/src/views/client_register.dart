@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../controllers/client_controller.dart';
+import '../models/manager_model.dart';
 
 class RegisterClient extends StatelessWidget {
   const RegisterClient({super.key});
@@ -106,15 +107,15 @@ class RegisterClient extends StatelessWidget {
                     value: state.selectedState,
                     hint: const Text('Selecione o estado'),
                     items: state.states
-                        .map<DropdownMenuItem<String>>((String state) {
+                        .map<DropdownMenuItem<String>>((final state) {
                       return DropdownMenuItem<String>(
                         value: state,
                         child: Text(state),
                       );
                     }).toList(),
-                    onChanged: (String? value) {
+                    onChanged: (final value) {
                       state.selectedState = value;
-                      state.getManagerFromState(state.selectedState!);
+                      state.getManagersFromState(state.selectedState!);
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -123,15 +124,24 @@ class RegisterClient extends StatelessWidget {
                       return null;
                     },
                   ),
-                  TextFormField(
-                    controller: state.managerController,
-                    keyboardType: TextInputType.text,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Gerente',
-                    ),
+                  DropdownButtonFormField<ManagerModel>(
+                    value: state.selectedManager,
+                    hint: const Text('Selecione o gerente'),
+                    items: state.listManager
+                        .map<DropdownMenuItem<ManagerModel>>(
+                            (final manager) {
+                      return DropdownMenuItem<ManagerModel>(
+                        value: manager,
+                        child: Text(manager.name!),
+                      );
+                    }).toList(),
+                    onChanged: (final value) {
+                      if (value != null) {
+                        state.selectedManager = value;
+                      }
+                    },
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null) {
                         return 'Gerente é obrigatório.';
                       }
                       return null;

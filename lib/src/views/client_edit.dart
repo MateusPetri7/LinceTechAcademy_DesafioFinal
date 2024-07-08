@@ -1,9 +1,10 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../controllers/client_controller.dart';
 import '../models/client_model.dart';
+import '../models/manager_model.dart';
 
 class EditClient extends StatelessWidget {
   final ClientModel client;
@@ -131,7 +132,7 @@ class EditClient extends StatelessWidget {
                           }).toList(),
                           onChanged: (String? value) {
                             state.selectedState = value;
-                            state.getManagerFromState(state.selectedState!);
+                            state.getManagersFromState(state.selectedState!);
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -140,15 +141,24 @@ class EditClient extends StatelessWidget {
                             return null;
                           },
                         ),
-                        TextFormField(
-                          controller: state.managerController,
-                          keyboardType: TextInputType.text,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            labelText: 'Gerente',
-                          ),
+                        DropdownButtonFormField<ManagerModel>(
+                          value: state.selectedManager,
+                          hint: const Text('Selecione o gerente'),
+                          items: state.listManager
+                              .map<DropdownMenuItem<ManagerModel>>(
+                                  (final manager) {
+                                return DropdownMenuItem<ManagerModel>(
+                                  value: manager,
+                                  child: Text(manager.name!),
+                                );
+                              }).toList(),
+                          onChanged: (final value) {
+                            if (value != null) {
+                              state.selectedManager = value;
+                            }
+                          },
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
+                            if (value == null) {
                               return 'Gerente é obrigatório.';
                             }
                             return null;

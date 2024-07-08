@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/language_controller.dart';
 import '../controllers/theme_controller.dart';
+import '../models/language_model.dart';
 import '../models/theme_model.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -31,8 +32,8 @@ class HomeScreen extends StatelessWidget {
                           themeModel.themeMode == ThemeMode.light
                               ? Icons.dark_mode
                               : themeModel.themeMode == ThemeMode.dark
-                              ? Icons.light_mode
-                              : Icons.settings_brightness,
+                                  ? Icons.light_mode
+                                  : Icons.settings_brightness,
                         ),
                         const SizedBox(width: 8),
                         Text('Change Theme'),
@@ -43,17 +44,18 @@ class HomeScreen extends StatelessWidget {
               ),
               PopupMenuItem<int>(
                 value: 1,
-                child: Consumer<LanguageController>(
-                  builder: (context, languageController, _) {
+                child: Consumer<LanguageModel>(
+                  builder: (context, state, _) {
                     return Row(
                       children: [
                         Icon(Icons.language),
                         const SizedBox(width: 8),
                         DropdownButton<String>(
-                          value: languageController.selectedLanguage,
+                          value: state.selectedLanguage,
                           onChanged: (String? language) {
                             if (language != null) {
-                              languageController.selectLanguage(language);
+                              LanguageController.selectLanguage(
+                                  context, language);
                             }
                           },
                           items: <String>['pt', 'en']

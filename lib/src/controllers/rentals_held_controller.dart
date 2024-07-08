@@ -79,7 +79,7 @@ class RentalsHeldController extends ChangeNotifier {
   set selectedClient(ClientModel? value) {
     _selectedClient = value;
     if (_selectedClient != null) {
-      setPercentageManagerCommission(_selectedClient!.managerId.toString());
+      _setPercentageManagerCommission(_selectedClient!.managerId.toString());
     }
     notifyListeners();
   }
@@ -90,7 +90,7 @@ class RentalsHeldController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setPercentageManagerCommission(String id) async {
+  Future<void> _setPercentageManagerCommission(String id) async {
     final manager = await _managerControllerDataBase.getManagerFromId(id);
     if (manager != null) {
       _percentageManagerCommissionController.text =
@@ -98,9 +98,23 @@ class RentalsHeldController extends ChangeNotifier {
     }
   }
 
-  void calculateManagerCommissionValue(
-      double rentalsValue, String percentageManagerCommission) {
+  void _setManagerCommissionValue() {
+    if (_totalAmountPayableController.text.isNotEmpty &&
+        _percentageManagerCommissionController.text.isNotEmpty) {
+      _calculateManagerCommissionValue(
+        double.tryParse(_totalAmountPayableController.text)!,
+        double.tryParse(_percentageManagerCommissionController.text)!,
+      );
+    }
+  }
 
+  void _calculateManagerCommissionValue(
+      double rentalsValue, double percentageManagerCommission) {
+    final managerCommissionValue =
+        rentalsValue * (percentageManagerCommission / 100);
+    _managerCommissionValueController.text =
+        managerCommissionValue.toStringAsFixed(2);
+    notifyListeners();
   }
 
   Future<void> loadClients(String state) async {
@@ -152,6 +166,7 @@ class RentalsHeldController extends ChangeNotifier {
       final totalValue =
           dailyRentalCost * int.parse(_numberOfDaysController.text);
       _totalAmountPayableController.text = totalValue.toStringAsFixed(2);
+      _setManagerCommissionValue();
     }
   }
 

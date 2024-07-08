@@ -1,26 +1,13 @@
+// ignore_for_file: avoid_classes_with_only_static_members
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import '../models/language_model.dart';
 
-class LanguageController with ChangeNotifier {
-  static const String _languageKey = 'selectedLanguage';
-  String _selectedLanguage = 'en';
-
-  LanguageController() {
-    _loadLanguage();
-  }
-
-  String get selectedLanguage => _selectedLanguage;
-
-  Future<void> selectLanguage(String language) async {
-    _selectedLanguage = language;
-    notifyListeners();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_languageKey, language);
-  }
-
-  Future<void> _loadLanguage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _selectedLanguage = prefs.getString(_languageKey) ?? 'en';
-    notifyListeners();
+/// A controller class for managing language selection.
+class LanguageController {
+  /// Static method to select a language.
+  static void selectLanguage(BuildContext context, String language) {
+    final languageModel = Provider.of<LanguageModel>(context, listen: false);
+    languageModel.setLanguage(language);
   }
 }

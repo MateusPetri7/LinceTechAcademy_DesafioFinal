@@ -44,22 +44,23 @@ class ManagerController {
         where: '${ManagerTable.id} = ?', whereArgs: [manager.id]);
   }
 
-  Future<ManagerModel?> getManagerFromState(String state) async {
+  Future<List<ManagerModel>> getManagersFromState(String state) async {
     final database = await getDatabase();
 
     final List<Map<String, dynamic>> result = await database.query(
       ManagerTable.tableName,
       where: '${ManagerTable.state} = ?',
       whereArgs: [state],
-      limit: 1,
     );
 
+    final managers = <ManagerModel>[];
     if (result.isNotEmpty) {
-      final item = result.first;
-      return ManagerTable.fromMap(item);
+      for (var item in result) {
+        managers.add(ManagerTable.fromMap(item));
+      }
     }
 
-    return null;
+    return managers;
   }
 
   Future<ManagerModel?> getManagerFromId(String id) async {
