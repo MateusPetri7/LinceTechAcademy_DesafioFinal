@@ -8,9 +8,13 @@ import '../services/exceptions.dart';
 import 'databases/client_controller.dart' as database;
 import 'databases/manager_controller.dart' as database_manager;
 
+/// Controller for managing client data and interactions.
 class ClientController extends ChangeNotifier {
-  final IClientRepository clientRepository;
+  /// Repository for client data.
+  final ClientRepository clientRepository;
 
+  /// Constructor to initialize the client controller with the
+  /// required [clientRepository].
   ClientController({required this.clientRepository}) {
     load();
   }
@@ -29,27 +33,39 @@ class ClientController extends ChangeNotifier {
   String? _selectedState;
   ManagerModel? _selectedManager;
 
+  /// Returns the global form key used to manage the form state.
   GlobalKey<FormState> get formKey => _formKey;
 
+  /// Returns the controller managing the client's name input field.
   TextEditingController get nameController => _nameController;
 
+  /// Returns the controller managing the client's telephone input field.
   TextEditingController get telephoneController => _telephoneController;
 
+  /// Returns the controller managing the client's city input field.
   TextEditingController get cityController => _cityController;
 
+  /// Returns the list of Brazilian states abbreviations.
   List<String> get states => _states;
 
+  /// Returns the controller managing the company registration number
+  /// input field.
   TextEditingController get companyRegistrationNumberController =>
       _companyRegistrationNumberController;
 
+  /// Returns the list of  managers possible to associate with clients.
   List<ManagerModel> get listManager => _listManager;
 
+  /// Returns the list of clients managed by the controller.
   List<ClientModel> get listClient => _listClient;
 
+  /// Returns the currently selected client.
   ClientModel get clientCurrent => _clientCurrent;
 
+  /// Returns the currently selected state.
   String? get selectedState => _selectedState;
 
+  /// Returns the currently selected manager.
   ManagerModel? get selectedManager => _selectedManager;
 
   set selectedState(String? value) {
@@ -62,6 +78,10 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Fetches client data from the repository based on the
+  /// company registration number.
+  ///
+  /// Throws a [NotFoundException] if the client data is not found.
   Future<void> getClientData(String companyRegistrationNumber) async {
     try {
       final clientData =
@@ -75,6 +95,7 @@ class ClientController extends ChangeNotifier {
     }
   }
 
+  /// Fetches managers from the database based on the state.
   Future<void> getManagersFromState(String state) async {
     _listManager = [];
     final managersList =
@@ -86,12 +107,12 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getManagerFromClient(String state, String managerId) async {
+  Future<void> _getManagerFromClient(String state, String managerId) async {
     _listManager = await _managerControllerDatabase.getManagersFromState(state);
 
     final manager = _listManager.firstWhere(
-          (m) => m.id.toString() == managerId,
-      orElse: () => ManagerModel(id: null, name: 'Gerente não encontrado'),
+      (m) => m.id.toString() == managerId,
+      orElse: () => ManagerModel(id: null, name: ''),
     );
 
     if (manager.id != null) {
@@ -103,6 +124,7 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Inserts a new client into the database.
   Future<void> insert() async {
     final client = ClientModel(
       name: nameController.text,
@@ -121,6 +143,7 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Deletes a client from the database.
   Future<void> delete(ClientModel client) async {
     await _controllerDataBase.delete(client);
     await load();
@@ -128,6 +151,7 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Loads all clients from the database.
   Future<void> load() async {
     final list = await _controllerDataBase.select();
 
@@ -137,8 +161,9 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Populates client information based on a given client model.
   Future<void> populateClientInformation(ClientModel client) async {
-    await getManagerFromClient(client.state!, client.managerId.toString());
+    await _getManagerFromClient(client.state!, client.managerId.toString());
 
     _companyRegistrationNumberController.text =
         client.companyRegistrationNumber ?? '';
@@ -153,14 +178,16 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Populates client information during registration based
+  /// on a given client model.
   Future<void> populateClientInformationAtRegistration(
       ClientModel client) async {
     _clearControllersWhenSwitchingCompanyRegistrationNumber();
 
-    getManagersFromState(client.state!);
+    await getManagersFromState(client.state!);
 
     _nameController.text = client.name ?? '';
-    _telephoneController.text = formatTelephone(client.telephone);
+    _telephoneController.text = _formatTelephone(client.telephone);
     _cityController.text = client.city ?? '';
     _selectedState = client.state;
 
@@ -170,6 +197,7 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Updates client information in the database.
   Future<void> update() async {
     final editedClient = ClientModel(
         id: _clientCurrent.id,
@@ -209,15 +237,7 @@ class ClientController extends ChangeNotifier {
     _listManager = [];
   }
 
-  String formatcompanyRegistrationNumber(String companyRegistrationNumber) {
-    final cnpjMaskFormatter = MaskTextInputFormatter(
-      mask: '##.###.###/####-##',
-      filter: {'#': RegExp(r'[0-9]')},
-    );
-    return cnpjMaskFormatter.maskText(companyRegistrationNumber);
-  }
-
-  String formatTelephone(String? telephone) {
+  String _formatTelephone(String? telephone) {
     if (telephone != null) {
       final phoneMaskFormatter = MaskTextInputFormatter(
         mask: '(##) #####-####',

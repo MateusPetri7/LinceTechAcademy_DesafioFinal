@@ -263,5 +263,7 @@ class RentalsHeldController extends ChangeNotifier {
     _endDateController.clear();
     _numberOfDaysController.clear();
     _totalAmountPayableController.clear();
+    _percentageManagerCommissionController.clear();
+    _managerCommissionValueController.clear();
   }
 }

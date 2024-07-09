@@ -7,7 +7,6 @@ class ManagerController extends ChangeNotifier {
   ManagerController() {
     load();
   }
-
   final _controllerDataBase = database.ManagerController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();

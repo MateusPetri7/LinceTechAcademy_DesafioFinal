@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/pdf_controller.dart';
-import 'manager_edit.dart';
 
 class RegisteredPDF extends StatelessWidget {
   const RegisteredPDF({super.key});

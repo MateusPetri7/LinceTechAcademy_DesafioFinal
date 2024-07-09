@@ -6,6 +6,9 @@ import '../models/theme_model.dart';
 /// A controller class for managing theme toggling.
 class ThemeController {
   /// Static method to toggle between light and dark themes.
+  ///
+  /// This method toggles the theme in the provided [ThemeModel] instance
+  /// through the [Provider] context.
   static void toggleTheme(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context, listen: false);
     if (themeModel.themeMode == ThemeMode.light) {

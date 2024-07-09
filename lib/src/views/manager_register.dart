@@ -22,7 +22,7 @@ class RegisterManager extends StatelessWidget {
                   TextFormField(
                     controller: state.nameController,
                     keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Nome',
                     ),
                     validator: (value) {

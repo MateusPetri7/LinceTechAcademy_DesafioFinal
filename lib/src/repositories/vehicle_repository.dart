@@ -4,15 +4,37 @@ import '../models/vehicle_model_model.dart';
 import '../services/exceptions.dart';
 import '../services/http_client.dart';
 
+/// Abstract class defining methods to fetch vehicle brands and models.
 abstract class IVehicleRepository {
+  /// Fetches a list of vehicle brands based on the specified type.
+  ///
+  /// Throws a [NotFoundException] if the page is not found (404).
+  ///
+  /// Throws an [InternalServerErrorException] if there's an internal server error
+  /// (500).
+  ///
+  /// Throws an [Exception] for any other errors encountered during the
+  /// HTTP request.
   Future<List<VehicleBrandModel>> getVehicleBrands(String type);
 
+  /// Fetches a list of vehicle models based on the specified brand code.
+  ///
+  /// Throws a [NotFoundException] if the page is not found (404).
+  ///
+  /// Throws an [InternalServerErrorException] if there's an internal server error
+  /// (500).
+  ///
+  /// Throws an [Exception] for any other errors encountered during the
+  /// HTTP request.
   Future<List<VehicleModelModel>> getVehicleModels(String brandCode);
 }
 
+/// Implementation of [IVehicleRepository] using an [IHttpClient] instance.
 class VehicleRepository implements IVehicleRepository {
+  /// Instance of [IHttpClient] used for making HTTP requests.
   final IHttpClient client;
 
+  /// Constructs a [VehicleRepository] with the required client dependency.
   VehicleRepository({required this.client});
 
   @override
@@ -21,7 +43,6 @@ class VehicleRepository implements IVehicleRepository {
       url: 'https://fipe.parallelum.com.br/api/v2/$type/brands',
     );
 
-    print(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> body = jsonDecode(response.body);
       return body.map((item) => VehicleBrandModel.fromJson(item)).toList();
@@ -41,7 +62,6 @@ class VehicleRepository implements IVehicleRepository {
           'https://fipe.parallelum.com.br/api/v2/cars/brands/$brandCode/models',
     );
 
-    print(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> body = jsonDecode(response.body);
       return body.map((item) => VehicleModelModel.fromJson(item)).toList();

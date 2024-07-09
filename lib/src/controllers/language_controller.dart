@@ -6,6 +6,9 @@ import '../models/language_model.dart';
 /// A controller class for managing language selection.
 class LanguageController {
   /// Static method to select a language.
+  ///
+  /// This method updates the language in the provided [LanguageModel] instance
+  /// through the [Provider] context.
   static void selectLanguage(BuildContext context, String language) {
     final languageModel = Provider.of<LanguageModel>(context, listen: false);
     languageModel.setLanguage(language);

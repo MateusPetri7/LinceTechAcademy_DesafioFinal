@@ -10,7 +10,8 @@ class ThemeModel extends ChangeNotifier {
   /// Getter to retrieve the current theme mode.
   ThemeMode get themeMode => _themeMode;
 
-  /// Constructor that initializes the theme model and loads the saved theme mode.
+  /// Constructor that initializes the theme model and loads the saved
+  /// theme mode.
   ThemeModel() {
     _loadPreferences();
   }
@@ -28,6 +29,11 @@ class ThemeModel extends ChangeNotifier {
   }
 
   /// Sets the theme mode and saves it to SharedPreferences.
+  ///
+  /// This method updates the [_themeMode] with the new value and saves it
+  /// in the persistent storage. It also notifies listeners about the change.
+  ///
+  /// - [mode]: The new theme mode to be set and saved.
   void setThemeMode(ThemeMode mode) {
     _themeMode = mode;
     _sharedPreferences.setString(_appThemeModeKey, mode.toString());

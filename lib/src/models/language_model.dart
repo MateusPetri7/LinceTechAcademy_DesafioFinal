@@ -9,7 +9,8 @@ class LanguageModel extends ChangeNotifier {
   /// Getter to retrieve the currently selected language.
   String get selectedLanguage => _selectedLanguage;
 
-  /// Constructor that initializes the language model and loads the saved language.
+  /// Constructor that initializes the language model and loads the
+  /// saved language.
   LanguageModel() {
     _loadLanguage();
   }
@@ -21,6 +22,12 @@ class LanguageModel extends ChangeNotifier {
   }
 
   /// Sets the selected language and saves it to SharedPreferences.
+  ///
+  /// This method updates the [_selectedLanguage] with the new value and
+  /// saves it in the persistent storage. It also notifies listeners
+  /// about the change.
+  ///
+  /// - [language]: The new language code to be set and saved.
   Future<void> setLanguage(String language) async {
     _selectedLanguage = language;
     final prefs = await SharedPreferences.getInstance();
