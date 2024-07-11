@@ -7,7 +7,6 @@ class RentalsHeldController {
     final database = await getDatabase();
     final map = RentalsHeldTable.toMap(rentalsHeld);
 
-    print(rentalsHeld);
     await database.insert(RentalsHeldTable.tableName, map);
   }
 

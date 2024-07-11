@@ -1,14 +1,12 @@
 import 'package:http/http.dart' as http;
 
-abstract class IHttpClient {
-  Future get({required String url});
-}
-
-class HttpClient implements IHttpClient {
+/// A class for performing HTTP GET requests using the `http` package.
+class HttpClient {
+  /// The HTTP client instance from the `http` package.
   final client = http.Client();
 
-  @override
+  /// Performs a GET request to the specified [url].
   Future get({required String url}) async {
-   return await client.get(Uri.parse(url));
+    return await client.get(Uri.parse(url));
   }
 }

@@ -29,10 +29,10 @@ abstract class IVehicleRepository {
   Future<List<VehicleModelModel>> getVehicleModels(String brandCode);
 }
 
-/// Implementation of [IVehicleRepository] using an [IHttpClient] instance.
+/// Implementation of [IVehicleRepository] using an [HttpClient] instance.
 class VehicleRepository implements IVehicleRepository {
-  /// Instance of [IHttpClient] used for making HTTP requests.
-  final IHttpClient client;
+  /// Instance of [HttpClient] used for making HTTP requests.
+  final HttpClient client;
 
   /// Constructs a [VehicleRepository] with the required client dependency.
   VehicleRepository({required this.client});

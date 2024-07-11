@@ -5,8 +5,8 @@ import '../services/http_client.dart';
 
 /// A repository responsible for fetching client data using an HTTP client.
 class ClientRepository {
-  /// Instance of HTTP client used for making requests.
-  final IHttpClient client;
+  /// Instance of [HttpClient] used for making HTTP requests.
+  final HttpClient client;
 
   /// Constructs a ClientRepository with the required HTTP client dependency.
   ClientRepository({required this.client});

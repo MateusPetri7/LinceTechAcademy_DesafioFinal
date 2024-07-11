@@ -17,7 +17,7 @@ Future<Database> getDatabase() async {
       await db.execute(ManagerTable.createTable);
       await db.execute(VehicleTable.createTable);
       await db.execute(RentalsHeldTable.createTable);
-      await db.execute(PDFTable.createTable);
+      await db.execute(PdfTable.createTable);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
@@ -63,7 +63,7 @@ Future<Database> getDatabase() async {
             'ALTER TABLE ${RentalsHeldTable.tableName} ADD COLUMN ${RentalsHeldTable.vehicleId} INTEGER');
       }
       if (oldVersion < 8) {
-        await db.execute(PDFTable.createTable);
+        await db.execute(PdfTable.createTable);
       }
     },
   );

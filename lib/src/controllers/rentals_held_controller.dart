@@ -7,6 +7,7 @@ import 'databases/client_controller.dart' as database_client;
 import 'databases/manager_controller.dart' as database_manager;
 import 'databases/rentals_held_controller.dart' as database;
 import 'databases/vehicle_controller.dart' as database_vehicle;
+import 'pdf_controller.dart';
 
 class RentalsHeldController extends ChangeNotifier {
   RentalsHeldController() {
@@ -184,8 +185,6 @@ class RentalsHeldController extends ChangeNotifier {
 
     await _controllerDataBase.insert(rentals);
 
-    _clearControllers();
-
     await load();
     notifyListeners();
   }
@@ -250,12 +249,12 @@ class RentalsHeldController extends ChangeNotifier {
     await _controllerDataBase.update(editedRental);
 
     _rentalsCurrent = RentalsHeldModel();
-    _clearControllers();
+    clearControllers();
     await load();
     notifyListeners();
   }
 
-  void _clearControllers() {
+  void clearControllers() {
     _selectedState = null;
     _selectedClient = null;
     _selectedVehicle = null;

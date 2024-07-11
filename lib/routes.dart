@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'src/models/client_model.dart';
 import 'src/models/manager_model.dart';
+import 'src/models/pdf_model.dart';
 import 'src/models/rentals_held_model.dart';
 import 'src/models/vehicle_model.dart';
 import 'src/views/client_edit.dart';
@@ -71,7 +72,9 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (_) => EditRentalsHeld(rentals: args));
       case pdfView:
-        return MaterialPageRoute(builder: (_) => PdfView());
+        final args = settings.arguments as PdfModel;
+        return MaterialPageRoute(
+            builder: (_) => PdfView(pdf: args));
       case registeredPDF:
         return MaterialPageRoute(builder: (_) => const RegisteredPDF());
       default:
