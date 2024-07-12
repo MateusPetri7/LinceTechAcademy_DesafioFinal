@@ -5,10 +5,24 @@ import 'package:provider/provider.dart';
 import '../controllers/manager_controller.dart';
 import '../models/manager_model.dart';
 
-class EditManager extends StatelessWidget {
+class EditManager extends StatefulWidget {
   final ManagerModel manager;
 
   const EditManager({super.key, required this.manager});
+
+  @override
+  _EditManagerState createState() => _EditManagerState();
+}
+
+class _EditManagerState extends State<EditManager> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final state = Provider.of<ManagerController>(context, listen: false);
+      state.populateManagerInformation(widget.manager);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +31,6 @@ class EditManager extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Consumer<ManagerController>(
           builder: (context, state, _) {
-            state.populateManagerInformation(manager);
             return Form(
               key: state.formKey,
               child: Column(
@@ -81,6 +94,7 @@ class EditManager extends StatelessWidget {
                       );
                     }).toList(),
                     onChanged: (String? value) {
+                      print('Selected state: $value'); // Log for debugging
                       state.selectedState = value;
                     },
                     validator: (value) {
@@ -94,14 +108,14 @@ class EditManager extends StatelessWidget {
                     controller: state.commissionPercentageController,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
-                      labelText: "Porcetagem de Comissão",
+                      labelText: "Porcentagem de Comissão",
                     ),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
-                        return "Porcetagem de Comissão obrigatória.";
+                        return "Porcentagem de Comissão obrigatória.";
                       }
                       return null;
                     },

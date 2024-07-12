@@ -2,6 +2,7 @@
 class VehicleBrandModel {
   /// The unique code of the vehicle brand.
   final String code;
+
   /// The name of the vehicle brand.
   final String name;
 

@@ -3,11 +3,11 @@ import 'database_helper.dart';
 import 'rentals_held_table.dart';
 
 class RentalsHeldController {
-  Future<void> insert(RentalsHeldModel rentalsHeld) async {
+  Future<int> insert(RentalsHeldModel rentalsHeld) async {
     final database = await getDatabase();
     final map = RentalsHeldTable.toMap(rentalsHeld);
 
-    await database.insert(RentalsHeldTable.tableName, map);
+    return await database.insert(RentalsHeldTable.tableName, map);
   }
 
   Future<void> delete(RentalsHeldModel rentalsHeld) async {
@@ -46,5 +46,23 @@ class RentalsHeldController {
         where: '${RentalsHeldTable.id} = ?',
         whereArgs: [rentalsHeld.id]
     );
+  }
+
+  Future<RentalsHeldModel?> getRentalsFromId(String id) async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      RentalsHeldTable.tableName,
+      where: '${RentalsHeldTable.id} = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      final item = result.first;
+      return RentalsHeldTable.fromMap(item);
+    }
+
+    return null;
   }
 }

@@ -7,12 +7,11 @@ import 'databases/client_controller.dart' as database_client;
 import 'databases/manager_controller.dart' as database_manager;
 import 'databases/rentals_held_controller.dart' as database;
 import 'databases/vehicle_controller.dart' as database_vehicle;
-import 'pdf_controller.dart';
 
 class RentalsHeldController extends ChangeNotifier {
   RentalsHeldController() {
     load();
-    loadVehicles();
+    loadClients();
   }
 
   final _controllerDataBase = database.RentalsHeldController();
@@ -26,8 +25,6 @@ class RentalsHeldController extends ChangeNotifier {
   ClientModel? _selectedClient;
   final _listVehicle = <VehicleModel>[];
   VehicleModel? _selectedVehicle;
-
-  //final _clientIdController = TextEditingController();
   final _startDateController = TextEditingController();
   final _endDateController = TextEditingController();
   final _numberOfDaysController = TextEditingController();
@@ -35,7 +32,7 @@ class RentalsHeldController extends ChangeNotifier {
   final _percentageManagerCommissionController = TextEditingController();
   final _managerCommissionValueController = TextEditingController();
   final _listRentalsHeld = <RentalsHeldModel>[];
-  RentalsHeldModel _rentalsCurrent = RentalsHeldModel();
+  RentalsHeldModel? _rentalsCurrent = RentalsHeldModel();
 
   GlobalKey<FormState> get formKey => _formKey;
 
@@ -50,8 +47,6 @@ class RentalsHeldController extends ChangeNotifier {
   List<VehicleModel> get listVehicle => _listVehicle;
 
   VehicleModel? get selectedVehicle => _selectedVehicle;
-
-  //TextEditingController get clientIdController => _clientIdController;
 
   TextEditingController get startDateController => _startDateController;
 
@@ -70,9 +65,10 @@ class RentalsHeldController extends ChangeNotifier {
 
   List<RentalsHeldModel> get listRentalsHeld => _listRentalsHeld;
 
-  RentalsHeldModel get rentalsCurrent => _rentalsCurrent;
+  RentalsHeldModel? get rentalsCurrent => _rentalsCurrent;
 
   set selectedState(String? value) {
+    _selectedVehicle = null;
     _selectedState = value;
     notifyListeners();
   }
@@ -118,15 +114,15 @@ class RentalsHeldController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadClients(String state) async {
-    final list = await _clientControllerDataBase.getClientsFromState(state);
+  Future<void> loadClients() async {
+    final list = await _clientControllerDataBase.select();
     _listClient.clear();
     _listClient.addAll(list);
     notifyListeners();
   }
 
-  Future<void> loadVehicles() async {
-    final list = await _vehicleControllerDataBase.select();
+  Future<void> loadVehicles(String state) async {
+    final list = await _vehicleControllerDataBase.getVehiclesFromState(state);
     _listVehicle.clear();
     _listVehicle.addAll(list);
     notifyListeners();
@@ -173,17 +169,21 @@ class RentalsHeldController extends ChangeNotifier {
 
   Future<void> insert() async {
     final rentals = RentalsHeldModel(
-      clientId: _selectedClient?.id,
-      vehicleId: _selectedVehicle?.id,
-      startDate: DateTime.parse(
-          _startDateController.text.split('/').reversed.join('-')),
-      endDate:
-          DateTime.parse(_endDateController.text.split('/').reversed.join('-')),
-      numberOfDays: int.parse(_numberOfDaysController.text),
-      totalAmountPayable: double.parse(_totalAmountPayableController.text),
-    );
+        rentalState: _selectedState,
+        clientId: _selectedClient?.id,
+        vehicleId: _selectedVehicle?.id,
+        startDate: DateTime.parse(
+            _startDateController.text.split('/').reversed.join('-')),
+        endDate: DateTime.parse(
+            _endDateController.text.split('/').reversed.join('-')),
+        numberOfDays: int.parse(_numberOfDaysController.text),
+        totalAmountPayable: double.parse(_totalAmountPayableController.text),
+        percentageManagerCommission: _percentageManagerCommissionController.text,
+        managerCommissionValue:
+            double.parse(_managerCommissionValueController.text));
 
-    await _controllerDataBase.insert(rentals);
+    final id = await _controllerDataBase.insert(rentals);
+    _rentalsCurrent = await _controllerDataBase.getRentalsFromId(id.toString());
 
     await load();
     notifyListeners();
@@ -221,10 +221,10 @@ class RentalsHeldController extends ChangeNotifier {
         .getClientFromId(rentals.clientId.toString());
     _selectedClient = client;
 
-    if (client != null) {
-      _selectedState = client.state;
-      await loadClients(client.state!);
-    }
+    // if (client != null) {
+    //   _selectedState = client.state;
+    //   await loadClients(client.state!);
+    // }
 
     final vehicle = await _vehicleControllerDataBase
         .getVehicleFromId(rentals.vehicleId.toString());
@@ -235,7 +235,7 @@ class RentalsHeldController extends ChangeNotifier {
 
   Future<void> update() async {
     final editedRental = RentalsHeldModel(
-      id: _rentalsCurrent.id,
+      id: _rentalsCurrent!.id,
       clientId: selectedClient?.id,
       vehicleId: _selectedVehicle?.id,
       startDate: DateTime.parse(

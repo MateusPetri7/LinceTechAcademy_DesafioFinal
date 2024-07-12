@@ -11,7 +11,7 @@ Future<Database> getDatabase() async {
 
   return openDatabase(
     path,
-    version: 8,
+    version: 9,
     onCreate: (db, version) async {
       await db.execute(ClientTable.createTable);
       await db.execute(ManagerTable.createTable);
@@ -64,6 +64,16 @@ Future<Database> getDatabase() async {
       }
       if (oldVersion < 8) {
         await db.execute(PdfTable.createTable);
+      }
+      if (oldVersion < 9) {
+        await db.execute(
+            'ALTER TABLE ${VehicleTable.tableName} ADD COLUMN ${VehicleTable.state} TEXT');
+        await db.execute(
+            'ALTER TABLE ${RentalsHeldTable.tableName} ADD COLUMN ${RentalsHeldTable.rentalState} TEXT');
+        await db.execute(
+            'ALTER TABLE ${RentalsHeldTable.tableName} ADD COLUMN ${RentalsHeldTable.percentageManagerCommission} TEXT');
+        await db.execute(
+            'ALTER TABLE ${RentalsHeldTable.tableName} ADD COLUMN ${RentalsHeldTable.managerCommissionValue} REAL');
       }
     },
   );

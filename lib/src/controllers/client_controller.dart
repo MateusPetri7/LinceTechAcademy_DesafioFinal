@@ -97,6 +97,7 @@ class ClientController extends ChangeNotifier {
 
   /// Fetches managers from the database based on the state.
   Future<void> getManagersFromState(String state) async {
+    _selectedManager = null;
     _listManager = [];
     final managersList =
         await _managerControllerDatabase.getManagersFromState(state);
@@ -191,9 +192,6 @@ class ClientController extends ChangeNotifier {
     _cityController.text = client.city ?? '';
     _selectedState = client.state;
 
-    _clientCurrent = ClientModel(
-      id: client.id,
-    );
     notifyListeners();
   }
 

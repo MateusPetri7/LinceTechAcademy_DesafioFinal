@@ -11,6 +11,7 @@ class VehicleTable {
   $model TEXT NOT NULL,
   $plate TEXT NOT NULL,
   $yearManufacture INTEGER NOT NULL,
+  $state TEXT NOT NULL,
   $dailyRentalCost REAL NOT NULL,
   $photosTheVehicle TEXT NOT NULL
   ); 
@@ -23,6 +24,7 @@ class VehicleTable {
   static const String model = 'model';
   static const String plate = 'plate';
   static const String yearManufacture = 'year_manufacture';
+  static const String state = 'state';
   static const String dailyRentalCost = 'daily_rental_cost';
   static const String photosTheVehicle = 'photos_the_vehicle';
 
@@ -35,6 +37,7 @@ class VehicleTable {
     map[VehicleTable.model] = vehicle.model;
     map[VehicleTable.plate] = vehicle.plate;
     map[VehicleTable.yearManufacture] = vehicle.yearManufacture;
+    map[VehicleTable.state] = vehicle.state;
     map[VehicleTable.dailyRentalCost] = vehicle.dailyRentalCost;
     map[VehicleTable.photosTheVehicle] = jsonEncode(vehicle.photosTheVehicle);
 
@@ -49,6 +52,7 @@ class VehicleTable {
       model: map[VehicleTable.model],
       plate: map[VehicleTable.plate],
       yearManufacture: map[VehicleTable.yearManufacture],
+      state: map[VehicleTable.state],
       dailyRentalCost: map[VehicleTable.dailyRentalCost],
       photosTheVehicle:
           List<String>.from(jsonDecode(map[VehicleTable.photosTheVehicle])),

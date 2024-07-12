@@ -2,6 +2,7 @@
 class VehicleModelModel {
   /// The unique code of the vehicle model.
   final String code;
+
   /// The name of the vehicle model.
   final String name;
 

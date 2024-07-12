@@ -31,6 +31,8 @@ class ManagerController extends ChangeNotifier {
   String? get selectedState => _selectedState;
 
   set selectedState(String? value) {
+    print('Setting selectedState: $value');
+    _selectedState = null;
     _selectedState = value;
     notifyListeners();
   }
@@ -39,7 +41,7 @@ class ManagerController extends ChangeNotifier {
     final manager = ManagerModel(
         name: nameController.text,
         individualTaxpayerRegistry: individualTaxpayerRegistryController.text,
-        state: selectedState,
+        state: _selectedState,
         telephone: telephoneController.text,
         commissionPercentage: commissionPercentageController.text);
 
@@ -78,6 +80,8 @@ class ManagerController extends ChangeNotifier {
     _managerCurrent = ManagerModel(
       id: manager.id,
     );
+
+    notifyListeners();
   }
 
   Future<void> update() async {
@@ -89,6 +93,7 @@ class ManagerController extends ChangeNotifier {
         telephone: telephoneController.text,
         commissionPercentage: commissionPercentageController.text);
 
+    print('Updating manager: ${editedManager.state}');
     await _controllerDataBase.update(editedManager);
 
     _managerCurrent = ManagerModel();

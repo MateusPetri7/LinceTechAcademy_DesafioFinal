@@ -24,7 +24,7 @@ class RegisterRentalsHeld extends StatelessWidget {
                 children: [
                   DropdownButtonFormField<String>(
                     value: rentalsState.selectedState,
-                    hint: const Text('Selecione o estado'),
+                    hint: const Text('Selecione o estado de locação'),
                     items: rentalsState.states
                         .map<DropdownMenuItem<String>>((String state) {
                       return DropdownMenuItem<String>(
@@ -32,10 +32,10 @@ class RegisterRentalsHeld extends StatelessWidget {
                         child: Text(state),
                       );
                     }).toList(),
-                    onChanged: (String? value) {
+                    onChanged: (String? value) async {
                       rentalsState.selectedState = value;
                       if (value != null) {
-                        rentalsState.loadClients(value);
+                        await rentalsState.loadVehicles(value);
                       }
                     },
                     validator: (value) {
@@ -155,8 +155,10 @@ class RegisterRentalsHeld extends StatelessWidget {
                     onPressed: () async {
                       if (rentalsState.formKey.currentState!.validate()) {
                         await rentalsState.insert();
-                        await pdfState.createPdf(rentalsState.selectedClient!,
-                            rentalsState.selectedVehicle!);
+                        await pdfState.createPdf(
+                            rentalsState.selectedClient!,
+                            rentalsState.selectedVehicle!,
+                            rentalsState.rentalsCurrent!);
                         rentalsState.clearControllers();
                         Navigator.pushNamed(
                           context,

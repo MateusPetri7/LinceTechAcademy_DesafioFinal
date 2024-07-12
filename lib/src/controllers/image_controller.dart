@@ -9,13 +9,14 @@ class ImageController extends ChangeNotifier {
 
   File? get selectedImage => _selectedImage;
 
-  Future<void> pickImage(ImageSource source) async {
+  Future<void> pickImage(ImageSource source, String plateVehicle) async {
     final pickedFile = await _imagePicker.pickImage(source: source);
 
     if (pickedFile != null) {
       final directory = await getApplicationSupportDirectory();
       final path = directory.path;
-      final fileName = '${DateTime.now().millisecondsSinceEpoch}.png';
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final fileName = '$plateVehicle-$timestamp.png';
       final savedImage = await File(pickedFile.path).copy('$path/$fileName');
 
       _selectedImage = savedImage;

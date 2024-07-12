@@ -9,10 +9,13 @@ class ManagerModel {
   /// The individual taxpayer registry number (e.g., CPF for
   /// Brazilian individuals).
   String? individualTaxpayerRegistry;
+
   /// The state where the manager is located.
   String? state;
+
   /// The telephone number of the manager.
   String? telephone;
+
   /// The commission percentage that the manager receives.
   String? commissionPercentage;
 

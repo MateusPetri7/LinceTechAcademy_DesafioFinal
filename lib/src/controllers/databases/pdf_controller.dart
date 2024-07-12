@@ -7,8 +7,7 @@ class PdfController {
     final database = await getDatabase();
     final map = PdfTable.toMap(pdf);
 
-    final id = await database.insert(PdfTable.tableName, map);
-    return id;
+    return await database.insert(PdfTable.tableName, map);
   }
 
   Future<void> delete(PdfModel pdf) async {

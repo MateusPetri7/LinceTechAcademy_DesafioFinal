@@ -2,6 +2,7 @@
 class PdfModel {
   /// The unique identifier for the PDF file.
   final String? id;
+
   /// The file path where the PDF is stored.
   final String? filePath;
 

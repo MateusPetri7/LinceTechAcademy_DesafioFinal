@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -23,6 +24,7 @@ class VehicleController extends ChangeNotifier {
   final _modelController = TextEditingController();
   final _plateController = TextEditingController();
   final _yearManufactureController = TextEditingController();
+  final List<String> _states = Estados.listaEstadosSigla;
   final _dailyRentalCostController = TextEditingController();
   final List<String> _photosTheVehicle = [];
   final _listVehicle = <VehicleModel>[];
@@ -33,6 +35,7 @@ class VehicleController extends ChangeNotifier {
   String? _selectedType;
   VehicleBrandModel? _selectedBrand;
   VehicleModelModel? _selectedModel;
+  String? _selectedState;
 
   GlobalKey<FormState> get formKey => _formKey;
 
@@ -46,6 +49,8 @@ class VehicleController extends ChangeNotifier {
 
   TextEditingController get yearManufactureController =>
       _yearManufactureController;
+
+  List<String> get states => _states;
 
   TextEditingController get dailyRentalCostController =>
       _dailyRentalCostController;
@@ -67,6 +72,8 @@ class VehicleController extends ChangeNotifier {
   VehicleModelModel? get selectedModel => _selectedModel;
 
   String? get selectedType => _selectedType;
+
+  String? get selectedState => _selectedState;
 
   set selectedType(String? value) {
     _selectedType = value;
@@ -92,6 +99,11 @@ class VehicleController extends ChangeNotifier {
 
   set selectedModel(VehicleModelModel? value) {
     _selectedModel = value;
+    notifyListeners();
+  }
+
+  set selectedState(String? value) {
+    _selectedState = value;
     notifyListeners();
   }
 
@@ -124,6 +136,7 @@ class VehicleController extends ChangeNotifier {
       model: _selectedModel?.name,
       plate: plateController.text,
       yearManufacture: int.tryParse(yearManufactureController.text) ?? 0,
+      state: _selectedState,
       dailyRentalCost:
           _removeCurrencyFormatting(dailyRentalCostController.text),
       photosTheVehicle: _photosTheVehicle,
@@ -158,8 +171,11 @@ class VehicleController extends ChangeNotifier {
     _modelController.text = vehicle.model ?? '';
     _plateController.text = vehicle.plate ?? '';
     _yearManufactureController.text = vehicle.yearManufacture?.toString() ?? '';
+    _selectedState = vehicle.state;
     _dailyRentalCostController.text =
         _formatCurrency(vehicle.dailyRentalCost ?? 0.0);
+
+    _photosTheVehicle.clear();
     _photosTheVehicle.addAll(vehicle.photosTheVehicle ?? []);
 
     _vehicleCurrent = VehicleModel(
@@ -169,23 +185,29 @@ class VehicleController extends ChangeNotifier {
       model: vehicle.model,
       plate: vehicle.plate,
       yearManufacture: vehicle.yearManufacture,
+      state: vehicle.state,
       dailyRentalCost: vehicle.dailyRentalCost,
       photosTheVehicle: vehicle.photosTheVehicle,
     );
+
+    notifyListeners();
   }
 
   Future<void> update() async {
     final editedVehicle = VehicleModel(
       id: _vehicleCurrent.id,
-      type: _selectedType,
-      brand: _selectedBrand?.name,
-      model: _selectedModel?.name,
+      type: _typeController.text,
+      brand: _brandController.text,
+      model: _modelController.text,
       plate: plateController.text,
       yearManufacture: int.tryParse(yearManufactureController.text) ?? 0,
-      dailyRentalCost: double.tryParse(dailyRentalCostController.text) ?? 0.0,
+      state: _selectedState,
+      dailyRentalCost:
+          _removeCurrencyFormatting(dailyRentalCostController.text),
       photosTheVehicle: _photosTheVehicle,
     );
 
+    print(editedVehicle.dailyRentalCost);
     await _controllerDataBase.update(editedVehicle);
 
     _vehicleCurrent = VehicleModel();
@@ -201,6 +223,7 @@ class VehicleController extends ChangeNotifier {
     _selectedModel = null;
     _plateController.clear();
     _yearManufactureController.clear();
+    _selectedState = null;
     _dailyRentalCostController.clear();
     _photosTheVehicle.clear();
     notifyListeners();

@@ -125,6 +125,26 @@ class RegisterVehicle extends StatelessWidget {
                         return null;
                       },
                     ),
+                    DropdownButtonFormField<String>(
+                      value: vehicleState.selectedState,
+                      hint: const Text('Selecione o estado'),
+                      items: vehicleState.states
+                          .map<DropdownMenuItem<String>>((String state) {
+                        return DropdownMenuItem<String>(
+                          value: state,
+                          child: Text(state),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        vehicleState.selectedState = value;
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Estado é obrigatório.';
+                        }
+                        return null;
+                      },
+                    ),
                     TextFormField(
                       controller: vehicleState.dailyRentalCostController,
                       keyboardType: TextInputType.number,
@@ -148,7 +168,8 @@ class RegisterVehicle extends StatelessWidget {
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            await imageState.pickImage(ImageSource.gallery);
+                            await imageState.pickImage(ImageSource.gallery,
+                                vehicleState.plateController.text.toString());
                             if (imageState.selectedImage != null) {
                               vehicleState
                                   .addPhoto(imageState.selectedImage!.path);
@@ -158,7 +179,8 @@ class RegisterVehicle extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            await imageState.pickImage(ImageSource.camera);
+                            await imageState.pickImage(ImageSource.camera,
+                                vehicleState.plateController.text.toString());
                             if (imageState.selectedImage != null) {
                               vehicleState
                                   .addPhoto(imageState.selectedImage!.path);

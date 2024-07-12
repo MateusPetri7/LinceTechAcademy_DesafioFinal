@@ -40,6 +40,8 @@ class VehicleController {
 
     var map = VehicleTable.toMap(vehicle);
 
+    print(map);
+
     await database.update(
         VehicleTable.tableName,
         map,
@@ -64,5 +66,24 @@ class VehicleController {
     }
 
     return null;
+  }
+
+  Future<List<VehicleModel>> getVehiclesFromState(String state) async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      VehicleTable.tableName,
+      where: '${VehicleTable.state} = ?',
+      whereArgs: [state],
+    );
+
+    var list = <VehicleModel>[];
+    if (result.isNotEmpty) {
+      for (final item in result) {
+        list.add(VehicleTable.fromMap(item));
+      }
+    }
+
+    return list;
   }
 }

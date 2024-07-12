@@ -67,10 +67,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const RegisterRentalsHeld());
       case registeredRentalsHeld:
         return MaterialPageRoute(builder: (_) => const RegisteredRentalsHeld());
-      case editRentals:
-        final args = settings.arguments as RentalsHeldModel;
-        return MaterialPageRoute(
-            builder: (_) => EditRentalsHeld(rentals: args));
+      // case editRentals:
+      //   final args = settings.arguments as RentalsHeldModel;
+      //   return MaterialPageRoute(
+      //       builder: (_) => EditRentalsHeld(rentals: args));
       case pdfView:
         final args = settings.arguments as PdfModel;
         return MaterialPageRoute(

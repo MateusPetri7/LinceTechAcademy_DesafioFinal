@@ -8,11 +8,24 @@ import '../controllers/image_controller.dart';
 import '../controllers/vehicle_controller.dart';
 import '../models/vehicle_model.dart';
 
-
-class EditVehicle extends StatelessWidget {
+class EditVehicle extends StatefulWidget {
   final VehicleModel vehicle;
 
   const EditVehicle({super.key, required this.vehicle});
+
+  @override
+  _EditVehicleState createState() => _EditVehicleState();
+}
+
+class _EditVehicleState extends State<EditVehicle> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final vehicleState = Provider.of<VehicleController>(context, listen: false);
+      vehicleState.populateVehicleInformation(widget.vehicle);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +34,6 @@ class EditVehicle extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Consumer2<VehicleController, ImageController>(
           builder: (context, vehicleState, imageState, _) {
-            vehicleState.populateVehicleInformation(vehicle);
             return Form(
               key: vehicleState.formKey,
               child: SingleChildScrollView(
@@ -72,6 +84,26 @@ class EditVehicle extends StatelessWidget {
                         labelText: 'Ano de fabricação',
                       ),
                     ),
+                    DropdownButtonFormField<String>(
+                      value: vehicleState.selectedState,
+                      hint: const Text('Selecione o estado'),
+                      items: vehicleState.states
+                          .map<DropdownMenuItem<String>>((String state) {
+                        return DropdownMenuItem<String>(
+                          value: state,
+                          child: Text(state),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        vehicleState.selectedState = value;
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Estado é obrigatório.';
+                        }
+                        return null;
+                      },
+                    ),
                     TextFormField(
                       controller: vehicleState.dailyRentalCostController,
                       keyboardType: TextInputType.number,
@@ -95,20 +127,20 @@ class EditVehicle extends StatelessWidget {
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            await imageState.pickImage(ImageSource.gallery);
+                            await imageState.pickImage(
+                                ImageSource.gallery, vehicleState.plateController.text.toString());
                             if (imageState.selectedImage != null) {
-                              vehicleState
-                                  .addPhoto(imageState.selectedImage!.path);
+                              vehicleState.addPhoto(imageState.selectedImage!.path);
                             }
                           },
                           child: const Text('Selecionar imagem da galeria'),
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            await imageState.pickImage(ImageSource.camera);
+                            await imageState.pickImage(
+                                ImageSource.camera, vehicleState.plateController.text.toString());
                             if (imageState.selectedImage != null) {
-                              vehicleState
-                                  .addPhoto(imageState.selectedImage!.path);
+                              vehicleState.addPhoto(imageState.selectedImage!.path);
                             }
                           },
                           child: const Text('Tirar foto'),
@@ -129,8 +161,7 @@ class EditVehicle extends StatelessWidget {
                                 right: 0,
                                 top: 0,
                                 child: IconButton(
-                                  icon: const Icon(Icons.close,
-                                      color: Colors.red),
+                                  icon: const Icon(Icons.close, color: Colors.red),
                                   onPressed: () {
                                     vehicleState.removePhoto(imagePath);
                                   },
@@ -146,11 +177,12 @@ class EditVehicle extends StatelessWidget {
                     ElevatedButton.icon(
                       onPressed: () async {
                         if (vehicleState.formKey.currentState!.validate()) {
-                          await vehicleState.insert();
+                          await vehicleState.update();
+                          Navigator.pop(context);
                         }
                       },
-                      icon: const Icon(Icons.add),
-                      label: const Text('Cadastrar'),
+                      icon: const Icon(Icons.edit),
+                      label: const Text('Editar'),
                       style: ElevatedButton.styleFrom(),
                     ),
                   ],

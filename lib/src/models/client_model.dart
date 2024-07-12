@@ -2,16 +2,22 @@
 class ClientModel {
   /// The unique identifier for the client.
   String? id;
+
   /// The name of the client.
   String? name;
+
   /// The telephone number of the client.
   String? telephone;
+
   /// The city where the client is located.
   String? city;
+
   /// The state where the client is located.
   String? state;
+
   /// The company registration number (e.g., CNPJ for Brazilian companies).
   String? companyRegistrationNumber;
+
   /// The identifier for the manager associated with the client.
   String? managerId;
 

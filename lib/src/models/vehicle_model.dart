@@ -2,18 +2,28 @@
 class VehicleModel {
   /// The unique identifier for the vehicle.
   String? id;
+
   /// The type of the vehicle.
   String? type;
+
   /// The brand of the vehicle.
   String? brand;
+
   /// The model name of the vehicle.
   String? model;
+
   /// The license plate number of the vehicle.
   String? plate;
+
   /// The year the vehicle was manufactured.
   int? yearManufacture;
+
+  /// The state where the vehicle is located.
+  String? state;
+
   /// The daily rental cost of the vehicle.
   double? dailyRentalCost;
+
   /// A list of paths to photos of the vehicle.
   List<String>? photosTheVehicle;
 
@@ -27,6 +37,7 @@ class VehicleModel {
       this.model,
       this.plate,
       this.yearManufacture,
+      this.state,
       this.dailyRentalCost,
       this.photosTheVehicle});
 }
