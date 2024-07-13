@@ -15,7 +15,7 @@ class RegisterClient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      title: 'Cadastro de Clientes',
+      title: AppLocalizations.of(context)!.clientRegister,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Consumer<ClientController>(
@@ -28,7 +28,8 @@ class RegisterClient extends StatelessWidget {
                   children: [
                     const SizedBox(height: 20.0),
                     CustomTextFormField(
-                      labelText: 'CNPJ',
+                      labelText: AppLocalizations.of(context)!
+                          .companyRegistrationNumber,
                       icon: Icons.business,
                       controller: state.companyRegistrationNumberController,
                       keyboardType: TextInputType.number,
@@ -38,24 +39,26 @@ class RegisterClient extends StatelessWidget {
                       ],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'CNPJ é obrigatório.';
+                          return AppLocalizations.of(context)!
+                              .companyRegistrationNumberRequired;
                         }
                         if (!CNPJValidator.isValid(value)) {
-                          return 'CNPJ inválido.';
+                          return AppLocalizations.of(context)!
+                              .companyRegistrationNumberInvalid;
                         }
                         return null;
                       },
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.search),
+                        icon: const Icon(Icons.search),
                         onPressed: () async {
-                          String? cnpj = state
-                              .companyRegistrationNumberController.text
-                              .replaceAll(RegExp(r'\D'), '');
-                          if (cnpj.isNotEmpty) {
+                          if (state.companyRegistrationNumberController.text
+                              .isNotEmpty) {
                             try {
-                              await state.getClientData(cnpj);
-                              await state.populateClientInformationAtRegistration(
-                                  state.clientCurrent);
+                              await state.getClientData(
+                                  state.companyRegistrationNumberController);
+                              await state
+                                  .populateClientInformationAtRegistration(
+                                      state.clientCurrent);
                             } catch (e) {
                               showDialog(
                                 context: context,
@@ -81,22 +84,22 @@ class RegisterClient extends StatelessWidget {
                     ),
                     const SizedBox(height: 20.0),
                     CustomTextFormField(
-                      labelText: 'Nome',
+                      labelText: AppLocalizations.of(context)!.name,
                       icon: Icons.person,
                       controller: state.nameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Nome é obrigatório.';
+                          return AppLocalizations.of(context)!.nameRequired;
                         }
                         if (value.length < 3) {
-                          return 'Nome precisa ter pelo menos 3 letras.';
+                          return AppLocalizations.of(context)!.incompleteName;
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 20.0),
                     CustomTextFormField(
-                      labelText: 'Telefone',
+                      labelText: AppLocalizations.of(context)!.telephone,
                       icon: Icons.phone,
                       controller: state.telephoneController,
                       keyboardType: TextInputType.phone,
@@ -106,29 +109,31 @@ class RegisterClient extends StatelessWidget {
                       ],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Telefone é obrigatório.';
+                          return AppLocalizations.of(context)!
+                              .telephoneRequired;
                         }
                         if (value.length < 10) {
-                          return 'Número inválido.';
+                          return AppLocalizations.of(context)!
+                              .invalidPhoneNumber;
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 20.0),
                     CustomTextFormField(
-                      labelText: 'Cidade',
+                      labelText: AppLocalizations.of(context)!.city,
                       icon: Icons.location_city,
                       controller: state.cityController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Cidade é obrigatório.';
+                          return AppLocalizations.of(context)!.cityRequired;
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 20.0),
                     CustomDropdownButtonFormField(
-                      labelText: 'Estado',
+                      labelText: AppLocalizations.of(context)!.state,
                       icon: Icons.location_on,
                       items: state.states,
                       value: state.selectedState,
@@ -138,14 +143,14 @@ class RegisterClient extends StatelessWidget {
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Estado é obrigatório.';
+                          return AppLocalizations.of(context)!.stateRequired;
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 20.0),
                     CustomDropdownButtonFormField(
-                      labelText: 'Gerente',
+                      labelText: AppLocalizations.of(context)!.manager,
                       icon: Icons.person,
                       items: state.listManager
                           .map((manager) => manager.name!)
@@ -159,7 +164,7 @@ class RegisterClient extends StatelessWidget {
                       },
                       validator: (value) {
                         if (value == null) {
-                          return 'Gerente é obrigatório.';
+                          return AppLocalizations.of(context)!.managerRequired;
                         }
                         return null;
                       },
@@ -172,7 +177,7 @@ class RegisterClient extends StatelessWidget {
                         }
                       },
                       icon: const Icon(Icons.add),
-                      label: 'Registrar Cliente',
+                      label: AppLocalizations.of(context)!.registerClient,
                     ),
                     const SizedBox(height: 20.0),
                   ],

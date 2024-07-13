@@ -48,7 +48,7 @@ class RentController {
     );
   }
 
-  Future<RentModel?> getRentsFromId(String id) async {
+  Future<RentModel?> getRentFromId(String id) async {
     final database = await getDatabase();
 
     final List<Map<String, dynamic>> result = await database.query(
@@ -64,5 +64,24 @@ class RentController {
     }
 
     return null;
+  }
+
+  Future<List<RentModel>> getRentsFromVehicle(String vehicleId) async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      RentTable.tableName,
+      where: '${RentTable.vehicleId} = ?',
+      whereArgs: [vehicleId],
+    );
+
+    var list = <RentModel>[];
+    if (result.isNotEmpty) {
+      for (final item in result) {
+        list.add(RentTable.fromMap(item));
+      }
+    }
+
+    return list;
   }
 }

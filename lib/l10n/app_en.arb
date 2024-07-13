@@ -1,7 +1,21 @@
 {
-    "language" : "Language",
-    "car" : "Car",
-    "test" : "test",
-    "helloWorld": "Hello World",
-    "title": "English application"
+    "companyRegistrationNumber": "Company Registration Number",
+    "name": "Name",
+    "telephone": "Telephone",
+    "city": "City",
+    "state": "State",
+    "manager": "Manager",
+    "companyRegistrationNumberRequired": "Company Registration Number is required.",
+    "nameRequired": "Name is required.",
+    "telephoneRequired": "Telephone is required.",
+    "cityRequired": "City is required.",
+    "stateRequired": "State is required.",
+    "managerRequired": "Manager Required.",
+    "companyRegistrationNumberInvalid": "Company Registration Number Invalid.",
+    "error": "Error.",
+    "okay": "Okay.",
+    "incompleteName": "Name must have at least three letters.",
+    "invalidPhoneNumber": "Invalid phone number.",
+    "registerClient": "Register Client",
+    "clientRegister": "Client Register"
 }

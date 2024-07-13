@@ -93,7 +93,6 @@ class ManagerController extends ChangeNotifier {
         telephone: telephoneController.text,
         commissionPercentage: commissionPercentageController.text);
 
-    print('Updating manager: ${editedManager.state}');
     await _controllerDataBase.update(editedManager);
 
     _managerCurrent = ManagerModel();

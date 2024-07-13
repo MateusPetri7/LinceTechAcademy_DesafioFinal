@@ -53,17 +53,33 @@ class PdfController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> update() async {
+    final editedPdf = PdfModel(
+        id: _currentPdf.id,
+        filePath: _filePath.toString());
+
+    await _controllerDataBase.update(editedPdf);
+
+    _currentPdf = PdfModel();
+    _clearFields();
+
+    await load();
+    notifyListeners();
+  }
+
   Future<PdfModel> getPdfFromId(String id) async {
     final pdf = await _controllerDataBase.getPdfFromId(id);
     return pdf!;
   }
 
-  Future<void> createPdf(ClientModel client, VehicleModel vehicle, RentModel rent) async {
+  Future<void> createPdf(
+      ClientModel client, VehicleModel vehicle, RentModel rent) async {
     final pdf = pw.Document();
     final font = await rootBundle.load('assets/fonts/Rubik-Regular.ttf');
     final ttf = pw.Font.ttf(font);
 
-    final manager = await _managerControllerDataBase.getManagerFromId(client.managerId.toString());
+    final manager = await _managerControllerDataBase
+        .getManagerFromId(client.managerId.toString());
 
     var vehiclePhotosWidgets = <pw.Widget>[];
     if (vehicle.photosTheVehicle != null) {
@@ -101,38 +117,58 @@ class PdfController extends ChangeNotifier {
               pw.SizedBox(height: 20),
               pw.Text(
                 'Informações do Cliente:',
-                style: pw.TextStyle(font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                    font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
               ),
-              pw.Text('Nome: ${client.name}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Telefone: ${client.telephone}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Cidade: ${client.city}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Estado: ${client.state}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('CNPJ: ${client.companyRegistrationNumber}', style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Nome: ${client.name}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Telefone: ${client.telephone}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Cidade: ${client.city}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Estado: ${client.state}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('CNPJ: ${client.companyRegistrationNumber}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
               pw.SizedBox(height: 20),
               pw.Text(
                 'Informações do Gerente:',
-                style: pw.TextStyle(font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                    font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
               ),
-              pw.Text('Nome: ${manager!.name}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('CPF: ${manager.individualTaxpayerRegistry}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Estado: ${manager.state}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Telefone: ${manager.telephone}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Percentual de Comissão: ${manager.commissionPercentage}', style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Nome: ${manager!.name}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('CPF: ${manager.individualTaxpayerRegistry}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Estado: ${manager.state}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Telefone: ${manager.telephone}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Percentual de Comissão: ${manager.commissionPercentage}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
               pw.SizedBox(height: 20),
               pw.Text(
                 'Informações do Veículo:',
-                style: pw.TextStyle(font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                    font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
               ),
-              pw.Text('Tipo: ${vehicle.type}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Marca: ${vehicle.brand}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Modelo: ${vehicle.model}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Placa: ${vehicle.plate}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Ano de Fabricação: ${vehicle.yearManufacture}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Custo Diário de Aluguel: R\$${vehicle.dailyRentalCost}', style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Tipo: ${vehicle.type}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Marca: ${vehicle.brand}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Modelo: ${vehicle.model}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Placa: ${vehicle.plate}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Ano de Fabricação: ${vehicle.yearManufacture}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Custo Diário de Aluguel: R\$${vehicle.dailyRentalCost}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
               pw.SizedBox(height: 20),
               pw.Text(
                 'Fotos do Veículo:',
-                style: pw.TextStyle(font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                    font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
               ),
               pw.SizedBox(height: 10),
               pw.Wrap(
@@ -143,14 +179,17 @@ class PdfController extends ChangeNotifier {
               pw.SizedBox(height: 20),
               pw.Text(
                 'Informações do Aluguel:',
-                style: pw.TextStyle(font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                    font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
               ),
               pw.Text(
                 'Período do Aluguel: ${rent.startDate!.toLocal().toString().split(' ')[0]} - ${rent.endDate!.toLocal().toString().split(' ')[0]}',
                 style: pw.TextStyle(font: ttf, fontSize: 14),
               ),
-              pw.Text('Total de Dias do Período: ${rent.numberOfDays}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Valor Total do Aluguel: R\$${rent.totalAmountPayable}', style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Total de Dias do Período: ${rent.numberOfDays}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Valor Total do Aluguel: R\$${rent.totalAmountPayable}',
+                  style: pw.TextStyle(font: ttf, fontSize: 14)),
             ],
           ),
         ],

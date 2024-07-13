@@ -8,6 +8,13 @@ import 'databases/manager_controller.dart' as database_manager;
 import 'databases/rent_controller.dart' as database;
 import 'databases/vehicle_controller.dart' as database_vehicle;
 
+
+// get no aluguel para ver se o veículo está registrado em algum aluguel, daí pegar os dias que o veículo está registrado e bloquear no calendario e aparecer em vermelho
+//
+// fazer para gerar o pdf a qualquer momento na tela de lista de aluguéis.
+
+
+
 class RentController extends ChangeNotifier {
   RentController() {
     load();
@@ -21,9 +28,9 @@ class RentController extends ChangeNotifier {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final List<String> _states = Estados.listaEstadosSigla;
   String? _selectedState;
-  final _listClient = <ClientModel>[];
+  List<ClientModel> _listClient = <ClientModel>[];
   ClientModel? _selectedClient;
-  final _listVehicle = <VehicleModel>[];
+  List<VehicleModel> _listVehicle = <VehicleModel>[];
   VehicleModel? _selectedVehicle;
   final _startDateController = TextEditingController();
   final _endDateController = TextEditingController();
@@ -178,12 +185,13 @@ class RentController extends ChangeNotifier {
             _endDateController.text.split('/').reversed.join('-')),
         numberOfDays: int.parse(_numberOfDaysController.text),
         totalAmountPayable: double.parse(_totalAmountPayableController.text),
-        percentageManagerCommission: _percentageManagerCommissionController.text,
+        percentageManagerCommission:
+            _percentageManagerCommissionController.text,
         managerCommissionValue:
             double.parse(_managerCommissionValueController.text));
 
     final id = await _controllerDataBase.insert(rent);
-    _rentCurrent = await _controllerDataBase.getRentsFromId(id.toString());
+    _rentCurrent = await _controllerDataBase.getRentFromId(id.toString());
 
     await load();
     notifyListeners();
@@ -204,52 +212,86 @@ class RentController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getRentFromId(String id) async {
+    _rentCurrent = await _controllerDataBase.getRentFromId(id);
+  }
+
+  Future<void> _getClient(String clientId) async {
+    _listClient = await _clientControllerDataBase.select();
+
+    final client = _listClient.firstWhere(
+      (m) => m.id.toString() == clientId,
+      orElse: () => ClientModel(id: null),
+    );
+
+    if (client.id != null) {
+      _selectedClient = client;
+    } else {
+      _selectedClient = null;
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> _getVehicle(String vehicleId) async {
+    _listVehicle = await _vehicleControllerDataBase.select();
+
+    final vehicle = _listVehicle.firstWhere(
+      (m) => m.id.toString() == vehicleId,
+      orElse: () => VehicleModel(id: null),
+    );
+
+    if (vehicle.id != null) {
+      _selectedVehicle = vehicle;
+    } else {
+      _selectedVehicle = null;
+    }
+
+    notifyListeners();
+  }
+
   Future<void> populateRentInformation(RentModel rent) async {
+    _selectedState = rent.rentState;
     _startDateController.text = rent.startDate != null
         ? UtilData.obterDataDDMMAAAA(rent.startDate!)
         : '';
-    _endDateController.text = rent.endDate != null
-        ? UtilData.obterDataDDMMAAAA(rent.endDate!)
-        : '';
+    _endDateController.text =
+        rent.endDate != null ? UtilData.obterDataDDMMAAAA(rent.endDate!) : '';
     _numberOfDaysController.text = rent.numberOfDays?.toString() ?? '';
-    _totalAmountPayableController.text =
-        rent.totalAmountPayable?.toString() ?? '';
+    _totalAmountPayableController.text = rent.totalAmountPayable.toString();
 
-    _rentCurrent = rent;
+    await _getClient(rent.clientId.toString());
+    await _getVehicle(rent.vehicleId.toString());
 
-    final client = await _clientControllerDataBase
-        .getClientFromId(rent.clientId.toString());
-    _selectedClient = client;
+    _percentageManagerCommissionController.text =
+        rent.percentageManagerCommission ?? '';
+    _managerCommissionValueController.text =
+        rent.managerCommissionValue.toString();
 
-    // if (client != null) {
-    //   _selectedState = client.state;
-    //   await loadClients(client.state!);
-    // }
-
-    final vehicle = await _vehicleControllerDataBase
-        .getVehicleFromId(rent.vehicleId.toString());
-    _selectedVehicle = vehicle;
+    _rentCurrent = await _controllerDataBase.getRentFromId(rent.id.toString());
 
     notifyListeners();
   }
 
   Future<void> update() async {
     final editedRent = RentModel(
-      id: _rentCurrent!.id,
-      clientId: selectedClient?.id,
-      vehicleId: _selectedVehicle?.id,
-      startDate: DateTime.parse(
-          _startDateController.text.split('/').reversed.join('-')),
-      endDate:
-          DateTime.parse(_endDateController.text.split('/').reversed.join('-')),
-      numberOfDays: int.parse(_numberOfDaysController.text),
-      totalAmountPayable: double.parse(_totalAmountPayableController.text),
-    );
+        id: _rentCurrent!.id,
+        rentState: _selectedState,
+        clientId: selectedClient?.id,
+        vehicleId: _selectedVehicle?.id,
+        startDate: DateTime.parse(
+            _startDateController.text.split('/').reversed.join('-')),
+        endDate: DateTime.parse(
+            _endDateController.text.split('/').reversed.join('-')),
+        numberOfDays: int.parse(_numberOfDaysController.text),
+        totalAmountPayable: double.parse(_totalAmountPayableController.text),
+        percentageManagerCommission:
+            _percentageManagerCommissionController.text,
+        managerCommissionValue:
+            double.parse(_managerCommissionValueController.text));
 
     await _controllerDataBase.update(editedRent);
 
-    _rentCurrent = RentModel();
-    clearControllers();
     await load();
     notifyListeners();
   }
@@ -264,5 +306,6 @@ class RentController extends ChangeNotifier {
     _totalAmountPayableController.clear();
     _percentageManagerCommissionController.clear();
     _managerCommissionValueController.clear();
+    _rentCurrent = RentModel();
   }
 }

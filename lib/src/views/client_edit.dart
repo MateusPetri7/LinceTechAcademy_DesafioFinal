@@ -45,11 +45,10 @@ class _EditClientState extends State<EditClient> {
                       suffixIcon: IconButton(
                         icon: Icon(Icons.search),
                         onPressed: () async {
-                          String? cnpj = state
-                              .companyRegistrationNumberController.text
-                              .replaceAll(RegExp(r'\D'), '');
-                          if (cnpj.isNotEmpty) {
-                            await state.getClientData(cnpj);
+                          if (state.companyRegistrationNumberController.text
+                              .isNotEmpty) {
+                            await state.getClientData(
+                                state.companyRegistrationNumberController);
                             state.populateClientInformationAtRegistration(
                                 state.clientCurrent);
                           }

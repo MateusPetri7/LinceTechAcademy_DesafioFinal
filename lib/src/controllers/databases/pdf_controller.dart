@@ -46,6 +46,15 @@ class PdfController {
     return list;
   }
 
+  Future<void> update(PdfModel pdf) async {
+    final database = await getDatabase();
+
+    var map = PdfTable.toMap(pdf);
+
+    await database.update(PdfTable.tableName, map,
+        where: '${PdfTable.id} = ?', whereArgs: [pdf.id]);
+  }
+
   /// Retrieves a PDF model from the database by [id].
   ///
   /// Returns `null` if no PDF with the specified [id] is found.

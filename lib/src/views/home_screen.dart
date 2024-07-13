@@ -86,7 +86,7 @@ class HomeScreen extends StatelessWidget {
                   Navigator.pushNamed(context, AppRoutes.registerClient);
                 },
                 icon: const Icon(Icons.person),
-                label: Text(AppLocalizations.of(context)!.language),
+                label: const Text('Cadastrar Clientes'),
               ),
             ),
             SizedBox(

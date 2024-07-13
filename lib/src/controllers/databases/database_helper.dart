@@ -11,7 +11,7 @@ Future<Database> getDatabase() async {
 
   return openDatabase(
     path,
-    version: 9,
+    version: 11,
     onCreate: (db, version) async {
       await db.execute(ClientTable.createTable);
       await db.execute(ManagerTable.createTable);
@@ -79,6 +79,10 @@ Future<Database> getDatabase() async {
         await db.execute('ALTER TABLE rentals_held RENAME TO rent');
         await db.execute(
             'ALTER TABLE rent RENAME COLUMN rental_state TO rent_state');
+      }
+      if (oldVersion < 11) {
+        await db.execute('DROP TABLE IF EXISTS vehicle');
+        await db.execute(VehicleTable.createTable);
       }
     },
   );

@@ -1,7 +1,21 @@
 {
-    "language" : "Idioma",
-    "car" : "Carro",
-    "test" : "teste",
-    "helloWorld": "Olá mundo!",
-    "title": "Aplicativo em português"
+    "companyRegistrationNumber": "CNPJ",
+    "name": "Nome",
+    "telephone": "Telefone",
+    "city": "Cidade",
+    "state": "Estado",
+    "manager": "Gerente",
+    "companyRegistrationNumberRequired": "CNPJ é obrigatório.",
+    "nameRequired": "Nome é obrigatório.",
+    "telephoneRequired": "Telefone é obrigatório.",
+    "cityRequired": "Cidade é obrigatório.",
+    "stateRequired": "Estado é obrigatório.",
+    "managerRequired": "Gerente é obrigatório",
+    "companyRegistrationNumberInvalid": "CNPJ é obrigatório.",
+    "error": "Erro.",
+    "okay": "Ok.",
+    "incompleteName": "O nome deve ter pelo menos três letras.",
+    "invalidPhoneNumber": "Número de telefone inválido.",
+    "registerClient": "Registrar Cliente",
+    "clientRegister": "Cadastro de Cliente"
 }

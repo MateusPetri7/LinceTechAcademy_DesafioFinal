@@ -82,16 +82,33 @@ class ClientController extends ChangeNotifier {
   /// company registration number.
   ///
   /// Throws a [NotFoundException] if the client data is not found.
-  Future<void> getClientData(String companyRegistrationNumber) async {
+  Future<void> getClientData(
+      TextEditingController companyRegistrationNumberController) async {
     try {
-      final clientData =
-          await clientRepository.getClientData(companyRegistrationNumber);
-      _clientCurrent = clientData;
-      notifyListeners();
-    } on NotFoundException catch (e) {
-      throw Exception(e.message);
+      String? companyRegistrationNumber = companyRegistrationNumberController
+          .text
+          .replaceAll(RegExp(r'\D'), '');
+
+      final client =
+          await _controllerDataBase.getClientFromCompanyRegistrationNumber(
+              companyRegistrationNumberController.text);
+
+      if (client == null) {
+        try {
+          final clientData =
+              await clientRepository.getClientData(companyRegistrationNumber);
+          _clientCurrent = clientData;
+          notifyListeners();
+        } on NotFoundException catch (e) {
+          throw Exception(e.message);
+        } catch (e) {
+          throw Exception('Erro ao buscar dados do cliente.');
+        }
+      } else {
+        throw Exception();
+      }
     } catch (e) {
-      throw Exception('Erro ao buscar dados do cliente.');
+      throw Exception('Cliente já cadastrado.');
     }
   }
 
