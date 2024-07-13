@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/client_controller.dart';
+import '../widgets/base_scaffold.dart';
 
 class RegisteredClients extends StatelessWidget {
   const RegisteredClients({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
+      title: 'Clientes',
       body: Column(
         children: [
           Expanded(
