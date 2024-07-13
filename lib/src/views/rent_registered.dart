@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
-import '../controllers/rentals_held_controller.dart';
+import '../controllers/rent_controller.dart';
 
-class RegisteredRentalsHeld extends StatelessWidget {
-  const RegisteredRentalsHeld({super.key});
+class RegisteredRent extends StatelessWidget {
+  const RegisteredRent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class RegisteredRentalsHeld extends StatelessWidget {
         children: [
           Expanded(
             child: FutureBuilder(
-              future: Provider.of<RentalsHeldController>(context, listen: false)
+              future: Provider.of<RentController>(context, listen: false)
                   .load(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -27,24 +27,24 @@ class RegisteredRentalsHeld extends StatelessWidget {
                     child: Text('Ocorreu um erro ao carregar os dados'),
                   );
                 } else {
-                  return Consumer<RentalsHeldController>(
+                  return Consumer<RentController>(
                     builder: (context, state, _) {
-                      if (state.listRentalsHeld.isEmpty) {
+                      if (state.listRent.isEmpty) {
                         return const Center(
                           child: Text('Nenhum aluguel encontrado'),
                         );
                       }
                       return ListView.builder(
-                        itemCount: state.listRentalsHeld.length,
+                        itemCount: state.listRent.length,
                         itemBuilder: (context, index) {
-                          final rentals = state.listRentalsHeld[index];
+                          final rent = state.listRent[index];
                           return ListTile(
-                            title: Text('Cliente: ${rentals.clientId}'),
+                            title: Text('Cliente: ${rent.clientId}'),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Valor total: ${rentals.totalAmountPayable}'),
+                                    'Valor total: ${rent.totalAmountPayable}'),
                               ],
                             ),
                             trailing: Row(
@@ -55,8 +55,8 @@ class RegisteredRentalsHeld extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.pushNamed(
                                       context,
-                                      AppRoutes.editRentals,
-                                      arguments: rentals,
+                                      AppRoutes.editRent,
+                                      arguments: rent,
                                     );
                                   },
                                 ),
@@ -99,7 +99,7 @@ class RegisteredRentalsHeld extends StatelessWidget {
                                       },
                                     );
                                     if (confirmDelete == true) {
-                                      state.delete(rentals);
+                                      state.delete(rent);
                                     }
                                   },
                                 ),

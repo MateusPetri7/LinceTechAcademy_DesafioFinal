@@ -89,9 +89,9 @@ class ClientController extends ChangeNotifier {
       _clientCurrent = clientData;
       notifyListeners();
     } on NotFoundException catch (e) {
-      print(e.message);
+      throw Exception(e.message);
     } catch (e) {
-      print(e);
+      throw Exception('Erro ao buscar dados do cliente.');
     }
   }
 

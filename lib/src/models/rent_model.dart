@@ -1,27 +1,27 @@
-/// A model class representing a rental held.
-class RentalsHeldModel {
-  /// The unique identifier of the rental held.
+/// A model class representing a rent.
+class RentModel {
+  /// The unique identifier of the rent.
   String? id;
 
-  /// The state where the rental is being accomplished.
-  String? rentalState;
+  /// The state where the rent is being accomplished.
+  String? rentState;
 
-  /// The unique identifier for the client involved in the rental held.
+  /// The unique identifier for the client involved in the rent.
   String? clientId;
 
-  /// The unique identifier for the vehicle involved in the rental held.
+  /// The unique identifier for the vehicle involved in the rent.
   String? vehicleId;
 
-  /// The start date of the rental period.
+  /// The start date of the rent period.
   DateTime? startDate;
 
-  /// The end date of the rental period.
+  /// The end date of the rent period.
   DateTime? endDate;
 
   /// The number of days the vehicle is rented.
   int? numberOfDays;
 
-  /// The total amount payable for the rental held.
+  /// The total amount payable for the rent.
   double? totalAmountPayable;
 
   /// The percentage of the commission for the manager.
@@ -30,12 +30,12 @@ class RentalsHeldModel {
   /// The value of the manager's commission.
   double? managerCommissionValue;
 
-  /// Creates a [RentalsHeldModel] instance with the given properties.
+  /// Creates a [RentModel] instance with the given properties.
   ///
   /// All parameters are optional.
-  RentalsHeldModel(
+  RentModel(
       {this.id,
-      this.rentalState,
+      this.rentState,
       this.clientId,
       this.vehicleId,
       this.startDate,

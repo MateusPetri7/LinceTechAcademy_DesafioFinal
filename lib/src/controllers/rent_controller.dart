@@ -1,20 +1,20 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import '../models/client_model.dart';
-import '../models/rentals_held_model.dart';
+import '../models/rent_model.dart';
 import '../models/vehicle_model.dart';
 import 'databases/client_controller.dart' as database_client;
 import 'databases/manager_controller.dart' as database_manager;
-import 'databases/rentals_held_controller.dart' as database;
+import 'databases/rent_controller.dart' as database;
 import 'databases/vehicle_controller.dart' as database_vehicle;
 
-class RentalsHeldController extends ChangeNotifier {
-  RentalsHeldController() {
+class RentController extends ChangeNotifier {
+  RentController() {
     load();
     loadClients();
   }
 
-  final _controllerDataBase = database.RentalsHeldController();
+  final _controllerDataBase = database.RentController();
   final _clientControllerDataBase = database_client.ClientController();
   final _vehicleControllerDataBase = database_vehicle.VehicleController();
   final _managerControllerDataBase = database_manager.ManagerController();
@@ -31,8 +31,8 @@ class RentalsHeldController extends ChangeNotifier {
   final _totalAmountPayableController = TextEditingController();
   final _percentageManagerCommissionController = TextEditingController();
   final _managerCommissionValueController = TextEditingController();
-  final _listRentalsHeld = <RentalsHeldModel>[];
-  RentalsHeldModel? _rentalsCurrent = RentalsHeldModel();
+  final _listRent = <RentModel>[];
+  RentModel? _rentCurrent = RentModel();
 
   GlobalKey<FormState> get formKey => _formKey;
 
@@ -63,9 +63,9 @@ class RentalsHeldController extends ChangeNotifier {
   TextEditingController get managerCommissionValueController =>
       _managerCommissionValueController;
 
-  List<RentalsHeldModel> get listRentalsHeld => _listRentalsHeld;
+  List<RentModel> get listRent => _listRent;
 
-  RentalsHeldModel? get rentalsCurrent => _rentalsCurrent;
+  RentModel? get rentCurrent => _rentCurrent;
 
   set selectedState(String? value) {
     _selectedVehicle = null;
@@ -106,9 +106,9 @@ class RentalsHeldController extends ChangeNotifier {
   }
 
   void _calculateManagerCommissionValue(
-      double rentalsValue, double percentageManagerCommission) {
+      double rentValue, double percentageManagerCommission) {
     final managerCommissionValue =
-        rentalsValue * (percentageManagerCommission / 100);
+        rentValue * (percentageManagerCommission / 100);
     _managerCommissionValueController.text =
         managerCommissionValue.toStringAsFixed(2);
     notifyListeners();
@@ -168,8 +168,8 @@ class RentalsHeldController extends ChangeNotifier {
   }
 
   Future<void> insert() async {
-    final rentals = RentalsHeldModel(
-        rentalState: _selectedState,
+    final rent = RentModel(
+        rentState: _selectedState,
         clientId: _selectedClient?.id,
         vehicleId: _selectedVehicle?.id,
         startDate: DateTime.parse(
@@ -182,15 +182,15 @@ class RentalsHeldController extends ChangeNotifier {
         managerCommissionValue:
             double.parse(_managerCommissionValueController.text));
 
-    final id = await _controllerDataBase.insert(rentals);
-    _rentalsCurrent = await _controllerDataBase.getRentalsFromId(id.toString());
+    final id = await _controllerDataBase.insert(rent);
+    _rentCurrent = await _controllerDataBase.getRentsFromId(id.toString());
 
     await load();
     notifyListeners();
   }
 
-  Future<void> delete(RentalsHeldModel rentalsHeld) async {
-    await _controllerDataBase.delete(rentalsHeld);
+  Future<void> delete(RentModel rent) async {
+    await _controllerDataBase.delete(rent);
     await load();
     notifyListeners();
   }
@@ -198,27 +198,27 @@ class RentalsHeldController extends ChangeNotifier {
   Future<void> load() async {
     final list = await _controllerDataBase.select();
 
-    _listRentalsHeld.clear();
-    _listRentalsHeld.addAll(list);
+    _listRent.clear();
+    _listRent.addAll(list);
 
     notifyListeners();
   }
 
-  Future<void> populateRentalInformation(RentalsHeldModel rentals) async {
-    _startDateController.text = rentals.startDate != null
-        ? UtilData.obterDataDDMMAAAA(rentals.startDate!)
+  Future<void> populateRentInformation(RentModel rent) async {
+    _startDateController.text = rent.startDate != null
+        ? UtilData.obterDataDDMMAAAA(rent.startDate!)
         : '';
-    _endDateController.text = rentals.endDate != null
-        ? UtilData.obterDataDDMMAAAA(rentals.endDate!)
+    _endDateController.text = rent.endDate != null
+        ? UtilData.obterDataDDMMAAAA(rent.endDate!)
         : '';
-    _numberOfDaysController.text = rentals.numberOfDays?.toString() ?? '';
+    _numberOfDaysController.text = rent.numberOfDays?.toString() ?? '';
     _totalAmountPayableController.text =
-        rentals.totalAmountPayable?.toString() ?? '';
+        rent.totalAmountPayable?.toString() ?? '';
 
-    _rentalsCurrent = rentals;
+    _rentCurrent = rent;
 
     final client = await _clientControllerDataBase
-        .getClientFromId(rentals.clientId.toString());
+        .getClientFromId(rent.clientId.toString());
     _selectedClient = client;
 
     // if (client != null) {
@@ -227,15 +227,15 @@ class RentalsHeldController extends ChangeNotifier {
     // }
 
     final vehicle = await _vehicleControllerDataBase
-        .getVehicleFromId(rentals.vehicleId.toString());
+        .getVehicleFromId(rent.vehicleId.toString());
     _selectedVehicle = vehicle;
 
     notifyListeners();
   }
 
   Future<void> update() async {
-    final editedRental = RentalsHeldModel(
-      id: _rentalsCurrent!.id,
+    final editedRent = RentModel(
+      id: _rentCurrent!.id,
       clientId: selectedClient?.id,
       vehicleId: _selectedVehicle?.id,
       startDate: DateTime.parse(
@@ -246,9 +246,9 @@ class RentalsHeldController extends ChangeNotifier {
       totalAmountPayable: double.parse(_totalAmountPayableController.text),
     );
 
-    await _controllerDataBase.update(editedRental);
+    await _controllerDataBase.update(editedRent);
 
-    _rentalsCurrent = RentalsHeldModel();
+    _rentCurrent = RentModel();
     clearControllers();
     await load();
     notifyListeners();

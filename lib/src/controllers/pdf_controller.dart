@@ -6,7 +6,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../models/client_model.dart';
 import '../models/pdf_model.dart';
-import '../models/rentals_held_model.dart';
+import '../models/rent_model.dart';
 import '../models/vehicle_model.dart';
 import 'databases/manager_controller.dart' as database_manager;
 import 'databases/pdf_controller.dart' as database;
@@ -58,7 +58,7 @@ class PdfController extends ChangeNotifier {
     return pdf!;
   }
 
-  Future<void> createPdf(ClientModel client, VehicleModel vehicle, RentalsHeldModel rentals) async {
+  Future<void> createPdf(ClientModel client, VehicleModel vehicle, RentModel rent) async {
     final pdf = pw.Document();
     final font = await rootBundle.load('assets/fonts/Rubik-Regular.ttf');
     final ttf = pw.Font.ttf(font);
@@ -146,11 +146,11 @@ class PdfController extends ChangeNotifier {
                 style: pw.TextStyle(font: ttf, fontSize: 18, fontWeight: pw.FontWeight.bold),
               ),
               pw.Text(
-                'Período do Aluguel: ${rentals.startDate!.toLocal().toString().split(' ')[0]} - ${rentals.endDate!.toLocal().toString().split(' ')[0]}',
+                'Período do Aluguel: ${rent.startDate!.toLocal().toString().split(' ')[0]} - ${rent.endDate!.toLocal().toString().split(' ')[0]}',
                 style: pw.TextStyle(font: ttf, fontSize: 14),
               ),
-              pw.Text('Total de Dias do Período: ${rentals.numberOfDays}', style: pw.TextStyle(font: ttf, fontSize: 14)),
-              pw.Text('Valor Total do Aluguel: R\$${rentals.totalAmountPayable}', style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Total de Dias do Período: ${rent.numberOfDays}', style: pw.TextStyle(font: ttf, fontSize: 14)),
+              pw.Text('Valor Total do Aluguel: R\$${rent.totalAmountPayable}', style: pw.TextStyle(font: ttf, fontSize: 14)),
             ],
           ),
         ],

@@ -1,7 +1,9 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 import '../../models/client_model.dart';
 
+/// A utility class for database operations related to clients.
 class ClientTable {
+  /// SQL statement to create the clients table.
   static const String createTable = '''
   CREATE TABLE $tableName(
   $id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -15,15 +17,24 @@ class ClientTable {
   ); 
   ''';
 
+  /// Name of the clients table in the database.
   static const String tableName = 'client';
+  /// Column name for client ID.
   static const String id = 'id';
+  /// Column name for client name.
   static const String name = 'name';
+  /// Column name for client telephone.
   static const String telephone = 'telephone';
+  /// Column name for client city.
   static const String city = 'city';
+  /// Column name for client state.
   static const String state = 'state';
+  /// Column name for client company registration number.
   static const String companyRegistrationNumber = 'company_registration_number';
+  /// Column name for client manager ID.
   static const String managerId = 'manager_id';
 
+  /// Converts a [ClientModel] object into a map of database columns.
   static Map<String, dynamic> toMap(ClientModel client) {
     final map = <String, dynamic>{};
 
@@ -39,6 +50,7 @@ class ClientTable {
     return map;
   }
 
+  /// Converts a database column map into a [ClientModel] object.
   static ClientModel fromMap(Map<String, dynamic> map) {
     return ClientModel(
       id: map[ClientTable.id].toString(),

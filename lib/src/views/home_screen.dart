@@ -143,7 +143,7 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.registerRentals);
+                  Navigator.pushNamed(context, AppRoutes.registerRent);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Cadastrar alugueis'),
@@ -153,7 +153,7 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.registeredRentalsHeld);
+                  Navigator.pushNamed(context, AppRoutes.registeredRent);
                 },
                 icon: const Icon(Icons.person_3),
                 label: const Text('Aluguéis cadastrados'),

@@ -2,9 +2,9 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:provider/provider.dart';
-// import '../controllers/rentals_held_controller.dart';
+// import '../controllers/rent_controller.dart';
 // import '../models/client_model.dart';
-// import '../models/rentals_held_model.dart';
+// import '../models/rent_model.dart';
 // import '../models/vehicle_model.dart';
 //
 // class EditRentalsHeld extends StatelessWidget {

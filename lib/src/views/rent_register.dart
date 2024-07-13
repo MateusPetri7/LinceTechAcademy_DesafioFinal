@@ -3,29 +3,29 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/pdf_controller.dart';
-import '../controllers/rentals_held_controller.dart';
+import '../controllers/rent_controller.dart';
 import '../models/client_model.dart';
 import '../models/vehicle_model.dart';
 
-class RegisterRentalsHeld extends StatelessWidget {
-  const RegisterRentalsHeld({super.key});
+class RegisterRent extends StatelessWidget {
+  const RegisterRent({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer2<RentalsHeldController, PdfController>(
-          builder: (context, rentalsState, pdfState, _) {
+        child: Consumer2<RentController, PdfController>(
+          builder: (context, rentState, pdfState, _) {
             return Form(
-              key: rentalsState.formKey,
+              key: rentState.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   DropdownButtonFormField<String>(
-                    value: rentalsState.selectedState,
+                    value: rentState.selectedState,
                     hint: const Text('Selecione o estado de locação'),
-                    items: rentalsState.states
+                    items: rentState.states
                         .map<DropdownMenuItem<String>>((String state) {
                       return DropdownMenuItem<String>(
                         value: state,
@@ -33,9 +33,9 @@ class RegisterRentalsHeld extends StatelessWidget {
                       );
                     }).toList(),
                     onChanged: (String? value) async {
-                      rentalsState.selectedState = value;
+                      rentState.selectedState = value;
                       if (value != null) {
-                        await rentalsState.loadVehicles(value);
+                        await rentState.loadVehicles(value);
                       }
                     },
                     validator: (value) {
@@ -46,9 +46,9 @@ class RegisterRentalsHeld extends StatelessWidget {
                     },
                   ),
                   DropdownButtonFormField<ClientModel>(
-                    value: rentalsState.selectedClient,
+                    value: rentState.selectedClient,
                     hint: const Text('Selecione o cliente'),
-                    items: rentalsState.listClient
+                    items: rentState.listClient
                         .map<DropdownMenuItem<ClientModel>>(
                             (ClientModel client) {
                       return DropdownMenuItem<ClientModel>(
@@ -57,7 +57,7 @@ class RegisterRentalsHeld extends StatelessWidget {
                       );
                     }).toList(),
                     onChanged: (ClientModel? value) {
-                      rentalsState.selectedClient = value;
+                      rentState.selectedClient = value;
                     },
                     validator: (value) {
                       if (value == null) {
@@ -67,9 +67,9 @@ class RegisterRentalsHeld extends StatelessWidget {
                     },
                   ),
                   DropdownButtonFormField<VehicleModel>(
-                    value: rentalsState.selectedVehicle,
+                    value: rentState.selectedVehicle,
                     hint: const Text('Selecione o veículo'),
-                    items: rentalsState.listVehicle
+                    items: rentState.listVehicle
                         .map<DropdownMenuItem<VehicleModel>>(
                             (VehicleModel vehicle) {
                       return DropdownMenuItem<VehicleModel>(
@@ -78,7 +78,7 @@ class RegisterRentalsHeld extends StatelessWidget {
                       );
                     }).toList(),
                     onChanged: (VehicleModel? value) {
-                      rentalsState.selectedVehicle = value;
+                      rentState.selectedVehicle = value;
                     },
                     validator: (value) {
                       if (value == null) {
@@ -88,13 +88,13 @@ class RegisterRentalsHeld extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    controller: rentalsState.startDateController,
+                    controller: rentState.startDateController,
                     readOnly: true,
                     decoration: const InputDecoration(
                       labelText: 'Data de Início',
                     ),
-                    onTap: () => rentalsState.selectDate(
-                        context, rentalsState.startDateController),
+                    onTap: () => rentState.selectDate(
+                        context, rentState.startDateController),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Data de Início é obrigatória.';
@@ -103,13 +103,13 @@ class RegisterRentalsHeld extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    controller: rentalsState.endDateController,
+                    controller: rentState.endDateController,
                     readOnly: true,
                     decoration: const InputDecoration(
                       labelText: 'Data de Término',
                     ),
-                    onTap: () => rentalsState.selectDate(
-                        context, rentalsState.endDateController),
+                    onTap: () => rentState.selectDate(
+                        context, rentState.endDateController),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Data de Término é obrigatória.';
@@ -118,7 +118,7 @@ class RegisterRentalsHeld extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    controller: rentalsState.numberOfDaysController,
+                    controller: rentState.numberOfDaysController,
                     keyboardType: TextInputType.number,
                     readOnly: true,
                     decoration: const InputDecoration(
@@ -126,7 +126,7 @@ class RegisterRentalsHeld extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
-                    controller: rentalsState.totalAmountPayableController,
+                    controller: rentState.totalAmountPayableController,
                     keyboardType: TextInputType.number,
                     readOnly: true,
                     decoration: const InputDecoration(
@@ -135,7 +135,7 @@ class RegisterRentalsHeld extends StatelessWidget {
                   ),
                   TextFormField(
                     controller:
-                        rentalsState.percentageManagerCommissionController,
+                    rentState.percentageManagerCommissionController,
                     keyboardType: TextInputType.number,
                     readOnly: true,
                     decoration: const InputDecoration(
@@ -143,7 +143,7 @@ class RegisterRentalsHeld extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
-                    controller: rentalsState.managerCommissionValueController,
+                    controller: rentState.managerCommissionValueController,
                     keyboardType: TextInputType.number,
                     readOnly: true,
                     decoration: const InputDecoration(
@@ -153,13 +153,13 @@ class RegisterRentalsHeld extends StatelessWidget {
                   const SizedBox(height: 20.0),
                   ElevatedButton.icon(
                     onPressed: () async {
-                      if (rentalsState.formKey.currentState!.validate()) {
-                        await rentalsState.insert();
+                      if (rentState.formKey.currentState!.validate()) {
+                        await rentState.insert();
                         await pdfState.createPdf(
-                            rentalsState.selectedClient!,
-                            rentalsState.selectedVehicle!,
-                            rentalsState.rentalsCurrent!);
-                        rentalsState.clearControllers();
+                            rentState.selectedClient!,
+                            rentState.selectedVehicle!,
+                            rentState.rentCurrent!);
+                        rentState.clearControllers();
                         Navigator.pushNamed(
                           context,
                           AppRoutes.pdfView,

@@ -4,7 +4,7 @@ import 'src/controllers/client_controller.dart';
 import 'src/controllers/image_controller.dart';
 import 'src/controllers/manager_controller.dart';
 import 'src/controllers/pdf_controller.dart';
-import 'src/controllers/rentals_held_controller.dart';
+import 'src/controllers/rent_controller.dart';
 import 'src/controllers/vehicle_controller.dart';
 import 'src/models/language_model.dart';
 import 'src/models/theme_model.dart';
@@ -29,7 +29,7 @@ void main() {
             create: (context) =>
                 VehicleController(vehicleRepository: vehicleRepository)),
         ChangeNotifierProvider(create: (context) => ImageController()),
-        ChangeNotifierProvider(create: (context) => RentalsHeldController()),
+        ChangeNotifierProvider(create: (context) => RentController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
         ChangeNotifierProvider(create: (context) => LanguageModel()),
       ],
