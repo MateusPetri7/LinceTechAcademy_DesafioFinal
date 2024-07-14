@@ -144,7 +144,7 @@ class VehicleController extends ChangeNotifier {
 
     await _controllerDataBase.insert(vehicle);
 
-    _clearControllers();
+    clearControllers();
 
     await load();
     notifyListeners();
@@ -211,13 +211,13 @@ class VehicleController extends ChangeNotifier {
     await _controllerDataBase.update(editedVehicle);
 
     _vehicleCurrent = VehicleModel();
-    _clearControllers();
+    clearControllers();
 
     await load();
     notifyListeners();
   }
 
-  void _clearControllers() {
+  void clearControllers() {
     _selectedType = null;
     _selectedBrand = null;
     _selectedModel = null;

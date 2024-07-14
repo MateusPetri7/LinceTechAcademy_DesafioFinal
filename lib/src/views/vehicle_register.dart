@@ -1,44 +1,48 @@
-import 'dart:io';
-import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import '../../routes.dart';
 import '../controllers/image_controller.dart';
 import '../controllers/vehicle_controller.dart';
 import '../models/vehicle_brand_model.dart';
 import '../models/vehicle_model_model.dart';
+import '../widgets/base_scaffold.dart';
+import '../widgets/custom_dropdown_form_field.dart';
+import '../widgets/custom_image_field.dart';
+import '../widgets/custom_style_button.dart';
+import '../widgets/custom_text_form_field.dart';
+import '../widgets/custom_vehicle_dropdow_form_field.dart';
 
 class RegisterVehicle extends StatelessWidget {
-  const RegisterVehicle({super.key});
+  const RegisterVehicle({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final state = Provider.of<VehicleController>(context, listen: false);
+    final imageState = Provider.of<ImageController>(context, listen: false);
+
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.clientRegister,
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Consumer2<VehicleController, ImageController>(
-          builder: (context, vehicleState, imageState, _) {
-            return Form(
-              key: vehicleState.formKey,
-              child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          child: Consumer<VehicleController>(
+            builder: (context, vehicleState, _) {
+              return Form(
+                key: vehicleState.formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    DropdownButtonFormField<String>(
-                      value: vehicleState.selectedType,
-                      hint: Text('Selecione o tipo'),
-                      items: vehicleState.types
-                          .map<DropdownMenuItem<String>>((String type) {
-                        return DropdownMenuItem<String>(
-                          value: type,
-                          child: Text(type),
-                        );
-                      }).toList(),
-                      onChanged: (String? value) {
-                        vehicleState.selectedType = value;
+                    const SizedBox(height: 20.0),
+                    CustomVehicleDropdownFormField(
+                      labelText: 'Selecione o tipo',
+                      icon: Icons.category,
+                      items: vehicleState.types,
+                      onChanged: (dynamic value) {
+                        vehicleState.selectedType = value as String?;
                         if (value != null) {
-                          vehicleState.getVehicleBrands(value);
+                          vehicleState.getVehicleBrands(value as String);
                         }
                       },
                       validator: (value) {
@@ -48,21 +52,17 @@ class RegisterVehicle extends StatelessWidget {
                         return null;
                       },
                     ),
-                    DropdownButtonFormField<VehicleBrandModel>(
-                      value: vehicleState.selectedBrand,
-                      hint: const Text('Selecione a marca'),
-                      items: vehicleState.vehicleBrands
-                          .map<DropdownMenuItem<VehicleBrandModel>>(
-                              (VehicleBrandModel brand) {
-                        return DropdownMenuItem<VehicleBrandModel>(
-                          value: brand,
-                          child: Text(brand.name),
-                        );
-                      }).toList(),
-                      onChanged: (VehicleBrandModel? value) {
-                        vehicleState.selectedBrand = value;
+                    const SizedBox(height: 20.0),
+                    CustomVehicleDropdownFormField(
+                      labelText: 'Selecione a marca',
+                      icon: Icons.branding_watermark,
+                      items: vehicleState.vehicleBrands,
+                      onChanged: (dynamic value) {
+                        vehicleState.selectedBrand =
+                        value as VehicleBrandModel?;
                         if (value != null) {
-                          vehicleState.getVehicleModels(value.code);
+                          vehicleState.getVehicleModels(
+                              (value).code);
                         }
                       },
                       validator: (value) {
@@ -72,33 +72,28 @@ class RegisterVehicle extends StatelessWidget {
                         return null;
                       },
                     ),
-                    DropdownButtonFormField<VehicleModelModel>(
-                      value: vehicleState.selectedModel,
-                      hint: const Text('Selecione o modelo'),
-                      items: vehicleState.vehicleModels
-                          .map<DropdownMenuItem<VehicleModelModel>>(
-                              (VehicleModelModel model) {
-                        return DropdownMenuItem<VehicleModelModel>(
-                          value: model,
-                          child: Text(model.name),
-                        );
-                      }).toList(),
-                      onChanged: (VehicleModelModel? value) {
-                        vehicleState.selectedModel = value;
+                    const SizedBox(height: 20.0),
+                    CustomVehicleDropdownFormField(
+                      labelText: 'Selecione o modelo',
+                      icon: Icons.model_training,
+                      items: vehicleState.vehicleModels,
+                      onChanged: (dynamic value) {
+                        vehicleState.selectedModel =
+                        value as VehicleModelModel?;
                       },
                       validator: (value) {
                         if (value == null) {
-                          return 'Madelo do veículo é obrigatório.';
+                          return 'Modelo do veículo é obrigatório.';
                         }
                         return null;
                       },
                     ),
-                    TextFormField(
+                    const SizedBox(height: 20.0),
+                    CustomTextFormField(
+                      labelText: 'Placa',
+                      icon: Icons.directions_car,
                       controller: vehicleState.plateController,
                       keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        labelText: 'Placa',
-                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Placa é obrigatória.';
@@ -106,12 +101,12 @@ class RegisterVehicle extends StatelessWidget {
                         return null;
                       },
                     ),
-                    TextFormField(
+                    const SizedBox(height: 20.0),
+                    CustomTextFormField(
+                      labelText: 'Ano de fabricação',
+                      icon: Icons.date_range,
                       controller: vehicleState.yearManufactureController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Ano de fabricação',
-                      ),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                       ],
@@ -125,37 +120,30 @@ class RegisterVehicle extends StatelessWidget {
                         return null;
                       },
                     ),
-                    DropdownButtonFormField<String>(
-                      value: vehicleState.selectedState,
-                      hint: const Text('Selecione o estado'),
-                      items: vehicleState.states
-                          .map<DropdownMenuItem<String>>((String state) {
-                        return DropdownMenuItem<String>(
-                          value: state,
-                          child: Text(state),
-                        );
-                      }).toList(),
-                      onChanged: (String? value) {
-                        vehicleState.selectedState = value;
+                    const SizedBox(height: 20.0),
+                    CustomDropdownButtonFormField(
+                      labelText: AppLocalizations.of(context)!.state,
+                      icon: Icons.location_on,
+                      items: state.states,
+                      value: state.selectedState,
+                      onChanged: (value) {
+                        state.selectedState = value;
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Estado é obrigatório.';
+                          return AppLocalizations.of(context)!.stateRequired;
                         }
                         return null;
                       },
                     ),
-                    TextFormField(
+                    const SizedBox(height: 20.0),
+                    CustomTextFormField(
+                      labelText: 'Custo da diária de aluguel',
+                      icon: Icons.attach_money,
                       controller: vehicleState.dailyRentalCostController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Custo da diária de aluguel',
-                      ),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
-                        CentavosInputFormatter(
-                          moeda: true,
-                        ),
                       ],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -163,78 +151,56 @@ class RegisterVehicle extends StatelessWidget {
                         }
                         return null;
                       },
+                      isCurrency: true,
                     ),
+                    const SizedBox(height: 20.0),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            await imageState.pickImage(ImageSource.gallery,
-                                vehicleState.plateController.text.toString());
+                        CustomImageField(
+                          onImageSourceSelected: (source) async {
+                            await imageState.pickImage(
+                              source,
+                              vehicleState.plateController.text.toString(),
+                            );
                             if (imageState.selectedImage != null) {
-                              vehicleState
-                                  .addPhoto(imageState.selectedImage!.path);
+                              vehicleState.addPhoto(imageState.selectedImage!.path);
                             }
                           },
-                          child: const Text('Selecionar imagem da galeria'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            await imageState.pickImage(ImageSource.camera,
-                                vehicleState.plateController.text.toString());
-                            if (imageState.selectedImage != null) {
-                              vehicleState
-                                  .addPhoto(imageState.selectedImage!.path);
-                            }
-                          },
-                          child: const Text('Tirar foto'),
-                        ),
-                        Wrap(
-                          children: vehicleState.photosTheVehicle
-                              .map((imagePath) => Stack(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Image.file(
-                                          File(imagePath),
-                                          width: 100,
-                                          height: 100,
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: 0,
-                                        top: 0,
-                                        child: IconButton(
-                                          icon: const Icon(Icons.close,
-                                              color: Colors.red),
-                                          onPressed: () {
-                                            vehicleState.removePhoto(imagePath);
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ))
-                              .toList(),
+                          imagePaths: vehicleState.photosTheVehicle,
+                          onRemoveImage: vehicleState.removePhoto,
                         ),
                       ],
                     ),
                     const SizedBox(height: 20.0),
-                    ElevatedButton.icon(
+                    CustomStyledButton(
                       onPressed: () async {
                         if (vehicleState.formKey.currentState!.validate()) {
                           await vehicleState.insert();
                         }
                       },
                       icon: const Icon(Icons.add),
-                      label: const Text('Cadastrar'),
-                      style: ElevatedButton.styleFrom(),
+                      label: 'Cadastrar',
                     ),
+                    const SizedBox(height: 20.0),
                   ],
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
+      onIconPressed: (index) {
+        state.clearControllers();
+        switch (index) {
+          case 0:
+            Navigator.pop(context);
+            break;
+          case 1:
+            Navigator.pushNamed(context, AppRoutes.home);
+            break;
+        }
+      },
     );
   }
 }

@@ -22,7 +22,7 @@ class CustomListView<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: items.isEmpty
-          ? Center(child: Text('No items found'))
+          ? const Center(child: Text('No items found'))
           : ListView.builder(
         itemCount: items.length,
         itemBuilder: (context, index) {

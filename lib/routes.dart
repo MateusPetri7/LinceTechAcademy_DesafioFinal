@@ -16,9 +16,11 @@ import 'src/views/manager_register.dart';
 import 'src/views/managers_registered.dart';
 import 'src/views/pdf_registered.dart';
 import 'src/views/pdf_view.dart';
+import 'src/views/rent_details.dart';
 import 'src/views/rent_edit.dart';
 import 'src/views/rent_register.dart';
 import 'src/views/rent_registered.dart';
+import 'src/views/vehicle_details.dart';
 import 'src/views/vehicle_edit.dart';
 import 'src/views/vehicle_register.dart';
 import 'src/views/vehicles_registered.dart';
@@ -36,9 +38,11 @@ class AppRoutes {
   static const String registerVehicle = '/registerVehicle';
   static const String registeredVehicles = '/registeredVehicles';
   static const String editVehicle = '/editVehicle';
+  static const String detailsVehicle = '/detailsVehicle';
   static const String registerRent = '/registerRent';
   static const String registeredRent = '/registeredRent';
   static const String editRent = '/editRent';
+  static const String detailsRent = '/detailsRent';
   static const String pdfView = '/pdfView';
   static const String registeredPDF = '/registeredPDF';
 
@@ -73,18 +77,22 @@ class AppRoutes {
       case editVehicle:
         final args = settings.arguments as VehicleModel;
         return MaterialPageRoute(builder: (_) => EditVehicle(vehicle: args));
+      case detailsVehicle:
+        final args = settings.arguments as VehicleModel;
+        return MaterialPageRoute(builder: (_) => DetailsVehicle(vehicle: args));
       case registerRent:
         return MaterialPageRoute(builder: (_) => const RegisterRent());
       case registeredRent:
         return MaterialPageRoute(builder: (_) => const RegisteredRent());
       case editRent:
         final args = settings.arguments as RentModel;
-        return MaterialPageRoute(
-            builder: (_) => EditRent(rent: args));
+        return MaterialPageRoute(builder: (_) => EditRent(rent: args));
+      case detailsRent:
+        final args = settings.arguments as RentModel;
+        return MaterialPageRoute(builder: (_) => DetailsRent(rent: args));
       case pdfView:
         final args = settings.arguments as PdfModel;
-        return MaterialPageRoute(
-            builder: (_) => PdfView(pdf: args));
+        return MaterialPageRoute(builder: (_) => PdfView(pdf: args));
       case registeredPDF:
         return MaterialPageRoute(builder: (_) => const RegisteredPDF());
       default:

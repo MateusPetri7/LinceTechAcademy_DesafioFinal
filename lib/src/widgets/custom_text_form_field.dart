@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String labelText;
@@ -10,6 +11,8 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Widget? suffixIcon;
   final bool readOnly;
+  final bool isCurrency; // Novo parâmetro para indicar se é um campo de moeda
+  final VoidCallback? onTapCallback; // Callback para o evento onTap
 
   CustomTextFormField({
     required this.labelText,
@@ -20,10 +23,14 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
     this.suffixIcon,
     this.readOnly = false,
+    this.isCurrency = false, // Valor padrão: não é campo de moeda
+    this.onTapCallback, // Adicione o parâmetro para o callback
   });
 
   @override
   Widget build(BuildContext context) {
+    final currencyFormatter = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
     return Container(
       decoration: const BoxDecoration(
         boxShadow: [
@@ -37,9 +44,21 @@ class CustomTextFormField extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
-        inputFormatters: inputFormatters,
+        inputFormatters: isCurrency ? [
+          FilteringTextInputFormatter.digitsOnly,
+          TextInputFormatter.withFunction((oldValue, newValue) {
+            final numValue = num.tryParse(newValue.text);
+            if (numValue == null) return oldValue;
+            final formattedValue = currencyFormatter.format(numValue / 100);
+            return TextEditingValue(
+              text: formattedValue,
+              selection: TextSelection.collapsed(offset: formattedValue.length),
+            );
+          }),
+        ] : inputFormatters,
         validator: validator,
         readOnly: readOnly,
+        onTap: onTapCallback, // Atribua o callback ao evento onTap
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: const TextStyle(
@@ -57,7 +76,7 @@ class CustomTextFormField extends StatelessWidget {
           filled: true,
           fillColor: Colors.white,
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide.none,

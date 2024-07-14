@@ -96,6 +96,10 @@ class RentController extends ChangeNotifier {
     notifyListeners();
   }
 
+  GlobalKey<FormState> generateFormKey() {
+    return GlobalKey<FormState>();
+  }
+
   Future<void> _setPercentageManagerCommission(String id) async {
     final manager = await _managerControllerDataBase.getManagerFromId(id);
     if (manager != null) {
@@ -144,7 +148,6 @@ class RentController extends ChangeNotifier {
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
       selectableDayPredicate: (DateTime date) {
-        // Verifique se a data não está na lista de datas ocupadas
         return !_occupiedDates.contains(date);
       },
     );
