@@ -12,7 +12,6 @@ class ManagerController extends ChangeNotifier {
     load();
   }
   final _controllerDataBase = database.ManagerController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _individualTaxpayerRegistryController = TextEditingController();
   final List<String> _states = Estados.listaEstadosSigla;
@@ -22,8 +21,6 @@ class ManagerController extends ChangeNotifier {
   ManagerModel _managerCurrent = ManagerModel();
   String? _selectedState;
 
-  /// Returns the form key used to manage form state.
-  GlobalKey<FormState> get formKey => _formKey;
   /// Returns the controller managing the manager's name input field.
   TextEditingController get nameController => _nameController;
   /// Returns the controller managing the manager's individual taxpayer registry
@@ -51,6 +48,10 @@ class ManagerController extends ChangeNotifier {
     notifyListeners();
   }
 
+  GlobalKey<FormState> generateFormKey() {
+    return GlobalKey<FormState>();
+  }
+
   /// Inserts a new manager into the database.
   ///
   /// Clears input controllers, reloads the manager list from the database,
@@ -65,7 +66,7 @@ class ManagerController extends ChangeNotifier {
 
     await _controllerDataBase.insert(manager);
 
-    _clearControllers();
+    clearControllers();
 
     await load();
     notifyListeners();
@@ -130,13 +131,13 @@ class ManagerController extends ChangeNotifier {
     await _controllerDataBase.update(editedManager);
 
     _managerCurrent = ManagerModel();
-    _clearControllers();
+    clearControllers();
 
     await load();
     notifyListeners();
   }
 
-  void _clearControllers() {
+  void clearControllers() {
     nameController.clear();
     individualTaxpayerRegistryController.clear();
     telephoneController.clear();

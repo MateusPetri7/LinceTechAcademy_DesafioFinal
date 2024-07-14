@@ -1,136 +1,47 @@
-import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import '../../routes.dart';
 import '../controllers/manager_controller.dart';
+import '../widgets/base_scaffold.dart';
+import '../widgets/manager_form_field.dart';
 
 class RegisterManager extends StatelessWidget {
-  const RegisterManager({super.key});
+  const RegisterManager({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final formKey = context.read<ManagerController>().generateFormKey();
+    final state = Provider.of<ManagerController>(context, listen: false);
+
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.registerManager,
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Consumer<ManagerController>(
-          builder: (context, state, _) {
-            return Form(
-              key: state.formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextFormField(
-                    controller: state.nameController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      labelText: 'Nome',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Nome é obrigatório.';
-                      }
-                      if (value.length < 3) {
-                        return 'Nome precisa ter pelo menos 3 letras.';
-                      }
-                      if (!RegExp(r'^[A-Z]').hasMatch(value)) {
-                        return 'Nome precisa começar com letra maiúscula.';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: state.telephoneController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      labelText: 'Telefone',
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      TelefoneInputFormatter(),
-                    ],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Telefone é obrigatório.';
-                      }
-                      if (value.length < 10) {
-                        return 'Número inválido.';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: state.individualTaxpayerRegistryController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      labelText: 'CPF',
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      CpfInputFormatter(),
-                    ],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'CPF é obrigatório.';
-                      }
-                      if (!CPFValidator.isValid(value)) {
-                        return 'CPF inválido.';
-                      }
-                      return null;
-                    },
-                  ),
-                  DropdownButtonFormField<String>(
-                    value: state.selectedState,
-                    hint: const Text('Selecione o estado'),
-                    items: state.states
-                        .map<DropdownMenuItem<String>>((String state) {
-                      return DropdownMenuItem<String>(
-                        value: state,
-                        child: Text(state),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      state.selectedState = value;
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Estado é obrigatório.';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: state.commissionPercentageController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: "Porcetagem de Comissão",
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    validator: (value) {
-                      if (value?.isEmpty ?? true) {
-                        return "Porcetagem de Comissão obrigatória.";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20.0),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      if (state.formKey.currentState!.validate()) {
-                        await state.insert();
-                      }
-                    },
-                    icon: const Icon(Icons.add),
-                    label: const Text('Cadastrar'),
-                    style: ElevatedButton.styleFrom(),
-                  ),
-                ],
-              ),
-            );
-          },
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          child: ManagerFormFields(
+            formKey: formKey,
+            buttonText: 'Cadastrar',
+            buttonIcon: Icons.add,
+            onButtonPressed: () async {
+              if (formKey.currentState!.validate()) {
+                await state.insert();
+              }
+            },
+          ),
         ),
       ),
+      onIconPressed: (index) {
+        state.clearControllers();
+        switch (index) {
+          case 0:
+            Navigator.pop(context);
+            break;
+          case 1:
+            Navigator.pushNamed(context, AppRoutes.home);
+            break;
+        }
+      },
     );
   }
 }

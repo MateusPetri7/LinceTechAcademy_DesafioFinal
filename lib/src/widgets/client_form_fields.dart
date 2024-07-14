@@ -1,8 +1,8 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import '../controllers/client_controller.dart';
 import '../widgets/custom_dropdown_button_form_field.dart';
 import '../widgets/custom_style_button.dart';

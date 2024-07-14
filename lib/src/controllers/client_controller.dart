@@ -25,7 +25,6 @@ class ClientController extends ChangeNotifier {
 
   final _controllerDataBase = database.ClientController();
   final _managerControllerDatabase = database_manager.ManagerController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _telephoneController = TextEditingController();
   final _cityController = TextEditingController();
@@ -36,9 +35,6 @@ class ClientController extends ChangeNotifier {
   ClientModel _clientCurrent = ClientModel();
   String? _selectedState;
   ManagerModel? _selectedManager;
-
-  /// Returns the global form key used to manage the form state.
-  GlobalKey<FormState> get formKey => _formKey;
 
   /// Returns the controller managing the client's name input field.
   TextEditingController get nameController => _nameController;

@@ -19,5 +19,6 @@
     "registerClient": "Register Client",
     "clientRegister": "Client Register",
     "clientEdit": "Edit data Client",
-    "editClient": "Edit Client"
+    "editClient": "Edit Client",
+    "registerManager": "Register Manager"
 }

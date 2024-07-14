@@ -19,5 +19,6 @@
     "registerClient": "Registrar Cliente",
     "clientRegister": "Cadastro de Cliente",
     "clientEdit": "Editar dados do Cliente",
-    "editClient": "Editar Cliente"
+    "editClient": "Editar Cliente",
+    "registerManager": "Registrar Gerente"
 }
