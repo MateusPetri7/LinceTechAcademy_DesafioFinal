@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../../routes.dart';
+
 class BaseScaffold extends StatelessWidget {
   final Widget body;
   final String title;
+  final void Function(int)? onIconPressed;
 
   const BaseScaffold({
     required this.body,
     required this.title,
+    this.onIconPressed,
   });
 
   @override
@@ -40,7 +44,11 @@ class BaseScaffold extends StatelessWidget {
                 size: 30.0,
               ),
               onPressed: () {
-                Navigator.pop(context);
+                if (onIconPressed != null) {
+                  onIconPressed!(0);
+                } else {
+                  Navigator.pop(context);
+                }
               },
             ),
             IconButton(
@@ -49,16 +57,11 @@ class BaseScaffold extends StatelessWidget {
                 size: 30.0,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/home');
-              },
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.search,
-                size: 30.0,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/search');
+                if (onIconPressed != null) {
+                  onIconPressed!(1);
+                } else {
+                  Navigator.pushNamed(context, AppRoutes.home);
+                }
               },
             ),
           ],

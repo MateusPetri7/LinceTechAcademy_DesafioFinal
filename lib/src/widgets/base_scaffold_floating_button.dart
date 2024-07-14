@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-class BaseScaffold extends StatelessWidget {
+import '../../routes.dart';
+
+class BaseScaffoldFloatingButton extends StatelessWidget {
   final Widget body;
   final String title;
   final String buttonText;
   final String buttonRoute;
 
-  const BaseScaffold({
+  const BaseScaffoldFloatingButton({
     required this.body,
     required this.title,
     required this.buttonText,
@@ -62,7 +64,7 @@ class BaseScaffold extends StatelessWidget {
                 size: 30.0,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/home');
+                Navigator.pushNamed(context, AppRoutes.home);
               },
             ),
           ],

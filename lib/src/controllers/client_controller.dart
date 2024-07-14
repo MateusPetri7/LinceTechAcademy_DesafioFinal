@@ -82,6 +82,10 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
+  GlobalKey<FormState> generateFormKey() {
+    return GlobalKey<FormState>();
+  }
+
   /// Fetches client data based on the provided company registration number.
   ///
   /// Retrieves client data from the local database. If found, updates the
@@ -171,7 +175,7 @@ class ClientController extends ChangeNotifier {
 
     await _controllerDataBase.insert(client);
 
-    _clearControllers();
+    clearControllers();
 
     await load();
     notifyListeners();
@@ -254,13 +258,13 @@ class ClientController extends ChangeNotifier {
 
     _clientCurrent = ClientModel();
 
-    _clearControllers();
+    clearControllers();
 
     await load();
     notifyListeners();
   }
 
-  void _clearControllers() {
+  void clearControllers() {
     _companyRegistrationNumberController.clear();
     _nameController.clear();
     _telephoneController.clear();

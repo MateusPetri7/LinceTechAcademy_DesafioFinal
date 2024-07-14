@@ -5,6 +5,7 @@ import 'src/models/manager_model.dart';
 import 'src/models/pdf_model.dart';
 import 'src/models/rent_model.dart';
 import 'src/models/vehicle_model.dart';
+import 'src/views/client_details.dart';
 import 'src/views/client_edit.dart';
 import 'src/views/client_register.dart';
 import 'src/views/clients_registered.dart';
@@ -26,6 +27,7 @@ class AppRoutes {
   static const String registerClient = '/registerClient';
   static const String registeredClients = '/registeredClients';
   static const String editClient = '/editClient';
+  static const String detailsClient = '/datailsClient';
   static const String registerManager = '/registerManager';
   static const String registeredManagers = '/registeredManagers';
   static const String editManager = '/editManager';
@@ -49,6 +51,9 @@ class AppRoutes {
       case editClient:
         final args = settings.arguments as ClientModel;
         return MaterialPageRoute(builder: (_) => EditClient(client: args));
+      case detailsClient:
+        final args = settings.arguments as ClientModel;
+        return MaterialPageRoute(builder: (_) => DetailsClient(client: args));
       case registerManager:
         return MaterialPageRoute(builder: (_) => const RegisterManager());
       case registeredManagers:

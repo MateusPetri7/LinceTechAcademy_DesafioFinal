@@ -10,7 +10,7 @@ class RegisteredClients extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
+    return BaseScaffoldFloatingButton(
       title: 'Clientes',
       buttonText: 'Novo Cliente',
       buttonRoute: AppRoutes.registerClient,
@@ -75,6 +75,16 @@ class RegisteredClients extends StatelessWidget {
                     if (confirmDelete == true) {
                       state.delete(client);
                     }
+                  },
+                  onTap: (client) async {
+                    await Provider.of<ClientController>(context, listen: false)
+                        .populateClientInformation(client);
+
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.detailsClient,
+                      arguments: client,
+                    );
                   },
                 );
               },

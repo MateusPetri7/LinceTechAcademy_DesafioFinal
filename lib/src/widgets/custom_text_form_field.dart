@@ -9,6 +9,7 @@ class CustomTextFormField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
   final Widget? suffixIcon;
+  final bool readOnly;
 
   CustomTextFormField({
     required this.labelText,
@@ -18,6 +19,7 @@ class CustomTextFormField extends StatelessWidget {
     this.inputFormatters,
     this.validator,
     this.suffixIcon,
+    this.readOnly = false,
   });
 
   @override
@@ -37,6 +39,7 @@ class CustomTextFormField extends StatelessWidget {
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
         validator: validator,
+        readOnly: readOnly,
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: const TextStyle(

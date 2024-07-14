@@ -6,6 +6,7 @@ class CustomListView<T> extends StatelessWidget {
   final String Function(T) getSubtitle;
   final void Function(T) onEdit;
   final void Function(T) onDelete;
+  final void Function(T) onTap;
 
   const CustomListView({
     Key? key,
@@ -14,6 +15,7 @@ class CustomListView<T> extends StatelessWidget {
     required this.getSubtitle,
     required this.onEdit,
     required this.onDelete,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,7 @@ class CustomListView<T> extends StatelessWidget {
             child: ListTile(
               title: Text(getTitle(item)),
               subtitle: Text(getSubtitle(item)),
+              onTap: () => onTap(item),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

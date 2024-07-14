@@ -17,5 +17,7 @@
     "incompleteName": "Name must have at least three letters.",
     "invalidPhoneNumber": "Invalid phone number.",
     "registerClient": "Register Client",
-    "clientRegister": "Client Register"
+    "clientRegister": "Client Register",
+    "clientEdit": "Edit data Client",
+    "editClient": "Edit Client"
 }

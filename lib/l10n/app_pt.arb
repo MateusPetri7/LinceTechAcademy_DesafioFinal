@@ -17,5 +17,7 @@
     "incompleteName": "O nome deve ter pelo menos três letras.",
     "invalidPhoneNumber": "Número de telefone inválido.",
     "registerClient": "Registrar Cliente",
-    "clientRegister": "Cadastro de Cliente"
+    "clientRegister": "Cadastro de Cliente",
+    "clientEdit": "Editar dados do Cliente",
+    "editClient": "Editar Cliente"
 }
