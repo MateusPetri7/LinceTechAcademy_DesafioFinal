@@ -30,7 +30,7 @@ class CustomDropdownButtonFormField extends StatelessWidget {
         ],
       ),
       child: DropdownButtonFormField<String>(
-        isExpanded: true, // Redimensiona para preencher horizontalmente
+        isExpanded: true,
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: const TextStyle(
@@ -46,7 +46,7 @@ class CustomDropdownButtonFormField extends StatelessWidget {
           filled: true,
           fillColor: Colors.white,
           contentPadding:
-          const EdgeInsets.symmetric(vertical: 15, horizontal: 20), // Ajuste de padding
+          const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide.none,

@@ -73,7 +73,7 @@ class RegisteredClients extends StatelessWidget {
                       },
                     );
                     if (confirmDelete == true) {
-                      state.delete(client);
+                      await state.delete(client);
                     }
                   },
                   onTap: (client) async {

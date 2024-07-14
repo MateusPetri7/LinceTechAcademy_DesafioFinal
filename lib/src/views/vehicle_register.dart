@@ -39,6 +39,7 @@ class RegisterVehicle extends StatelessWidget {
                       labelText: 'Selecione o tipo',
                       icon: Icons.category,
                       items: vehicleState.types,
+                      value: vehicleState.selectedType,
                       onChanged: (dynamic value) {
                         vehicleState.selectedType = value as String?;
                         if (value != null) {
@@ -57,12 +58,11 @@ class RegisterVehicle extends StatelessWidget {
                       labelText: 'Selecione a marca',
                       icon: Icons.branding_watermark,
                       items: vehicleState.vehicleBrands,
+                      value: vehicleState.selectedBrand,
                       onChanged: (dynamic value) {
-                        vehicleState.selectedBrand =
-                        value as VehicleBrandModel?;
+                        vehicleState.selectedBrand = value as VehicleBrandModel?;
                         if (value != null) {
-                          vehicleState.getVehicleModels(
-                              (value).code);
+                          vehicleState.getVehicleModels((value).code);
                         }
                       },
                       validator: (value) {
@@ -77,9 +77,9 @@ class RegisterVehicle extends StatelessWidget {
                       labelText: 'Selecione o modelo',
                       icon: Icons.model_training,
                       items: vehicleState.vehicleModels,
+                      value: vehicleState.selectedModel,
                       onChanged: (dynamic value) {
-                        vehicleState.selectedModel =
-                        value as VehicleModelModel?;
+                        vehicleState.selectedModel = value as VehicleModelModel?;
                       },
                       validator: (value) {
                         if (value == null) {

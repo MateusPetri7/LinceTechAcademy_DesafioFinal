@@ -52,10 +52,22 @@ class RegisterRent extends StatelessWidget {
                       arguments: pdfState.currentPdf,
                     );
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Selecione um intervalo de datas contínuo e livre.'),
-                      ),
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Intervalo de datas inválido'),
+                          content: const Text('Selecione um intervalo de datas contínuo e livre.'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
                     );
                   }
                 }

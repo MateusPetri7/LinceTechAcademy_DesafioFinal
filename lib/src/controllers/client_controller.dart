@@ -35,6 +35,7 @@ class ClientController extends ChangeNotifier {
   ClientModel _clientCurrent = ClientModel();
   String? _selectedState;
   ManagerModel? _selectedManager;
+  bool _noManagersFound = false;
 
   /// Returns the controller managing the client's name input field.
   TextEditingController get nameController => _nameController;
@@ -67,6 +68,8 @@ class ClientController extends ChangeNotifier {
 
   /// Returns the currently selected manager.
   ManagerModel? get selectedManager => _selectedManager;
+
+  bool get noManagersFound => _noManagersFound;
 
   set selectedState(String? value) {
     _selectedState = value;
@@ -128,13 +131,21 @@ class ClientController extends ChangeNotifier {
   ///
   /// Throws a [Exception] if an error occurs during retrieval.
   Future<void> getManagersFromState(String state) async {
-    _selectedManager = null;
-    _listManager = [];
-    final managersList =
-        await _managerControllerDatabase.getManagersFromState(state);
-    _listManager = managersList;
-    if (_listManager.length == 1) {
-      _selectedManager = _listManager.first;
+    try {
+      _selectedManager = null;
+      _listManager = [];
+      final managersList =
+          await _managerControllerDatabase.getManagersFromState(state);
+      _listManager = managersList;
+      if (_listManager.length == 1) {
+        _selectedManager = _listManager.first;
+      }
+      if (_listManager.isEmpty) {
+        throw Exception();
+      }
+    } catch (e) {
+      throw Exception('Erro ao obter gerentes do Estado ou nenhum '
+          'gerente cadastrado para o Estado selecionado ou retornado ($state).');
     }
     notifyListeners();
   }

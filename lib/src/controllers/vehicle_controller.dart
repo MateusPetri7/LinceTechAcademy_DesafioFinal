@@ -77,10 +77,7 @@ class VehicleController extends ChangeNotifier {
 
   set selectedType(String? value) {
     _selectedType = value;
-    _selectedBrand = null;
-    _selectedModel = null;
-    _vehicleBrands.clear();
-    _vehicleModels.clear();
+    clearFields();
     if (value != null) {
       getVehicleBrands(value);
     }
@@ -248,5 +245,15 @@ class VehicleController extends ChangeNotifier {
   String _formatCurrency(double value) {
     final formatCurrency = NumberFormat.simpleCurrency(locale: 'pt_BR');
     return formatCurrency.format(value);
+  }
+
+  void clearFields() {
+    _selectedBrand = null;
+    _selectedModel = null;
+    _brandController.clear();
+    _modelController.clear();
+    _vehicleBrands.clear();
+    _vehicleModels.clear();
+    notifyListeners();
   }
 }

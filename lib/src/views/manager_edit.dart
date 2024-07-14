@@ -10,7 +10,7 @@ import '../widgets/manager_form_field.dart';
 class EditManager extends StatefulWidget {
   final ManagerModel manager;
 
-  const EditManager({Key? key, required this.manager});
+  const EditManager({Key? key, required this.manager}) : super(key: key);
 
   @override
   _EditManagerState createState() => _EditManagerState();
@@ -33,7 +33,7 @@ class _EditManagerState extends State<EditManager> {
   Widget build(BuildContext context) {
     final state = Provider.of<ManagerController>(context, listen: false);
     return BaseScaffold(
-      title: AppLocalizations.of(context)!.registerManager,
+      title: AppLocalizations.of(context)!.clientEdit,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(

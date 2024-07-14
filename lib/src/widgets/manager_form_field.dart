@@ -54,7 +54,7 @@ class ManagerFormFields extends StatelessWidget {
                 labelText: 'Telefone',
                 icon: Icons.phone,
                 controller: state.telephoneController,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.phone,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                   TelefoneInputFormatter(),
@@ -74,7 +74,7 @@ class ManagerFormFields extends StatelessWidget {
                 labelText: 'CPF',
                 icon: Icons.badge,
                 controller: state.individualTaxpayerRegistryController,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                   CpfInputFormatter(),
@@ -123,12 +123,8 @@ class ManagerFormFields extends StatelessWidget {
               ),
               const SizedBox(height: 20.0),
               CustomStyledButton(
-                onPressed: () async {
-                  if (formKey.currentState!.validate()) {
-                    await state.insert();
-                  }
-                },
-                icon: const Icon(Icons.add),
+                onPressed: onButtonPressed,
+                icon: Icon(buttonIcon),
                 label: buttonText,
               ),
               const SizedBox(height: 20.0),

@@ -35,12 +35,12 @@ class RentFormFields extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             CustomDropdownButtonFormField(
               labelText: 'Selecione o estado de locação',
               icon: Icons.location_city,
               items: rentState.states,
-              onChanged: (String? value) async {
+              onChanged: (value) async {
                 rentState.selectedState = value;
                 if (value != null) {
                   await rentState.loadVehicles(value);
@@ -54,7 +54,7 @@ class RentFormFields extends StatelessWidget {
                 return null;
               },
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             CustomDropdownButtonFormField(
               labelText: 'Selecione o cliente',
               icon: Icons.person,
@@ -73,21 +73,22 @@ class RentFormFields extends StatelessWidget {
                 return null;
               },
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             CustomDropdownButtonFormField(
               labelText: 'Selecione o veículo',
               icon: Icons.directions_car,
               items: rentState.listVehicle
-                  .map((VehicleModel vehicle) =>
+                  .map((vehicle) =>
               '${vehicle.brand!} - ${vehicle.model!}')
                   .toList(),
-              onChanged: (String? value) {
+              onChanged: (value) {
                 rentState.selectedVehicle = rentState.listVehicle
                     .firstWhere((vehicle) =>
                 '${vehicle.brand!} - ${vehicle.model!}' == value);
               },
               value: rentState.selectedVehicle != null
-                  ? '${rentState.selectedVehicle!.brand!} - ${rentState.selectedVehicle!.model!}'
+                  ? '${rentState.selectedVehicle!.brand!} -'
+                  ' ${rentState.selectedVehicle!.model!}'
                   : null,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -96,7 +97,7 @@ class RentFormFields extends StatelessWidget {
                 return null;
               },
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             CustomTextFormField(
               labelText: 'Data de Início',
               icon: Icons.calendar_today,
@@ -113,7 +114,7 @@ class RentFormFields extends StatelessWidget {
                 return null;
               },
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             CustomTextFormField(
               labelText: 'Data de Término',
               icon: Icons.calendar_today,
@@ -130,7 +131,7 @@ class RentFormFields extends StatelessWidget {
                 return null;
               },
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             CustomTextFormField(
               labelText: 'Número de Dias',
               icon: Icons.calendar_today,
@@ -138,7 +139,7 @@ class RentFormFields extends StatelessWidget {
               keyboardType: TextInputType.number,
               readOnly: true,
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             CustomTextFormField(
               labelText: 'Valor Total a Pagar',
               icon: Icons.monetization_on,
@@ -147,7 +148,7 @@ class RentFormFields extends StatelessWidget {
               readOnly: true,
               isCurrency: true,
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             CustomTextFormField(
               labelText: 'Percentual de comissão do gerente',
               icon: Icons.person,
@@ -156,7 +157,7 @@ class RentFormFields extends StatelessWidget {
               keyboardType: TextInputType.number,
               readOnly: true,
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             CustomTextFormField(
               labelText: 'Valor comissão do gerente',
               icon: Icons.monetization_on,
@@ -165,7 +166,7 @@ class RentFormFields extends StatelessWidget {
               readOnly: true,
               isCurrency: true,
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             CustomStyledButton(
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
@@ -217,7 +218,7 @@ class RentFormFields extends StatelessWidget {
               icon: Icon(buttonIcon),
               label: buttonText,
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
           ],
         ),
       ),

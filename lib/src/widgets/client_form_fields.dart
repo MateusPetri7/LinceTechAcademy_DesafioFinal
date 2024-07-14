@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../controllers/client_controller.dart';
+import '../services/exceptions.dart';
 import '../widgets/custom_dropdown_form_field.dart';
 import '../widgets/custom_style_button.dart';
 import '../widgets/custom_text_form_field.dart';
@@ -135,7 +136,27 @@ class ClientFormFields extends StatelessWidget {
                 value: state.selectedState,
                 onChanged: (value) {
                   state.selectedState = value;
+                  try {
                   state.getManagersFromState(state.selectedState!);
+                  } catch (e) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Erro'),
+                          content: Text(e.toString()),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {

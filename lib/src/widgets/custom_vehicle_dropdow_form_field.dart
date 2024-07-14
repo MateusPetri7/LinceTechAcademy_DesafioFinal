@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../models/vehicle_brand_model.dart';
 import '../models/vehicle_model_model.dart';
 
@@ -7,6 +6,7 @@ class CustomVehicleDropdownFormField extends StatelessWidget {
   final String labelText;
   final IconData icon;
   final List<dynamic> items;
+  final dynamic value;
   final ValueChanged<dynamic>? onChanged;
   final FormFieldValidator<dynamic>? validator;
 
@@ -15,6 +15,7 @@ class CustomVehicleDropdownFormField extends StatelessWidget {
     required this.labelText,
     required this.icon,
     required this.items,
+    this.value,
     this.onChanged,
     this.validator,
   }) : super(key: key);
@@ -46,8 +47,8 @@ class CustomVehicleDropdownFormField extends StatelessWidget {
               ),
               filled: true,
               fillColor: Colors.white,
-              contentPadding:
-              const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              contentPadding: const EdgeInsets.symmetric(
+                  vertical: 20, horizontal: 20),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
                 borderSide: BorderSide.none,
@@ -82,10 +83,10 @@ class CustomVehicleDropdownFormField extends StatelessWidget {
               ),
               errorText: state.errorText,
             ),
-            isEmpty: items.isEmpty,
+            isEmpty: value == null || items.isEmpty,
             child: DropdownButtonHideUnderline(
               child: DropdownButton<dynamic>(
-                value: state.value,
+                value: value,
                 isDense: true,
                 isExpanded: true,
                 onChanged: (dynamic newValue) {
