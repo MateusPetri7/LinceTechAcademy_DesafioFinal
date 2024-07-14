@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import '../models/manager_model.dart';
 import 'databases/manager_controller.dart' as database;
 
+/// Controller class for managing manager data and interactions.
+///
+/// Provides methods to insert, delete, update, and load manager data.
 class ManagerController extends ChangeNotifier {
+  /// Constructs a [ManagerController] and initiates data loading.
   ManagerController() {
     load();
   }
@@ -18,25 +22,39 @@ class ManagerController extends ChangeNotifier {
   ManagerModel _managerCurrent = ManagerModel();
   String? _selectedState;
 
+  /// Returns the form key used to manage form state.
   GlobalKey<FormState> get formKey => _formKey;
+  /// Returns the controller managing the manager's name input field.
   TextEditingController get nameController => _nameController;
+  /// Returns the controller managing the manager's individual taxpayer registry
+  /// input field.
   TextEditingController get individualTaxpayerRegistryController =>
       _individualTaxpayerRegistryController;
+  /// Returns the list of Brazilian states abbreviations.
   List<String> get states => _states;
+  /// Returns the controller managing the manager's telephone input field.
   TextEditingController get telephoneController => _telephoneController;
+  /// Returns the controller managing the manager's commission percentage
+  /// input field.
   TextEditingController get commissionPercentageController =>
       _commissionPercentageController;
+  /// Returns the list of managers managed by the controller.
   List<ManagerModel> get listManager => _listManager;
+  /// Returns the currently selected manager.
   ManagerModel get managerCurrent => _managerCurrent;
+  /// Returns the currently selected state.
   String? get selectedState => _selectedState;
 
   set selectedState(String? value) {
-    print('Setting selectedState: $value');
     _selectedState = null;
     _selectedState = value;
     notifyListeners();
   }
 
+  /// Inserts a new manager into the database.
+  ///
+  /// Clears input controllers, reloads the manager list from the database,
+  /// and notifies listeners.
   Future<void> insert() async {
     final manager = ManagerModel(
         name: nameController.text,
@@ -53,6 +71,10 @@ class ManagerController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Deletes a manager from the database.
+  ///
+  /// Reloads the manager list from the database and notifies listeners
+  /// after deletion.
   Future<void> delete(ManagerModel manager) async {
     await _controllerDataBase.delete(manager);
     await load();
@@ -60,6 +82,10 @@ class ManagerController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Loads all managers from the database.
+  ///
+  /// Clears the current list of managers, fetches the updated list from
+  /// database, and notifies listeners of the change.
   Future<void> load() async {
     final list = await _controllerDataBase.select();
 
@@ -69,6 +95,10 @@ class ManagerController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Populates manager information based on a given manager model.
+  ///
+  /// Sets input controllers with the provided manager's data and updates
+  /// Notifies listeners of the change.
   void populateManagerInformation(ManagerModel manager) {
     _nameController.text = manager.name ?? '';
     _individualTaxpayerRegistryController.text =
@@ -84,6 +114,10 @@ class ManagerController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Updates manager information in the database.
+  ///
+  /// Clears input controllers after updating the manager's data in the
+  /// database, reloads the manager list, and notifies listeners of the change.
   Future<void> update() async {
     final editedManager = ManagerModel(
         id: _managerCurrent.id,

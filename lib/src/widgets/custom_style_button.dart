@@ -35,7 +35,7 @@ class CustomStyledButton extends StatelessWidget {
           ),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: Colors.deepPurple[400],
           foregroundColor: Colors.black,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           shape: RoundedRectangleBorder(

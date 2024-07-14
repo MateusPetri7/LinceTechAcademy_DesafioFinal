@@ -134,8 +134,7 @@ class RegisterRent extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
-                    controller:
-                    rentState.percentageManagerCommissionController,
+                    controller: rentState.percentageManagerCommissionController,
                     keyboardType: TextInputType.number,
                     readOnly: true,
                     decoration: const InputDecoration(
@@ -154,17 +153,44 @@ class RegisterRent extends StatelessWidget {
                   ElevatedButton.icon(
                     onPressed: () async {
                       if (rentState.formKey.currentState!.validate()) {
-                        await rentState.insert();
-                        await pdfState.createPdf(
-                            rentState.selectedClient!,
-                            rentState.selectedVehicle!,
-                            rentState.rentCurrent!);
-                        rentState.clearControllers();
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.pdfView,
-                          arguments: pdfState.currentPdf,
-                        );
+                        final startDate = DateTime.parse(rentState
+                            .startDateController.text
+                            .split('/')
+                            .reversed
+                            .join('-'));
+                        final endDate = DateTime.parse(rentState
+                            .endDateController.text
+                            .split('/')
+                            .reversed
+                            .join('-'));
+                        var isValidRange = true;
+
+                        for (var i = startDate;
+                            i.isBefore(endDate.add(const Duration(days: 1)));
+                            i = i.add(const Duration(days: 1))) {
+                          if (rentState.occupiedDates.contains(i)) {
+                            isValidRange = false;
+                            break;
+                          }
+                        }
+
+                        if (isValidRange) {
+                          await rentState.insert();
+                          await pdfState.createPdf(
+                              rentState.selectedClient!,
+                              rentState.selectedVehicle!,
+                              rentState.rentCurrent!);
+                          rentState.clearControllers();
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.pdfView,
+                            arguments: pdfState.currentPdf,
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text(
+                                  'Selecione um intervalo de datas contínuo e livre.')));
+                        }
                       }
                     },
                     icon: const Icon(Icons.add),

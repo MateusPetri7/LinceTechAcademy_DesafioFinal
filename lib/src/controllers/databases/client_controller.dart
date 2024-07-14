@@ -97,6 +97,10 @@ class ClientController {
     return null;
   }
 
+  /// Retrieves a client from the database by [companyRegistrationNumber].
+  ///
+  /// Returns null if no client with the specified [companyRegistrationNumber]
+  /// is found.
   Future<ClientModel?> getClientFromCompanyRegistrationNumber(
       String companyRegistrationNumber) async {
     final database = await getDatabase();

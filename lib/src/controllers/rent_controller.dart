@@ -8,13 +8,6 @@ import 'databases/manager_controller.dart' as database_manager;
 import 'databases/rent_controller.dart' as database;
 import 'databases/vehicle_controller.dart' as database_vehicle;
 
-
-// get no aluguel para ver se o veículo está registrado em algum aluguel, daí pegar os dias que o veículo está registrado e bloquear no calendario e aparecer em vermelho
-//
-// fazer para gerar o pdf a qualquer momento na tela de lista de aluguéis.
-
-
-
 class RentController extends ChangeNotifier {
   RentController() {
     load();
@@ -39,7 +32,9 @@ class RentController extends ChangeNotifier {
   final _percentageManagerCommissionController = TextEditingController();
   final _managerCommissionValueController = TextEditingController();
   final _listRent = <RentModel>[];
+  final _listRentsFromVehicle = <RentModel>[];
   RentModel? _rentCurrent = RentModel();
+  final _occupiedDates = <DateTime>[];
 
   GlobalKey<FormState> get formKey => _formKey;
 
@@ -72,7 +67,11 @@ class RentController extends ChangeNotifier {
 
   List<RentModel> get listRent => _listRent;
 
+  List<RentModel> get listRentsFromVehicle => _listRentsFromVehicle;
+
   RentModel? get rentCurrent => _rentCurrent;
+
+  List<DateTime> get occupiedDates => _occupiedDates;
 
   set selectedState(String? value) {
     _selectedVehicle = null;
@@ -90,6 +89,9 @@ class RentController extends ChangeNotifier {
 
   set selectedVehicle(VehicleModel? value) {
     _selectedVehicle = value;
+    if (_selectedVehicle != null) {
+      loadRentsFromVehicle(_selectedVehicle!.id!);
+    }
     calculateTotalValue();
     notifyListeners();
   }
@@ -135,13 +137,16 @@ class RentController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> selectDate(
-      BuildContext context, TextEditingController controller) async {
+  Future<void> selectDate(BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
+      selectableDayPredicate: (DateTime date) {
+        // Verifique se a data não está na lista de datas ocupadas
+        return !_occupiedDates.contains(date);
+      },
     );
     if (picked != null) {
       controller.text = UtilData.obterDataDDMMAAAA(picked);
@@ -172,6 +177,26 @@ class RentController extends ChangeNotifier {
       _totalAmountPayableController.text = totalValue.toStringAsFixed(2);
       _setManagerCommissionValue();
     }
+  }
+
+  Future<void> loadRentsFromVehicle(String vehicleId) async {
+    final list = await _controllerDataBase.getRentsFromVehicle(vehicleId);
+
+    _listRentsFromVehicle.clear();
+    _listRentsFromVehicle.addAll(list);
+
+    _occupiedDates.clear();
+
+    for (var rent in _listRentsFromVehicle) {
+      DateTime start = rent.startDate!;
+      DateTime end = rent.endDate!;
+      for (var i = start; i.isBefore(end.add(Duration(days: 1))); i = i.add(Duration(days: 1))) {
+        if (i.isAfter(DateTime.now())) {
+          _occupiedDates.add(i);
+        }
+      }
+    }
+    notifyListeners();
   }
 
   Future<void> insert() async {

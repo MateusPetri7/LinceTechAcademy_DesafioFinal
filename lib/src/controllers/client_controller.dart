@@ -9,6 +9,10 @@ import 'databases/client_controller.dart' as database;
 import 'databases/manager_controller.dart' as database_manager;
 
 /// Controller for managing client data and interactions.
+///
+/// This class provides methods to interact with clients, including
+/// fetching client data, inserting, updating, deleting clients,
+/// and populating client information.
 class ClientController extends ChangeNotifier {
   /// Repository for client data.
   final ClientRepository clientRepository;
@@ -78,10 +82,16 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Fetches client data from the repository based on the
-  /// company registration number.
+  /// Fetches client data based on the provided company registration number.
   ///
-  /// Throws a [NotFoundException] if the client data is not found.
+  /// Retrieves client data from the local database. If found, updates the
+  /// [_clientCurrent] instance and notifies listeners. If not found locally,
+  /// attempts to fetch from [clientRepository] using the cleaned
+  /// [companyRegistrationNumber]. Throws [NotFoundException] if client data
+  /// isn't found in the repository, and [Exception] for other errors.
+  ///
+  /// Throws [Exception] with message if the client is already
+  /// registered locally.
   Future<void> getClientData(
       TextEditingController companyRegistrationNumberController) async {
     try {
@@ -112,7 +122,11 @@ class ClientController extends ChangeNotifier {
     }
   }
 
-  /// Fetches managers from the database based on the state.
+  /// Fetches managers from the database based on the specified [state].
+  ///
+  /// Clears the current list of managers and updates it with the fetched list.
+  ///
+  /// Throws a [Exception] if an error occurs during retrieval.
   Future<void> getManagersFromState(String state) async {
     _selectedManager = null;
     _listManager = [];
@@ -143,6 +157,8 @@ class ClientController extends ChangeNotifier {
   }
 
   /// Inserts a new client into the database.
+  ///
+  /// Clears all input fields and reloads the client list after insertion.
   Future<void> insert() async {
     final client = ClientModel(
       name: nameController.text,
@@ -161,7 +177,9 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Deletes a client from the database.
+  /// Deletes the specified [client] from the database.
+  ///
+  /// Reloads the client list after deletion.
   Future<void> delete(ClientModel client) async {
     await _controllerDataBase.delete(client);
     await load();
@@ -170,6 +188,8 @@ class ClientController extends ChangeNotifier {
   }
 
   /// Loads all clients from the database.
+  ///
+  /// Clears the current client list and updates it with the fetched list.
   Future<void> load() async {
     final list = await _controllerDataBase.select();
 
@@ -179,7 +199,9 @@ class ClientController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Populates client information based on a given client model.
+  /// Populates client information based on the specified [client] model.
+  ///
+  /// Fetches and sets the associated manager and updates the input fields.
   Future<void> populateClientInformation(ClientModel client) async {
     await _getManagerFromClient(client.state!, client.managerId.toString());
 
@@ -197,7 +219,9 @@ class ClientController extends ChangeNotifier {
   }
 
   /// Populates client information during registration based
-  /// on a given client model.
+  /// on the specified [client] model.
+  ///
+  /// Clears input fields specific and fetches managers for the selected state.
   Future<void> populateClientInformationAtRegistration(
       ClientModel client) async {
     _clearControllersWhenSwitchingCompanyRegistrationNumber();
@@ -213,6 +237,9 @@ class ClientController extends ChangeNotifier {
   }
 
   /// Updates client information in the database.
+  ///
+  /// Updates the specified client details and reloads the client list
+  /// after updating.
   Future<void> update() async {
     final editedClient = ClientModel(
         id: _clientCurrent.id,

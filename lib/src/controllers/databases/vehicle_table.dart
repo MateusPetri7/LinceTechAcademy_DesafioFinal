@@ -2,7 +2,9 @@
 import 'dart:convert';
 import '../../models/vehicle_model.dart';
 
+/// A utility class for database operations related to vehicles.
 class VehicleTable {
+  /// SQL statement to create the vehicles table.
   static const String createTable = '''
   CREATE TABLE $tableName(
   $id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -17,17 +19,28 @@ class VehicleTable {
   ); 
   ''';
 
+  /// Name of the vehicles table in the database.
   static const String tableName = 'vehicle';
+  /// Column name for vehicle ID.
   static const String id = 'id';
+  /// Column name for vehicle type.
   static const String type = 'type';
+  /// Column name for vehicle brand.
   static const String brand = 'brand';
+  /// Column name for vehicle model.
   static const String model = 'model';
+  /// Column name for vehicle plate.
   static const String plate = 'plate';
+  /// Column name for vehicle year of manufacture.
   static const String yearManufacture = 'year_manufacture';
+  /// Column name for vehicle state.
   static const String state = 'state';
+  /// Column name for vehicle daily rental cost.
   static const String dailyRentalCost = 'daily_rental_cost';
+  /// Column name for vehicle photos.
   static const String photosTheVehicle = 'photos_the_vehicle';
 
+  /// Converts a [VehicleModel] object into a map of database columns.
   static Map<String, dynamic> toMap(VehicleModel vehicle) {
     final map = <String, dynamic>{};
 
@@ -44,6 +57,7 @@ class VehicleTable {
     return map;
   }
 
+  /// Converts a database column map into a [VehicleModel] object.
   static VehicleModel fromMap(Map<String, dynamic> map) {
     return VehicleModel(
       id: map[VehicleTable.id].toString(),

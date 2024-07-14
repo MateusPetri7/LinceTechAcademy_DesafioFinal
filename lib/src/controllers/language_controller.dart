@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/language_model.dart';
 
-/// A controller class for managing language selection.
+/// Controller class for managing language selection.
+///
+/// Provides a static method [selectLanguage] to update the language in
+/// the [LanguageModel] instance using the [Provider] context.
 class LanguageController {
-  /// Static method to select a language.
+  /// Selects a language and updates the [LanguageModel] instance.
   ///
-  /// This method updates the language in the provided [LanguageModel] instance
-  /// through the [Provider] context.
+  /// This method retrieves the [LanguageModel] from the [Provider] context
+  /// and sets the specified [language].
   static void selectLanguage(BuildContext context, String language) {
     final languageModel = Provider.of<LanguageModel>(context, listen: false);
     languageModel.setLanguage(language);

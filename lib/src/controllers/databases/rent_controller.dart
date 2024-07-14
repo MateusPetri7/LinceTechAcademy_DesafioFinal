@@ -2,7 +2,14 @@ import '../../models/rent_model.dart';
 import 'database_helper.dart';
 import 'rent_table.dart';
 
+/// Controller class for managing operations on [RentModel] in the database.
+///
+/// This class provides methods to insert, delete, update, and retrieve rents
+/// from the database using [RentModel] objects.
 class RentController {
+  /// Inserts a new [rent] into the database.
+  ///
+  /// Returns the ID of the newly inserted rent.
   Future<int> insert(RentModel rent) async {
     final database = await getDatabase();
     final map = RentTable.toMap(rent);
@@ -10,6 +17,7 @@ class RentController {
     return await database.insert(RentTable.tableName, map);
   }
 
+  /// Deletes the given [rent] from the database.
   Future<void> delete(RentModel rent) async {
     final database = await getDatabase();
 
@@ -20,6 +28,9 @@ class RentController {
     );
   }
 
+  /// Retrieves all rents from the database as a list of [RentModel].
+  ///
+  /// Returns an empty list if no rents are found.
   Future<List<RentModel>> select() async {
     final database = await getDatabase();
 
@@ -35,6 +46,7 @@ class RentController {
     return list;
   }
 
+  /// Updates the given [rent] in the database.
   Future<void> update(RentModel rent) async {
     final database = await getDatabase();
 
@@ -48,6 +60,9 @@ class RentController {
     );
   }
 
+  /// Retrieves a rent from the database by [id].
+  ///
+  /// Returns `null` if no rent with the specified [id] is found.
   Future<RentModel?> getRentFromId(String id) async {
     final database = await getDatabase();
 
@@ -66,6 +81,9 @@ class RentController {
     return null;
   }
 
+  /// Retrieves rents from the database filtered by [vehicleId].
+  ///
+  /// Returns an empty list if no rents match the [vehicleId] criteria.
   Future<List<RentModel>> getRentsFromVehicle(String vehicleId) async {
     final database = await getDatabase();
 
