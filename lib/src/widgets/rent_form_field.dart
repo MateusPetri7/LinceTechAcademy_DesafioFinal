@@ -74,27 +74,30 @@ class RentFormFields extends StatelessWidget {
               },
             ),
             const SizedBox(height: 20.0),
-            CustomDropdownButtonFormField(
-              labelText: 'Selecione o veículo',
-              icon: Icons.directions_car,
-              items: rentState.listVehicle
-                  .map((vehicle) =>
-              '${vehicle.brand!} - ${vehicle.model!}')
-                  .toList(),
-              onChanged: (value) {
-                rentState.selectedVehicle = rentState.listVehicle
-                    .firstWhere((vehicle) =>
-                '${vehicle.brand!} - ${vehicle.model!}' == value);
-              },
-              value: rentState.selectedVehicle != null
-                  ? '${rentState.selectedVehicle!.brand!} -'
-                  ' ${rentState.selectedVehicle!.model!}'
-                  : null,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Veículo é obrigatório.';
-                }
-                return null;
+            Consumer<RentController>(
+              builder: (context, rentState, child) {
+                return CustomDropdownButtonFormField(
+                  labelText: 'Selecione o veículo',
+                  icon: Icons.directions_car,
+                  items: rentState.listVehicle
+                      .map((vehicle) =>
+                  '${vehicle.brand!} - ${vehicle.model!}')
+                      .toList(),
+                  onChanged: (value) {
+                    rentState.selectedVehicle = rentState.listVehicle
+                        .firstWhere((vehicle) =>
+                    '${vehicle.brand!} - ${vehicle.model!}' == value);
+                  },
+                  value: rentState.selectedVehicle != null
+                      ? '${rentState.selectedVehicle!.brand!} - ${rentState.selectedVehicle!.model!}'
+                      : null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veículo é obrigatório.';
+                    }
+                    return null;
+                  },
+                );
               },
             ),
             const SizedBox(height: 20.0),

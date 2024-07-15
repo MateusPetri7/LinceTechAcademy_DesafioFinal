@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import '../../routes.dart';
 import '../controllers/image_controller.dart';
 import '../controllers/vehicle_controller.dart';
 import '../models/vehicle_model.dart';
@@ -205,6 +206,17 @@ class _EditVehicleState extends State<EditVehicle> {
           ),
         ),
       ),
+      onIconPressed: (index) {
+        vehicleState.clearControllers();
+        switch (index) {
+          case 0:
+            Navigator.pop(context);
+            break;
+          case 1:
+            Navigator.pushNamed(context, AppRoutes.home);
+            break;
+        }
+      },
     );
   }
 }

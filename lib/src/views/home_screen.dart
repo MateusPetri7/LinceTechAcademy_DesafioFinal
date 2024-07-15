@@ -163,16 +163,6 @@ class HomeScreen extends StatelessWidget {
               width: 250,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.pdfView);
-                },
-                icon: const Icon(Icons.person_3),
-                label: const Text('Pdf'),
-              ),
-            ),
-            SizedBox(
-              width: 250,
-              child: ElevatedButton.icon(
-                onPressed: () {
                   Navigator.pushNamed(context, AppRoutes.registeredPDF);
                 },
                 icon: const Icon(Icons.person_3),

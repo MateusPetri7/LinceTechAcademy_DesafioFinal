@@ -54,13 +54,13 @@ class RegisterRent extends StatelessWidget {
                   } else {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) {
+                      builder: (context) {
                         return AlertDialog(
                           title: const Text('Intervalo de datas inválido'),
                           content: const Text('Selecione um intervalo de datas contínuo e livre.'),
                           actions: <Widget>[
                             TextButton(
-                              child: Text('OK'),
+                              child: const Text('OK'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },

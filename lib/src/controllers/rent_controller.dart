@@ -135,14 +135,16 @@ class RentController extends ChangeNotifier {
   }
 
   Future<void> loadVehicles(String state) async {
-    print('oi');
+    print('Carregando veículos para o estado: $state');
     final list = await _vehicleControllerDataBase.getVehiclesFromState(state);
+    print('Veículos carregados: $list');
     _listVehicle.clear();
     _listVehicle.addAll(list);
     notifyListeners();
   }
 
-  Future<void> selectDate(BuildContext context, TextEditingController controller) async {
+  Future<void> selectDate(
+      BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -194,7 +196,9 @@ class RentController extends ChangeNotifier {
     for (var rent in _listRentsFromVehicle) {
       DateTime start = rent.startDate!;
       DateTime end = rent.endDate!;
-      for (var i = start; i.isBefore(end.add(Duration(days: 1))); i = i.add(Duration(days: 1))) {
+      for (var i = start;
+          i.isBefore(end.add(Duration(days: 1)));
+          i = i.add(Duration(days: 1))) {
         if (i.isAfter(DateTime.now())) {
           _occupiedDates.add(i);
         }
@@ -279,8 +283,16 @@ class RentController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String?> getNameClientFromId(String id) async {
+    final client = await _clientControllerDataBase.getClientFromId(id);
+    return client?.name;
+  }
+
   Future<void> populateRentInformation(RentModel rent) async {
+    final client =
+        await _clientControllerDataBase.getClientFromId(rent.clientId!);
     _selectedState = rent.rentState;
+    _selectedClient = client;
     _startDateController.text = rent.startDate != null
         ? UtilData.obterDataDDMMAAAA(rent.startDate!)
         : '';

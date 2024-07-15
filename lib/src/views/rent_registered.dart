@@ -8,6 +8,10 @@ import '../widgets/custom_list_view.dart';
 class RegisteredRent extends StatelessWidget {
   const RegisteredRent({Key? key});
 
+  Future<String> _getClientName(BuildContext context, String clientId) async {
+    return await Provider.of<RentController>(context, listen: false).getNameClientFromId(clientId) ?? 'Cliente Desconhecido';
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseScaffoldFloatingButton(
@@ -35,62 +39,98 @@ class RegisteredRent extends StatelessWidget {
                     child: Text('Nenhum aluguel encontrado'),
                   );
                 }
-                return CustomListView(
-                  items: state.listRent,
-                  getTitle: (rent) => 'Cliente: ${rent.clientId}',
-                  getSubtitle: (rent) =>
-                  'Valor total: ${rent.totalAmountPayable!.toStringAsFixed(2)}',
-                  onEdit: (rent) {
-                    Navigator.pushNamed(
-                      context,
-                      AppRoutes.editRent,
-                      arguments: rent,
-                    );
-                  },
-                  onDelete: (rent) async {
-                    final confirmDelete = await showDialog<bool>(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Center(
-                            child: Text('Confirmação'),
-                          ),
-                          content: const Text(
-                              'Tem certeza que deseja deletar este aluguel?'),
-                          actions: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                  child: const Text('Não'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                  child: const Text('Sim'),
-                                ),
-                              ],
+                return ListView.builder(
+                  itemCount: state.listRent.length,
+                  itemBuilder: (context, index) {
+                    final rent = state.listRent[index];
+                    return FutureBuilder(
+                      future: _getClientName(context, rent.clientId!),
+                      builder: (context, AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return ListTile(
+                            title: Text('Carregando...'),
+                            subtitle: Text('Valor total: ${rent.totalAmountPayable!.toStringAsFixed(2)}'),
+                          );
+                        } else if (snapshot.hasError) {
+                          return ListTile(
+                            title: Text('Erro ao carregar nome do cliente'),
+                            subtitle: Text('Valor total: ${rent.totalAmountPayable!.toStringAsFixed(2)}'),
+                          );
+                        } else {
+                          return Card(
+                            margin: const EdgeInsets.all(10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ],
-                        );
+                            elevation: 5,
+                            child: ListTile(
+                              title: Text('Cliente: ${snapshot.data}'),
+                              subtitle: Text('Valor total: ${rent.totalAmountPayable!.toStringAsFixed(2)}'),
+                              onTap: () async {
+                                await Provider.of<RentController>(context, listen: false).populateRentInformation(rent);
+                                Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.detailsRent,
+                                  arguments: rent,
+                                );
+                              },
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AppRoutes.editRent,
+                                        arguments: rent,
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () async {
+                                      final confirmDelete = await showDialog<bool>(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: const Center(
+                                              child: Text('Confirmação'),
+                                            ),
+                                            content: const Text('Tem certeza que deseja deletar este aluguel?'),
+                                            actions: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop(false);
+                                                    },
+                                                    child: const Text('Não'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop(true);
+                                                    },
+                                                    child: const Text('Sim'),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                      if (confirmDelete == true) {
+                                        state.delete(rent);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
                       },
-                    );
-                    if (confirmDelete == true) {
-                      state.delete(rent);
-                    }
-                  },
-                  onTap: (rent) async {
-                    await Provider.of<RentController>(context, listen: false)
-                        .populateRentInformation(rent);
-
-                    Navigator.pushNamed(
-                      context,
-                      AppRoutes.detailsRent,
-                      arguments: rent,
                     );
                   },
                 );
