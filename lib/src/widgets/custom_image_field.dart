@@ -83,7 +83,7 @@ class CustomImageField extends StatelessWidget {
                     right: 0,
                     top: 0,
                     child: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
                         color: Colors.red,
                       ),

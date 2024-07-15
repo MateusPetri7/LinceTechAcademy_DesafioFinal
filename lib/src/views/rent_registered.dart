@@ -9,7 +9,9 @@ class RegisteredRent extends StatelessWidget {
   const RegisteredRent({Key? key});
 
   Future<String> _getClientName(BuildContext context, String clientId) async {
-    return await Provider.of<RentController>(context, listen: false).getNameClientFromId(clientId) ?? 'Cliente Desconhecido';
+    return await Provider.of<RentController>(context, listen: false)
+            .getNameClientFromId(clientId) ??
+        'Cliente Desconhecido';
   }
 
   @override
@@ -46,15 +48,18 @@ class RegisteredRent extends StatelessWidget {
                     return FutureBuilder(
                       future: _getClientName(context, rent.clientId!),
                       builder: (context, AsyncSnapshot<String> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return ListTile(
                             title: Text('Carregando...'),
-                            subtitle: Text('Valor total: ${rent.totalAmountPayable!.toStringAsFixed(2)}'),
+                            subtitle: Text(
+                                'Valor total: ${rent.totalAmountPayable!.toStringAsFixed(2)}'),
                           );
                         } else if (snapshot.hasError) {
                           return ListTile(
                             title: Text('Erro ao carregar nome do cliente'),
-                            subtitle: Text('Valor total: ${rent.totalAmountPayable!.toStringAsFixed(2)}'),
+                            subtitle: Text(
+                                'Valor total: ${rent.totalAmountPayable!.toStringAsFixed(2)}'),
                           );
                         } else {
                           return Card(
@@ -65,9 +70,12 @@ class RegisteredRent extends StatelessWidget {
                             elevation: 5,
                             child: ListTile(
                               title: Text('Cliente: ${snapshot.data}'),
-                              subtitle: Text('Valor total: ${rent.totalAmountPayable!.toStringAsFixed(2)}'),
+                              subtitle: Text(
+                                  'Valor total: ${rent.totalAmountPayable!.toStringAsFixed(2)}'),
                               onTap: () async {
-                                await Provider.of<RentController>(context, listen: false).populateRentInformation(rent);
+                                await Provider.of<RentController>(context,
+                                        listen: false)
+                                    .populateRentInformation(rent);
                                 Navigator.pushNamed(
                                   context,
                                   AppRoutes.detailsRent,
@@ -90,27 +98,32 @@ class RegisteredRent extends StatelessWidget {
                                   IconButton(
                                     icon: const Icon(Icons.delete),
                                     onPressed: () async {
-                                      final confirmDelete = await showDialog<bool>(
+                                      final confirmDelete =
+                                          await showDialog<bool>(
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
                                             title: const Center(
                                               child: Text('Confirmação'),
                                             ),
-                                            content: const Text('Tem certeza que deseja deletar este aluguel?'),
+                                            content: const Text(
+                                                'Tem certeza que deseja deletar este aluguel?'),
                                             actions: [
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   TextButton(
                                                     onPressed: () {
-                                                      Navigator.of(context).pop(false);
+                                                      Navigator.of(context)
+                                                          .pop(false);
                                                     },
                                                     child: const Text('Não'),
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      Navigator.of(context).pop(true);
+                                                      Navigator.of(context)
+                                                          .pop(true);
                                                     },
                                                     child: const Text('Sim'),
                                                   ),

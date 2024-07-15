@@ -99,17 +99,17 @@ class CustomVehicleDropdownFormField extends StatelessWidget {
                   if (item is VehicleBrandModel) {
                     return DropdownMenuItem<dynamic>(
                       value: item,
-                      child: Text(item.name), // Utiliza item.name para a marca
+                      child: Text(item.name),
                     );
                   } else if (item is VehicleModelModel) {
                     return DropdownMenuItem<dynamic>(
                       value: item,
-                      child: Text(item.name), // Utiliza item.name para o modelo
+                      child: Text(item.name),
                     );
                   }
                   return DropdownMenuItem<dynamic>(
                     value: item,
-                    child: Text(item.toString()), // Caso padrão
+                    child: Text(item.toString()),
                   );
                 }).toList(),
               ),

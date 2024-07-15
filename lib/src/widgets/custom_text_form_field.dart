@@ -11,8 +11,8 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Widget? suffixIcon;
   final bool readOnly;
-  final bool isCurrency; // Novo parâmetro para indicar se é um campo de moeda
-  final VoidCallback? onTapCallback; // Callback para o evento onTap
+  final bool isCurrency;
+  final VoidCallback? onTapCallback;
 
   CustomTextFormField({
     required this.labelText,
@@ -23,8 +23,8 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
     this.suffixIcon,
     this.readOnly = false,
-    this.isCurrency = false, // Valor padrão: não é campo de moeda
-    this.onTapCallback, // Adicione o parâmetro para o callback
+    this.isCurrency = false,
+    this.onTapCallback,
   });
 
   @override
@@ -58,7 +58,7 @@ class CustomTextFormField extends StatelessWidget {
         ] : inputFormatters,
         validator: validator,
         readOnly: readOnly,
-        onTap: onTapCallback, // Atribua o callback ao evento onTap
+        onTap: onTapCallback,
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: const TextStyle(

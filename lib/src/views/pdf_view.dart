@@ -23,7 +23,7 @@ class PdfView extends StatelessWidget {
                   await pdfController.viewPdf(pdf.filePath!);
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error viewing PDF')),
+                    const SnackBar(content: Text('Error viewing PDF')),
                   );
                 }
               },
@@ -36,7 +36,7 @@ class PdfView extends StatelessWidget {
                       .exportPdf(pdfController.currentPdf.filePath!);
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error exporting PDF')),
+                    const SnackBar(content: Text('Error exporting PDF')),
                   );
                 }
               },
