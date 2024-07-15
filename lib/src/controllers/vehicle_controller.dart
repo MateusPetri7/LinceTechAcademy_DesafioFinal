@@ -109,9 +109,9 @@ class VehicleController extends ChangeNotifier {
       _vehicleBrands = await vehicleRepository.getVehicleBrands(selectedType);
       notifyListeners();
     } on NotFoundException catch (e) {
-      print(e.message);
+      throw NotFoundException("Erro");
     } catch (e) {
-      print(e);
+      throw Exception(e);
     }
   }
 
@@ -120,9 +120,9 @@ class VehicleController extends ChangeNotifier {
       _vehicleModels = await vehicleRepository.getVehicleModels(brandCode);
       notifyListeners();
     } on NotFoundException catch (e) {
-      print(e.message);
+      throw NotFoundException("Erro");
     } catch (e) {
-      print(e);
+      throw Exception(e);
     }
   }
 
@@ -204,7 +204,6 @@ class VehicleController extends ChangeNotifier {
       photosTheVehicle: _photosTheVehicle,
     );
 
-    print(editedVehicle.dailyRentalCost);
     await _controllerDataBase.update(editedVehicle);
 
     _vehicleCurrent = VehicleModel();

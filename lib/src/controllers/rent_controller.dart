@@ -135,9 +135,7 @@ class RentController extends ChangeNotifier {
   }
 
   Future<void> loadVehicles(String state) async {
-    print('Carregando veículos para o estado: $state');
     final list = await _vehicleControllerDataBase.getVehiclesFromState(state);
-    print('Veículos carregados: $list');
     _listVehicle.clear();
     _listVehicle.addAll(list);
     notifyListeners();
