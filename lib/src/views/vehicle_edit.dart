@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,15 +31,15 @@ class _EditVehicleState extends State<EditVehicle> {
     vehicleState = Provider.of<VehicleController>(context, listen: false);
     imageState = Provider.of<ImageController>(context, listen: false);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      vehicleState.populateVehicleInformation(widget.vehicle);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await vehicleState.populateVehicleInformation(widget.vehicle);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      title: AppLocalizations.of(context)!.clientEdit,
+      title: AppLocalizations.of(context)!.vehicleEdit,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
@@ -109,7 +108,9 @@ class _EditVehicleState extends State<EditVehicle> {
                   items: vehicleState.states,
                   value: vehicleState.selectedState,
                   onChanged: (value) {
-                    vehicleState.selectedState = value;
+                    setState(() {
+                      vehicleState.selectedState = value;
+                    });
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -145,47 +146,17 @@ class _EditVehicleState extends State<EditVehicle> {
                           vehicleState.plateController.text.toString(),
                         );
                         if (imageState.selectedImage != null) {
-                          vehicleState.addPhoto(imageState.selectedImage!.path);
+                          setState(() {
+                            vehicleState.addPhoto(imageState.selectedImage!.path);
+                          });
                         }
                       },
                       imagePaths: vehicleState.photosTheVehicle,
-                      onRemoveImage: vehicleState.removePhoto,
-                    ),
-                    SizedBox(
-                      height: 100,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: vehicleState.photosTheVehicle.length,
-                        itemBuilder: (context, index) {
-                          final imagePath = vehicleState.photosTheVehicle[index];
-                          return Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Image.file(
-                                  File(imagePath),
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.close,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed: () {
-                                    vehicleState.removePhoto(imagePath);
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                      onRemoveImage: (imagePath) {
+                        setState(() {
+                          vehicleState.removePhoto(imagePath);
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -198,7 +169,7 @@ class _EditVehicleState extends State<EditVehicle> {
                     }
                   },
                   icon: const Icon(Icons.edit),
-                  label: 'Editar',
+                  label: AppLocalizations.of(context)!.editVehicle,
                 ),
                 const SizedBox(height: 20.0),
               ],

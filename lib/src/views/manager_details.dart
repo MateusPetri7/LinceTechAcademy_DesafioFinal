@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/manager_controller.dart';
@@ -16,7 +17,7 @@ class DetailsManager extends StatelessWidget {
     final state = Provider.of<ManagerController>(context, listen: false);
 
     return BaseScaffold(
-      title: 'Detalhes do Gerente',
+      title: AppLocalizations.of(context)!.dataManager,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(

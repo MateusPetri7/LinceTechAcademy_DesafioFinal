@@ -33,13 +33,13 @@ class _EditManagerState extends State<EditManager> {
   Widget build(BuildContext context) {
     final state = Provider.of<ManagerController>(context, listen: false);
     return BaseScaffold(
-      title: AppLocalizations.of(context)!.clientEdit,
+      title: AppLocalizations.of(context)!.managerEdit,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           child: ManagerFormFields(
             formKey: formKey,
-            buttonText: 'Alterar dados',
+            buttonText: AppLocalizations.of(context)!.editManager,
             buttonIcon: Icons.edit,
             onButtonPressed: () async {
               if (formKey.currentState!.validate()) {

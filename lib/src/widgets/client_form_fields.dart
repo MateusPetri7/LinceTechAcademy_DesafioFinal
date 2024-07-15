@@ -34,7 +34,8 @@ class ClientFormFields extends StatelessWidget {
             children: [
               const SizedBox(height: 20.0),
               CustomTextFormField(
-                labelText: AppLocalizations.of(context)!.companyRegistrationNumber,
+                labelText:
+                    AppLocalizations.of(context)!.companyRegistrationNumber,
                 icon: Icons.business,
                 controller: state.companyRegistrationNumberController,
                 keyboardType: TextInputType.number,
@@ -44,20 +45,25 @@ class ClientFormFields extends StatelessWidget {
                 ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!.companyRegistrationNumberRequired;
+                    return AppLocalizations.of(context)!
+                        .companyRegistrationNumberRequired;
                   }
                   if (!CNPJValidator.isValid(value)) {
-                    return AppLocalizations.of(context)!.companyRegistrationNumberInvalid;
+                    return AppLocalizations.of(context)!
+                        .companyRegistrationNumberInvalid;
                   }
                   return null;
                 },
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () async {
-                    if (state.companyRegistrationNumberController.text.isNotEmpty) {
+                    if (state
+                        .companyRegistrationNumberController.text.isNotEmpty) {
                       try {
-                        await state.getClientData(state.companyRegistrationNumberController);
-                        await state.populateClientInformationAtRegistration(state.clientCurrent);
+                        await state.getClientData(
+                            state.companyRegistrationNumberController);
+                        await state.populateClientInformationAtRegistration(
+                            state.clientCurrent);
                       } catch (e) {
                         showDialog(
                           context: context,
@@ -137,7 +143,7 @@ class ClientFormFields extends StatelessWidget {
                 onChanged: (value) {
                   state.selectedState = value;
                   try {
-                  state.getManagersFromState(state.selectedState!);
+                    state.getManagersFromState(state.selectedState!);
                   } catch (e) {
                     showDialog(
                       context: context,
@@ -169,11 +175,13 @@ class ClientFormFields extends StatelessWidget {
               CustomDropdownButtonFormField(
                 labelText: AppLocalizations.of(context)!.manager,
                 icon: Icons.person,
-                items: state.listManager.map((manager) => manager.name!).toList(),
+                items:
+                    state.listManager.map((manager) => manager.name!).toList(),
                 value: state.selectedManager?.name,
                 onChanged: (value) {
                   if (value != null) {
-                    state.selectedManager = state.listManager.firstWhere((manager) => manager.name == value);
+                    state.selectedManager = state.listManager
+                        .firstWhere((manager) => manager.name == value);
                   }
                 },
                 validator: (value) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/vehicle_controller.dart';
@@ -11,8 +12,8 @@ class RegisteredVehicles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScaffoldFloatingButton(
-      title: 'Veiculos',
-      buttonText: 'Novo Veículo',
+      title: AppLocalizations.of(context)!.vehicles,
+      buttonText: AppLocalizations.of(context)!.newVehicle,
       buttonRoute: AppRoutes.registerVehicle,
       body: FutureBuilder(
         future: Provider.of<VehicleController>(context, listen: false).load(),

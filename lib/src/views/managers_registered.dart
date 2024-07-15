@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/manager_controller.dart';
@@ -11,8 +12,8 @@ class RegisteredManagers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScaffoldFloatingButton(
-      title: 'Gerentes',
-      buttonText: 'Novo Gerente',
+      title: AppLocalizations.of(context)!.managers,
+      buttonText: AppLocalizations.of(context)!.newManager,
       buttonRoute: AppRoutes.registerManager,
       body: FutureBuilder(
         future: Provider.of<ManagerController>(context, listen: false).load(),

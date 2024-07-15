@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/vehicle_controller.dart';
@@ -16,7 +17,7 @@ class DetailsVehicle extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = Provider.of<VehicleController>(context, listen: false);
     return BaseScaffold(
-      title: 'Detalhes do Veículo',
+      title: AppLocalizations.of(context)!.dataVehicle,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Consumer<VehicleController>(

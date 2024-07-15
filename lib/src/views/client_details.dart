@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/client_controller.dart';
@@ -15,7 +16,7 @@ class DetailsClient extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = Provider.of<ClientController>(context, listen: false);
     return BaseScaffold(
-      title: 'Detalhes do Cliente',
+      title: AppLocalizations.of(context)!.dataClient,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Consumer<ClientController>(

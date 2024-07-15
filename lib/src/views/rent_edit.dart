@@ -35,14 +35,14 @@ class _EditRentState extends State<EditRent> {
     final state = Provider.of<RentController>(context, listen: false);
 
     return BaseScaffold(
-      title: AppLocalizations.of(context)!.clientEdit,
+      title: AppLocalizations.of(context)!.rentEdit,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Consumer<PdfController>(
           builder: (context, pdfState, _) {
             return RentFormFields(
               formKey: formKey,
-              buttonText: 'Editar',
+              buttonText: AppLocalizations.of(context)!.editRent,
               buttonIcon: Icons.edit,
               onButtonPressed: () async {
                 if (formKey.currentState!.validate()) {

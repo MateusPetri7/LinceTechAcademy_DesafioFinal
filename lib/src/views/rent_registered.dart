@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/rent_controller.dart';
 import '../widgets/base_scaffold_floating_button.dart';
-import '../widgets/custom_list_view.dart';
 
 class RegisteredRent extends StatelessWidget {
   const RegisteredRent({Key? key});
@@ -15,8 +15,8 @@ class RegisteredRent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScaffoldFloatingButton(
-      title: 'Aluguéis',
-      buttonText: 'Novo Aluguel',
+      title: AppLocalizations.of(context)!.rents,
+      buttonText: AppLocalizations.of(context)!.newRent,
       buttonRoute: AppRoutes.registerRent,
       body: FutureBuilder(
         future: Provider.of<RentController>(context, listen: false).load(),

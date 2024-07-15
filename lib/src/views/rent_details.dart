@@ -19,7 +19,7 @@ class DetailsRent extends StatelessWidget {
     final rentState = Provider.of<RentController>(context, listen: false);
 
     return BaseScaffold(
-      title: AppLocalizations.of(context)!.clientEdit,
+      title: AppLocalizations.of(context)!.dataRent,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Consumer<RentController>(

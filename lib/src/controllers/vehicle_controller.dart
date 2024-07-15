@@ -162,13 +162,13 @@ class VehicleController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void populateVehicleInformation(VehicleModel vehicle) {
+  Future<void> populateVehicleInformation(VehicleModel vehicle) async {
     _typeController.text = vehicle.type ?? '';
     _brandController.text = vehicle.brand ?? '';
     _modelController.text = vehicle.model ?? '';
     _plateController.text = vehicle.plate ?? '';
     _yearManufactureController.text = vehicle.yearManufacture?.toString() ?? '';
-    _selectedState = vehicle.state;
+    _selectedState = vehicle.state ?? '';
     _dailyRentalCostController.text =
         _formatCurrency(vehicle.dailyRentalCost ?? 0.0);
 

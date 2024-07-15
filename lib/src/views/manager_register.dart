@@ -21,7 +21,7 @@ class RegisterManager extends StatelessWidget {
         child: SingleChildScrollView(
           child: ManagerFormFields(
             formKey: formKey,
-            buttonText: 'Cadastrar',
+            buttonText: AppLocalizations.of(context)!.registerManager,
             buttonIcon: Icons.add,
             onButtonPressed: () async {
               if (formKey.currentState!.validate()) {

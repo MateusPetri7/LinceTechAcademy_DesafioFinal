@@ -16,14 +16,14 @@ class RegisterRent extends StatelessWidget {
     final state = Provider.of<RentController>(context, listen: false);
 
     return BaseScaffold(
-      title: AppLocalizations.of(context)!.clientRegister,
+      title: AppLocalizations.of(context)!.rentRegister,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Consumer<PdfController>(
           builder: (context, pdfState, _) {
             return RentFormFields(
               formKey: formKey,
-              buttonText: 'Cadastrar',
+              buttonText: AppLocalizations.of(context)!.registerRent,
               buttonIcon: Icons.add,
               onButtonPressed: () async {
                 if (formKey.currentState!.validate()) {

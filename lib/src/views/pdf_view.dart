@@ -27,7 +27,7 @@ class PdfView extends StatelessWidget {
                   );
                 }
               },
-              child: Text('Open PDF'),
+              child: Text('Visualizar PDF'),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -40,7 +40,7 @@ class PdfView extends StatelessWidget {
                   );
                 }
               },
-              child: Text('Export PDF'),
+              child: Text('Exportar PDF'),
             ),
           ],
         ),

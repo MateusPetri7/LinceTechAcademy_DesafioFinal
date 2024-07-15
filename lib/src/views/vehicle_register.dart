@@ -23,7 +23,7 @@ class RegisterVehicle extends StatelessWidget {
     final imageState = Provider.of<ImageController>(context, listen: false);
 
     return BaseScaffold(
-      title: AppLocalizations.of(context)!.clientRegister,
+      title: AppLocalizations.of(context)!.vehicleRegister,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
@@ -180,7 +180,7 @@ class RegisterVehicle extends StatelessWidget {
                         }
                       },
                       icon: const Icon(Icons.add),
-                      label: 'Cadastrar',
+                      label: AppLocalizations.of(context)!.registerVehicle,
                     ),
                     const SizedBox(height: 20.0),
                   ],

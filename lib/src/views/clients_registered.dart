@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../routes.dart';
 import '../controllers/client_controller.dart';
@@ -11,8 +12,8 @@ class RegisteredClients extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScaffoldFloatingButton(
-      title: 'Clientes',
-      buttonText: 'Novo Cliente',
+      title: AppLocalizations.of(context)!.clients,
+      buttonText: AppLocalizations.of(context)!.newClient,
       buttonRoute: AppRoutes.registerClient,
       body: FutureBuilder(
         future: Provider.of<ClientController>(context, listen: false).load(),
